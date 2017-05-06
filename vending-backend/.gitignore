@@ -1,0 +1,5 @@
+/target/
+/MQTTReader-tcplocalhost1883/
+/.settings/
+/.classpath
+/.project

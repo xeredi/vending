@@ -1,0 +1,3043 @@
+/* message.jjt EVA-DTS message */
+options
+{
+  STATIC = false; // (default true)
+  VISITOR = true; // (default false)
+  MULTI = false; // (default false)
+  TRACK_TOKENS = true; // (default false)
+}
+
+PARSER_BEGIN(Message)
+package xeredi.vending.evadts;
+import java.io.FileInputStream;
+import java.io.IOException;
+
+public class Message
+{
+  public static void main(String [] args)
+  throws ParseException, TokenMgrError, IOException
+  {
+    Message parser = new Message(new FileInputStream("/home/xeredi/git/portico/xeredi-edifact2/samples/aperak/aperak1.itc"));
+    parser.message();
+  }
+}
+
+PARSER_END(Message)
+
+/************************************************ MESSAGES *********************************************************/
+/************************************************ MESSAGES *********************************************************/
+/************************************************ MESSAGES *********************************************************/
+/************************************************ MESSAGES *********************************************************/
+/************************************************ MESSAGES *********************************************************/
+
+Node message() :
+{}
+{
+  m_evadts()
+  {
+    return jjtThis;
+  }
+}
+
+/** EVA-DTS */
+void m_evadts() :
+{}
+{
+  s_DXS() s_ST()
+  s_ID1() s_ID4()
+  (
+    s_ID5()
+  )?
+  s_CB1() s_VA1() s_VA2() s_VA3() s_BA1()
+  (
+    s_CA1()
+  )?
+  (
+    s_CA2()
+  )?
+  (
+    s_CA3()
+  )?
+  (
+    s_CA4()
+  )?
+  (
+    s_CA7()
+  )?
+  (
+    s_CA8()
+  )?
+  (
+    s_CA10()
+  )?
+  (
+    s_CA15()
+  )?
+  (
+    s_DA1()
+  )?
+  (
+    s_DA2()
+  )?
+  (
+    s_DA4()
+  )?
+  (
+    s_DA5()
+  )?
+  (
+    s_DA7()
+  )*
+  (
+    s_TA2()
+  )?
+  (
+    s_EA1()
+    (
+      s_EA2()
+    )?
+  )*
+  (
+    s_EA7()
+  )?
+  (
+    s_EA3()
+  )?
+  (
+    s_PP1()
+  )*
+  (
+    s_SA2()
+  )*
+  (
+    s_PA1() s_PA2() s_PA3() s_PA4()
+  )*
+  (
+    s_LA1()
+  )*
+  s_G85() s_SE() s_DXE()
+}
+
+/************************************************ SEGMENTS *********************************************************/
+/************************************************ SEGMENTS *********************************************************/
+/************************************************ SEGMENTS *********************************************************/
+/************************************************ SEGMENTS *********************************************************/
+/************************************************ SEGMENTS *********************************************************/
+
+
+/** DXS - Application Header.*/
+void s_DXS() :
+{}
+{
+  "DXS*" d_DXS01() < ASTERISK > d_DXS02() < ASTERISK > d_DXS03() < ASTERISK > d_DXS04()
+  (
+    LOOKAHEAD(2)
+    < ASTERISK > d_DXS05()
+  )?
+  (
+    < ASTERISK > d_DXS06()
+  )?
+  < EOL >
+}
+
+/** DXE - Application Trailer.*/
+void s_DXE() :
+{}
+{
+  "DXE*" d_DXE01() < ASTERISK > d_DXE02() < EOL >
+}
+
+/** ST -Transaction Set Header.*/
+void s_ST() :
+{}
+{
+  "ST*" d_ST01() < ASTERISK > d_ST02() < EOL >
+}
+
+/** SE -Transaction Set Trailer.*/
+void s_SE() :
+{}
+{
+  "SE*" d_SE01() < ASTERISK > d_SE02() < EOL >
+}
+
+/** ID1.*/
+void s_ID1() :
+{}
+{
+  "ID1"
+  (
+    LOOKAHEAD(2)
+    < ASTERISK >
+    (
+      d_ID101()
+    )?
+  )?
+  (
+    LOOKAHEAD(2)
+    < ASTERISK >
+    (
+      d_ID102()
+    )?
+  )?
+  (
+    LOOKAHEAD(2)
+    < ASTERISK >
+    (
+      d_ID103()
+    )?
+  )?
+  (
+    LOOKAHEAD(2)
+    < ASTERISK >
+    (
+      d_ID104()
+    )?
+  )?
+  (
+    LOOKAHEAD(2)
+    < ASTERISK >
+    (
+      d_ID105()
+    )?
+  )?
+  < ASTERISK > d_ID106()
+  < EOL >
+}
+
+/** ID4.*/
+void s_ID4() :
+{}
+{
+  "ID4"
+  (
+    LOOKAHEAD(2)
+    < ASTERISK >
+    (
+      d_ID401()
+    )?
+  )?
+  (
+    LOOKAHEAD(2)
+    < ASTERISK >
+    (
+      d_ID402()
+    )?
+  )?
+  (
+    < ASTERISK >
+    (
+      d_ID403()
+    )?
+  )?
+  < EOL >
+}
+
+/** ID5.*/
+void s_ID5() :
+{}
+{
+  "ID5*" < EOL >
+}
+
+/** CB1.*/
+void s_CB1() :
+{}
+{
+  "CB1"
+  (
+    LOOKAHEAD(2)
+    < ASTERISK >
+    (
+      d_CB101()
+    )?
+  )?
+  (
+    LOOKAHEAD(2)
+    < ASTERISK >
+    (
+      d_CB102()
+    )?
+  )?
+  (
+    < ASTERISK >
+    (
+      d_CB103()
+    )?
+  )?
+  < EOL >
+}
+
+/** VA1.*/
+void s_VA1() :
+{}
+{
+  "VA1*" d_VA101() < ASTERISK > d_VA102()
+  (
+    LOOKAHEAD(2)
+    < ASTERISK >
+    (
+      d_VA103()
+    )?
+  )?
+  (
+    < ASTERISK >
+    (
+      d_VA104()
+    )?
+  )?
+  < EOL >
+}
+
+/** VA2.*/
+void s_VA2() :
+{}
+{
+  "VA2"
+  (
+    LOOKAHEAD(2)
+    < ASTERISK >
+    (
+      d_VA201()
+    )?
+  )?
+  (
+    LOOKAHEAD(2)
+    < ASTERISK >
+    (
+      d_VA202()
+    )?
+  )?
+  (
+    LOOKAHEAD(2)
+    < ASTERISK >
+    (
+      d_VA203()
+    )?
+  )?
+  (
+    < ASTERISK >
+    (
+      d_VA204()
+    )?
+  )?
+  < EOL >
+}
+
+/** VA3.*/
+void s_VA3() :
+{}
+{
+  "VA3*" d_VA301() < ASTERISK > d_VA302()
+  (
+    LOOKAHEAD(2)
+    < ASTERISK >
+    (
+      d_VA303()
+    )?
+  )?
+  (
+    < ASTERISK >
+    (
+      d_VA304()
+    )?
+  )?
+  < EOL >
+}
+
+/** BA1.*/
+void s_BA1() :
+{}
+{
+  "BA1"
+  (
+    LOOKAHEAD(2)
+    < ASTERISK >
+    (
+      d_BA101()
+    )?
+  )?
+  (
+    LOOKAHEAD(2)
+    < ASTERISK >
+    (
+      d_BA102()
+    )?
+  )?
+  (
+    < ASTERISK >
+    (
+      d_BA103()
+    )?
+  )?
+  < EOL >
+}
+
+/** CA1.*/
+void s_CA1() :
+{}
+{
+  "CA1"
+  (
+    LOOKAHEAD(2)
+    < ASTERISK >
+    (
+      d_CA101()
+    )?
+  )?
+  (
+    LOOKAHEAD(2)
+    < ASTERISK >
+    (
+      d_CA102()
+    )?
+  )?
+  (
+    < ASTERISK >
+    (
+      d_CA103()
+    )?
+  )?
+  < EOL >
+}
+
+/** CA2.*/
+void s_CA2() :
+{}
+{
+  "CA2"
+  (
+    LOOKAHEAD(2)
+    < ASTERISK >
+    (
+      d_CA201()
+    )?
+  )?
+  (
+    LOOKAHEAD(2)
+    < ASTERISK >
+    (
+      d_CA202()
+    )?
+  )?
+  (
+    LOOKAHEAD(2)
+    < ASTERISK >
+    (
+      d_CA203()
+    )?
+  )?
+  (
+    < ASTERISK >
+    (
+      d_CA204()
+    )?
+  )?
+  < EOL >
+}
+
+/** CA3.*/
+void s_CA3() :
+{}
+{
+  "CA3"
+  (
+    LOOKAHEAD(2)
+    < ASTERISK >
+    (
+      d_CA301()
+    )?
+  )?
+  (
+    LOOKAHEAD(2)
+    < ASTERISK >
+    (
+      d_CA302()
+    )?
+  )?
+  (
+    LOOKAHEAD(2)
+    < ASTERISK >
+    (
+      d_CA303()
+    )?
+  )?
+  (
+    LOOKAHEAD(2)
+    < ASTERISK >
+    (
+      d_CA304()
+    )?
+  )?
+  (
+    LOOKAHEAD(2)
+    < ASTERISK >
+    (
+      d_CA305()
+    )?
+  )?
+  (
+    LOOKAHEAD(2)
+    < ASTERISK >
+    (
+      d_CA306()
+    )?
+  )?
+  (
+    LOOKAHEAD(2)
+    < ASTERISK >
+    (
+      d_CA307()
+    )?
+  )?
+  (
+    LOOKAHEAD(2)
+    < ASTERISK >
+    (
+      d_CA308()
+    )?
+  )?
+  (
+    LOOKAHEAD(2)
+    < ASTERISK >
+    (
+      d_CA309()
+    )?
+  )?
+  (
+    LOOKAHEAD(2)
+    < ASTERISK >
+    (
+      d_CA310()
+    )?
+  )?
+  (
+    LOOKAHEAD(2)
+    < ASTERISK >
+    (
+      d_CA311()
+    )?
+  )?
+  (
+    < ASTERISK >
+    (
+      d_CA312()
+    )?
+  )?
+  < EOL >
+}
+
+/** CA4.*/
+void s_CA4() :
+{}
+{
+  "CA4"
+  (
+    LOOKAHEAD(2)
+    < ASTERISK >
+    (
+      d_CA401()
+    )?
+  )?
+  (
+    LOOKAHEAD(2)
+    < ASTERISK >
+    (
+      d_CA402()
+    )?
+  )?
+  (
+    LOOKAHEAD(2)
+    < ASTERISK >
+    (
+      d_CA403()
+    )?
+  )?
+  (
+    LOOKAHEAD(2)
+    < ASTERISK >
+    (
+      d_CA404()
+    )?
+  )?
+  (
+    LOOKAHEAD(2)
+    < ASTERISK >
+    (
+      d_CA405()
+    )?
+  )?
+  (
+    LOOKAHEAD(2)
+    < ASTERISK >
+    (
+      d_CA406()
+    )?
+  )?
+  (
+    LOOKAHEAD(2)
+    < ASTERISK >
+    (
+      d_CA407()
+    )?
+  )?
+  (
+    LOOKAHEAD(2)
+    < ASTERISK >
+    (
+      d_CA408()
+    )?
+  )?
+  (
+    LOOKAHEAD(2)
+    < ASTERISK >
+    (
+      d_CA409()
+    )?
+  )?
+  (
+    < ASTERISK >
+    (
+      d_CA410()
+    )?
+  )?
+  < EOL >
+}
+
+/** CA7.*/
+void s_CA7() :
+{}
+{
+  "CA7*"
+  < EOL >
+}
+
+/** CA8.*/
+void s_CA8() :
+{}
+{
+  "CA8"
+  (
+    LOOKAHEAD(2)
+    < ASTERISK >
+    (
+      d_CA801()
+    )?
+  )?
+  (
+    < ASTERISK >
+    (
+      d_CA802()
+    )?
+  )?
+  < EOL >
+}
+
+/** CA10.*/
+void s_CA10() :
+{}
+{
+  "CA10"
+  (
+    LOOKAHEAD(2)
+    < ASTERISK >
+    (
+      d_CA1001()
+    )?
+  )?
+  (
+    LOOKAHEAD(2)
+    < ASTERISK >
+    (
+      d_CA1002()
+    )?
+  )?
+  (
+    LOOKAHEAD(2)
+    < ASTERISK >
+    (
+      d_CA1003()
+    )?
+  )?
+  (
+    < ASTERISK >
+    (
+      d_CA1004()
+    )?
+  )?
+  < EOL >
+}
+
+/** CA15.*/
+void s_CA15() :
+{}
+{
+  "CA15*" < EOL >
+}
+
+/** DA1.*/
+void s_DA1() :
+{}
+{
+  "DA1"
+  (
+    LOOKAHEAD(2)
+    < ASTERISK >
+    (
+      d_DA101()
+    )?
+  )?
+  (
+    LOOKAHEAD(2)
+    < ASTERISK >
+    (
+      d_DA102()
+    )?
+  )?
+  (
+    < ASTERISK >
+    (
+      d_DA103()
+    )?
+  )?
+  < EOL >
+}
+
+/** DA2.*/
+void s_DA2() :
+{}
+{
+  "DA2"
+  (
+    LOOKAHEAD(2)
+    < ASTERISK >
+    (
+      d_DA201()
+    )?
+  )?
+  (
+    LOOKAHEAD(2)
+    < ASTERISK >
+    (
+      d_DA202()
+    )?
+  )?
+  (
+    LOOKAHEAD(2)
+    < ASTERISK >
+    (
+      d_DA203()
+    )?
+  )?
+  (
+    < ASTERISK >
+    (
+      d_DA204()
+    )?
+  )?
+  < EOL >
+}
+
+/** DA4.*/
+void s_DA4() :
+{}
+{
+  "DA4"
+  (
+    LOOKAHEAD(2)
+    < ASTERISK >
+    (
+      d_DA401()
+    )?
+  )?
+  (
+    < ASTERISK >
+    (
+      d_DA402()
+    )?
+  )?
+  < EOL >
+}
+
+/** DA5.*/
+void s_DA5() :
+{}
+{
+  "DA5*" < EOL >
+}
+
+/** DA7.*/
+void s_DA7() :
+{}
+{
+  "DA7"
+  (
+    LOOKAHEAD(2)
+    < ASTERISK >
+    (
+      d_DA701()
+    )?
+  )?
+  (
+    LOOKAHEAD(2)
+    < ASTERISK >
+    (
+      d_DA702()
+    )?
+  )?
+  (
+    LOOKAHEAD(2)
+    < ASTERISK >
+    (
+      d_DA703()
+    )?
+  )?
+  (
+    LOOKAHEAD(2)
+    < ASTERISK >
+    (
+      d_DA704()
+    )?
+  )?
+  (
+    LOOKAHEAD(2)
+    < ASTERISK >
+    (
+      d_DA705()
+    )?
+  )?
+  (
+    LOOKAHEAD(2)
+    < ASTERISK >
+    (
+      d_DA706()
+    )?
+  )?
+  (
+    LOOKAHEAD(2)
+    < ASTERISK >
+    (
+      d_DA707()
+    )?
+  )?
+  (
+    LOOKAHEAD(2)
+    < ASTERISK >
+    (
+      d_DA708()
+    )?
+  )?
+  (
+    < ASTERISK >
+    (
+      d_DA709()
+    )?
+  )?
+  < EOL >
+}
+
+/** TA2.*/
+void s_TA2() :
+{}
+{
+  "TA2"
+  (
+    LOOKAHEAD(2)
+    < ASTERISK >
+    (
+      d_TA201()
+    )?
+  )?
+  (
+    LOOKAHEAD(2)
+    < ASTERISK >
+    (
+      d_TA202()
+    )?
+  )?
+  (
+    LOOKAHEAD(2)
+    < ASTERISK >
+    (
+      d_TA203()
+    )?
+  )?
+  (
+    LOOKAHEAD(2)
+    < ASTERISK >
+    (
+      d_TA204()
+    )?
+  )?
+  (
+    LOOKAHEAD(2)
+    < ASTERISK >
+    (
+      d_TA205()
+    )?
+  )?
+  (
+    LOOKAHEAD(2)
+    < ASTERISK >
+    (
+      d_TA206()
+    )?
+  )?
+  (
+    LOOKAHEAD(2)
+    < ASTERISK >
+    (
+      d_TA207()
+    )?
+  )?
+  (
+    < ASTERISK >
+    (
+      d_TA208()
+    )?
+  )?
+  < EOL >
+}
+
+/** EA1.*/
+void s_EA1() :
+{}
+{
+  "EA1"
+  (
+    LOOKAHEAD(2)
+    < ASTERISK >
+    (
+      d_EA101()
+    )?
+  )?
+  (
+    LOOKAHEAD(2)
+    < ASTERISK >
+    (
+      d_EA102()
+    )?
+  )?
+  (
+    LOOKAHEAD(2)
+    < ASTERISK >
+    (
+      d_EA103()
+    )?
+  )?
+  (
+    LOOKAHEAD(2)
+    < ASTERISK >
+    (
+      d_EA104()
+    )?
+  )?
+  (
+    LOOKAHEAD(2)
+    < ASTERISK >
+    (
+      d_EA105()
+    )?
+  )?
+  (
+    < ASTERISK >
+    (
+      d_EA106()
+    )?
+  )?
+  < EOL >
+}
+
+/** EA2.*/
+void s_EA2() :
+{}
+{
+  "EA2*" d_EA201()
+  (
+    LOOKAHEAD(2)
+    < ASTERISK >
+    (
+      d_EA202()
+    )?
+  )?
+  (
+    LOOKAHEAD(2)
+    < ASTERISK >
+    (
+      d_EA203()
+    )?
+  )?
+  (
+    LOOKAHEAD(2)
+    < ASTERISK >
+    (
+      d_EA204()
+    )?
+  )?
+  < ASTERISK > d_EA205()
+  (
+    < ASTERISK >
+    (
+      d_EA206()
+    )?
+  )?
+  < EOL >
+}
+
+/** EA3.*/
+void s_EA3() :
+{}
+{
+  "EA3"
+  (
+    LOOKAHEAD(2)
+    < ASTERISK >
+    (
+      d_EA301()
+    )?
+  )?
+  (
+    LOOKAHEAD(2)
+    < ASTERISK >
+    (
+      d_EA302()
+    )?
+  )?
+  (
+    LOOKAHEAD(2)
+    < ASTERISK >
+    (
+      d_EA303()
+    )?
+  )?
+  (
+    LOOKAHEAD(2)
+    < ASTERISK >
+    (
+      d_EA304()
+    )?
+  )?
+  (
+    LOOKAHEAD(2)
+    < ASTERISK >
+    (
+      d_EA305()
+    )?
+  )?
+  (
+    LOOKAHEAD(2)
+    < ASTERISK >
+    (
+      d_EA306()
+    )?
+  )?
+  (
+    LOOKAHEAD(2)
+    < ASTERISK >
+    (
+      d_EA307()
+    )?
+  )?
+  (
+    LOOKAHEAD(2)
+    < ASTERISK >
+    (
+      d_EA308()
+    )?
+  )?
+  (
+    LOOKAHEAD(2)
+    < ASTERISK >
+    (
+      d_EA309()
+    )?
+  )?
+  (
+    < ASTERISK >
+    (
+      d_EA310()
+    )?
+  )?
+  < EOL >
+}
+
+/** EA7.*/
+void s_EA7() :
+{}
+{
+  "EA7"
+  (
+    LOOKAHEAD(2)
+    < ASTERISK >
+    (
+      d_EA701()
+    )?
+  )?
+  (
+    < ASTERISK >
+    (
+      d_EA702()
+    )?
+  )?
+  < EOL >
+}
+
+/** PP1.*/
+void s_PP1() :
+{}
+{
+  "PP1*" < EOL >
+}
+
+/** SA2.*/
+void s_SA2() :
+{}
+{
+  "SA2*" < EOL >
+}
+
+/** PA1.*/
+void s_PA1() :
+{}
+{
+  "PA1*" d_PA101()
+  (
+    LOOKAHEAD(2)
+    < ASTERISK >
+    (
+      d_PA102()
+    )?
+  )?
+  (
+    LOOKAHEAD(2)
+    < ASTERISK >
+    (
+      d_PA103()
+    )?
+  )?
+  (
+    LOOKAHEAD(2)
+    < ASTERISK >
+    (
+      d_PA104()
+    )?
+  )?
+  (
+    LOOKAHEAD(2)
+    < ASTERISK >
+    (
+      d_PA105()
+    )?
+  )?
+  (
+    LOOKAHEAD(2)
+    < ASTERISK >
+    (
+      d_PA106()
+    )?
+  )?
+  < ASTERISK > d_PA107()
+  (
+    LOOKAHEAD(2)
+    < ASTERISK >
+    (
+      d_PA108()
+    )?
+  )?
+  (
+    < ASTERISK >
+    (
+      d_PA109()
+    )?
+  )?
+  < EOL >
+}
+
+/** PA2.*/
+void s_PA2() :
+{}
+{
+  "PA2"
+  (
+    LOOKAHEAD(2)
+    < ASTERISK >
+    (
+      d_PA201()
+    )?
+  )?
+  (
+    LOOKAHEAD(2)
+    < ASTERISK >
+    (
+      d_PA202()
+    )?
+  )?
+  (
+    LOOKAHEAD(2)
+    < ASTERISK >
+    (
+      d_PA203()
+    )?
+  )?
+  < ASTERISK > d_PA204()
+  (
+    LOOKAHEAD(2)
+    < ASTERISK >
+    (
+      d_PA205()
+    )?
+  )?
+  (
+    LOOKAHEAD(2)
+    < ASTERISK >
+    (
+      d_PA206()
+    )?
+  )?
+  (
+    LOOKAHEAD(2)
+    < ASTERISK >
+    (
+      d_PA207()
+    )?
+  )?
+  (
+    LOOKAHEAD(2)
+    < ASTERISK >
+    (
+      d_PA208()
+    )?
+  )?
+  (
+    LOOKAHEAD(2)
+    < ASTERISK >
+    (
+      d_PA209()
+    )?
+  )?
+  (
+    LOOKAHEAD(2)
+    < ASTERISK >
+    (
+      d_PA210()
+    )?
+  )?
+  (
+    LOOKAHEAD(2)
+    < ASTERISK >
+    (
+      d_PA211()
+    )?
+  )?
+  (
+    < ASTERISK >
+    (
+      d_PA212()
+    )?
+  )?
+  < EOL >
+}
+
+/** PA3.*/
+void s_PA3() :
+{}
+{
+  "PA3*" d_PA301()
+  (
+    LOOKAHEAD(2)
+    < ASTERISK >
+    (
+      d_PA302()
+    )?
+  )?
+  (
+    LOOKAHEAD(2)
+    < ASTERISK >
+    (
+      d_PA303()
+    )?
+  )?
+  (
+    < ASTERISK >
+    (
+      d_PA304()
+    )?
+  )?
+  < EOL >
+}
+
+/** PA4.*/
+void s_PA4() :
+{}
+{
+  "PA4*" d_PA401()
+  (
+    LOOKAHEAD(2)
+    < ASTERISK >
+    (
+      d_PA402()
+    )?
+  )?
+  (
+    LOOKAHEAD(2)
+    < ASTERISK >
+    (
+      d_PA403()
+    )?
+  )?
+  (
+    LOOKAHEAD(2)
+    < ASTERISK >
+    (
+      d_PA404()
+    )?
+  )?
+  (
+    LOOKAHEAD(2)
+    < ASTERISK >
+    (
+      d_PA405()
+    )?
+  )?
+  (
+    < ASTERISK >
+    (
+      d_PA406()
+    )?
+  )?
+  < EOL >
+}
+
+/** LA1.*/
+void s_LA1() :
+{}
+{
+  "LA1*" d_LA101() < ASTERISK > d_LA102() < ASTERISK > d_LA103() < ASTERISK > d_LA104() < ASTERISK > d_LA105()
+  < EOL >
+}
+
+/** G85 - Record Integrity Check.*/
+void s_G85() :
+{}
+{
+  "G85*" d_G8501() < EOL >
+}
+
+/************************************************ COMPONENTS *********************************************************/
+/************************************************ COMPONENTS *********************************************************/
+/************************************************ COMPONENTS *********************************************************/
+/************************************************ COMPONENTS *********************************************************/
+/************************************************ COMPONENTS *********************************************************/
+
+
+/************************************************ FIELDS *********************************************************/
+/************************************************ FIELDS *********************************************************/
+/************************************************ FIELDS *********************************************************/
+/************************************************ FIELDS *********************************************************/
+/************************************************ FIELDS *********************************************************/
+
+
+/** DXS01 - COMMUNICATION ID (of sender). */
+void d_DXS01() :
+{}
+{
+  alphanumeric(10)
+}
+
+/** DXS02 - FUNCTIONAL IDENTIFIER. */
+void d_DXS02() :
+{}
+{
+  alphanumeric(2)
+}
+
+/** DXS03 – VERSION (*). */
+void d_DXS03() :
+{}
+{
+  alphanumeric(12)
+}
+
+/** DXS04 - TRANSMISSION CONTROL NUMBER N0. */
+void d_DXS04() :
+{}
+{
+  integer(5)
+}
+
+/** DXS05 - COMMUNICATION ID (of recipient). */
+void d_DXS05() :
+{}
+{
+  alphanumeric(10)
+}
+
+/** DXS06 - TEST CODE STATUS. */
+void d_DXS06() :
+{}
+{
+  alphanumeric(1)
+}
+
+/** DXE01 - TRANSMISSION CONTROL NUMBER. */
+void d_DXE01() :
+{}
+{
+  integer(5)
+}
+
+/** DXE02 - NUMBER OF INCLUDED SETS. */
+void d_DXE02() :
+{}
+{
+  integer(6)
+}
+
+/** ST01 - TRANSACTION SET HEADER. */
+void d_ST01() :
+{}
+{
+  alphanumeric(3)
+}
+
+/** ST02 - TRANSACTION SET CONTROL NUMBER. */
+void d_ST02() :
+{}
+{
+  alphanumeric(9)
+}
+
+/** SE01 - NUMBER OF INCLUDED SETS. */
+void d_SE01() :
+{}
+{
+  integer(6)
+}
+
+/** SE02 - TRANSACTION SET CONTROL NUMBER. */
+void d_SE02() :
+{}
+{
+  alphanumeric(9)
+}
+
+/** G8501 - INTEGRITY CHECK VALUE. */
+void d_G8501() :
+{}
+{
+  alphanumeric(4)
+}
+
+/** ID101 - Machine Serial Number. */
+void d_ID101() :
+{}
+{
+  alphanumeric(20)
+}
+
+/** ID102 - Machine Model Number. */
+void d_ID102() :
+{}
+{
+  alphanumeric(20)
+}
+
+/** ID103 - Machine Build Standard. */
+void d_ID103() :
+{}
+{
+  integer(4)
+}
+
+/** ID104 Machine Location. */
+void d_ID104() :
+{}
+{
+  alphanumeric(30)
+}
+
+/** ID105 User Defined Field. */
+void d_ID105() :
+{}
+{
+  alphanumeric(12)
+}
+
+/** ID106 Machine Asset Number. */
+void d_ID106() :
+{}
+{
+  alphanumeric(20)
+}
+
+/** ID107 DTS Level. */
+void d_ID107() :
+{}
+{
+  integer(2)
+}
+
+/** ID108 DTS Revision. */
+void d_ID108() :
+{}
+{
+  integer(4)
+}
+
+/** ID401 Decimal Point Position. */
+void d_ID401() :
+{}
+{
+  integer(1)
+}
+
+/** ID402 Numeric Currency Code. */
+void d_ID402() :
+{}
+{
+  integer(4)
+}
+
+/** ID403 Alphabetic Currency Code. */
+void d_ID403() :
+{}
+{
+  alphanumeric(3)
+}
+
+/** ID501 System Date. */
+void d_ID501() :
+{}
+{
+  integer(8) // DT
+}
+
+/** ID502 System Time. */
+void d_ID502() :
+{}
+{
+  integer(6) // TM
+}
+
+/** ID503 System Time - Seconds. */
+void d_ID503() :
+{}
+{
+  integer(2)
+}
+
+/** ID504 System Daylight Savings Mode. */
+void d_ID504() :
+{}
+{
+  alphanumeric(3)
+}
+
+/** CB101 Control Board Serial Number. */
+void d_CB101() :
+{}
+{
+  alphanumeric(20)
+}
+
+/** CB102 Control Board Model Number. */
+void d_CB102() :
+{}
+{
+  alphanumeric(20)
+}
+
+/** CB103 Control Board Software Revision. */
+void d_CB103() :
+{}
+{
+  alphanumeric(20)
+}
+
+/** CB104 User Defined Field. */
+void d_CB104() :
+{}
+{
+  alphanumeric(12)
+}
+
+/** CB105 Control Board Asset Number. */
+void d_CB105() :
+{}
+{
+  alphanumeric(20)
+}
+
+/** VA101 Value of All Paid Vends Since Initialisation. */
+void d_VA101() :
+{}
+{
+  integer(8)
+}
+
+/** VA102 Number of All Paid Vends Since Initiatlisation. */
+void d_VA102() :
+{}
+{
+  integer(8)
+}
+
+/** VA103 Value of All Paid Sales Since Last Reset. */
+void d_VA103() :
+{}
+{
+  integer(8)
+}
+
+/** VA104 Number of All Paid Vends Since Last Reset. */
+void d_VA104() :
+{}
+{
+  integer(6)
+}
+
+/** VA105 Value of All Discounts Given Since Initialisation. */
+void d_VA105() :
+{}
+{
+  integer(8)
+}
+
+/** VA106 Number of All Discounted Paid Vends Since Initialisation. */
+void d_VA106() :
+{}
+{
+  integer(8)
+}
+
+/** VA107 Value of All Discounts Given Since Last Reset. */
+void d_VA107() :
+{}
+{
+  integer(8)
+}
+
+/** VA108 Number of All Discounted Paid Vends Since Last Reset. */
+void d_VA108() :
+{}
+{
+  integer(8)
+}
+
+/** VA109 Number of All Surcharged Vends Since Initiatlization. */
+void d_VA109() :
+{}
+{
+  integer(8)
+}
+
+/** VA110 Value of All Surcharges Collected Since Initialization. */
+void d_VA110() :
+{}
+{
+  integer(8)
+}
+
+/** VA111 Number of All Surcharged Vends Since Last Reset. */
+void d_VA111() :
+{}
+{
+  integer(6)
+}
+
+/** VA112 Value of All Surcharges Collected Since Last Reset. */
+void d_VA112() :
+{}
+{
+  integer(8)
+}
+
+/** VA201 Test Vend Value Of Sales Since Initialisation. */
+void d_VA201() :
+{}
+{
+  integer(8)
+}
+
+/** VA202 Number of Test Vends Since Initialisation. */
+void d_VA202() :
+{}
+{
+  integer(8)
+}
+
+/** VA203 Test Vend Value Of Sales Since Last Reset. */
+void d_VA203() :
+{}
+{
+  integer(6)
+}
+
+/** VA204 Number of Test Vends Since Last Reset. */
+void d_VA204() :
+{}
+{
+  integer(4)
+}
+
+/** VA205 Value of money to the cash box during test vends. */
+void d_VA205() :
+{}
+{
+  integer(8)
+}
+
+/** VA206 Value of money to the cash box during test vends. */
+void d_VA206() :
+{}
+{
+  integer(8)
+}
+
+/** VA301 Free Vend Value of Sales Since Initialisation. */
+void d_VA301() :
+{}
+{
+  integer(8)
+}
+
+/** VA302 Number of Free Vends Since Initialisation. */
+void d_VA302() :
+{}
+{
+  integer(8)
+}
+
+/** VA303 Free Vend Value Of Sales Since Last Reset. */
+void d_VA303() :
+{}
+{
+  integer(8)
+}
+
+/** VA304 Number of Free Vends Since Last Reset. */
+void d_VA304() :
+{}
+{
+  integer(6)
+}
+
+/** BA101 Bill validator serial number. */
+void d_BA101() :
+{}
+{
+  alphanumeric(20)
+}
+
+/** BA102 Bill validator model. */
+void d_BA102() :
+{}
+{
+  alphanumeric(20)
+}
+
+/** BA103 Bill validator software rev. */
+void d_BA103() :
+{}
+{
+  alphanumeric(4)
+}
+
+/** BA104 User Defined Field. */
+void d_BA104() :
+{}
+{
+  alphanumeric(12)
+}
+
+/** BA105 Bill validator asset number. */
+void d_BA105() :
+{}
+{
+  alphanumeric(20)
+}
+
+/** LA101 Pricelist Number. */
+void d_LA101() :
+{}
+{
+  integer(1)
+}
+
+/** LA102 Product Number. */
+void d_LA102() :
+{}
+{
+  alphanumeric(6)
+}
+
+/** LA103 Price Product. */
+void d_LA103() :
+{}
+{
+  integer(8)
+}
+
+/** LA104 Number of Vends Since Last Reset. */
+void d_LA104() :
+{}
+{
+  integer(6)
+}
+
+/** LA105 Number Of Vends Since Initialisation. */
+void d_LA105() :
+{}
+{
+  integer(8)
+}
+
+/** PA101 Product Identifier. */
+void d_PA101() :
+{}
+{
+  alphanumeric(6)
+}
+
+/** PA102 Product Price. */
+void d_PA102() :
+{}
+{
+  integer(8)
+}
+
+/** PA103 Product Identification. */
+void d_PA103() :
+{}
+{
+  alphanumeric(20)
+}
+
+/** PA104 Maximum Product Capacity. */
+void d_PA104() :
+{}
+{
+  integer(4)
+}
+
+/** PA105 Standard Filling Level. */
+void d_PA105() :
+{}
+{
+  integer(4)
+}
+
+/** PA106 Standard Dispensed Quantity. */
+void d_PA106() :
+{}
+{
+  integer(4)
+}
+
+/** PA107 Selection Status. */
+void d_PA107() :
+{}
+{
+  integer(1)
+}
+
+/** PA108 Current Product Level. */
+void d_PA108() :
+{}
+{
+  integer(4)
+}
+
+/** PA109 Minimum Product Level. */
+void d_PA109() :
+{}
+{
+  integer(4)
+}
+
+/** PA201 Number of Products Vended Since Initialisation. */
+void d_PA201() :
+{}
+{
+  integer(8)
+}
+
+/** PA202 Value Of Paid Product Sales Since Initialisation. */
+void d_PA202() :
+{}
+{
+  integer(8)
+}
+
+/** PA203 Num. Of Products Vended Since Last Reset. */
+void d_PA203() :
+{}
+{
+  integer(6)
+}
+
+/** PA204 Value Of Paid Product Sales Since Last Reset. */
+void d_PA204() :
+{}
+{
+  integer(8)
+}
+
+/** PA205 Number of Discounted Paid Vends Since Initialisation. */
+void d_PA205() :
+{}
+{
+  integer(8)
+}
+
+/** PA206 Value of Discounts given Since Initialisation. */
+void d_PA206() :
+{}
+{
+  integer(8)
+}
+
+/** PA207 Number of Discounted Paid Vends Since Last Reset. */
+void d_PA207() :
+{}
+{
+  integer(8)
+}
+
+/** PA208 Value of Discounts Given Since Last Reset. */
+void d_PA208() :
+{}
+{
+  integer(8)
+}
+
+/** PA209 Number of Surcharges Paid Vends Since Initialisation. */
+void d_PA209() :
+{}
+{
+  integer(8)
+}
+
+/** PA210 Value of Surcharges Paid Since Initialisation. */
+void d_PA210() :
+{}
+{
+  integer(8)
+}
+
+/** PA211 Number of Surcharged Paid Since Last Reset. */
+void d_PA211() :
+{}
+{
+  integer(6)
+}
+
+/** PA212 Value of Surcharges Paid Since Last Reset. */
+void d_PA212() :
+{}
+{
+  integer(8)
+}
+
+/** PA301 Number Of Test Vends Since Initialisation. */
+void d_PA301() :
+{}
+{
+  integer(8)
+}
+
+/** PA302 Value Of Test Vends Since Initialisation. */
+void d_PA302() :
+{}
+{
+  integer(8)
+}
+
+/** PA303 Number Of Test Vends Since Last Reset. */
+void d_PA303() :
+{}
+{
+  integer(6)
+}
+
+/** PA304 Value Of Test Vends Since Last Reset. */
+void d_PA304() :
+{}
+{
+  integer(8)
+}
+
+/** PA401 Number Of Free Vends Since Initialisation. */
+void d_PA401() :
+{}
+{
+  integer(8)
+}
+
+/** PA402 Value Of Free Vends Since Initialisation. */
+void d_PA402() :
+{}
+{
+  integer(8)
+}
+
+/** PA403 Number Of Free Vends Since Last Reset. */
+void d_PA403() :
+{}
+{
+  integer(6)
+}
+
+/** PA404 Value Of Free Vends Since Last Reset. */
+void d_PA404() :
+{}
+{
+  integer(8)
+}
+
+/** PA405 Number of Free Vends without Cups Since Initialization. */
+void d_PA405() :
+{}
+{
+  integer(8)
+}
+
+/** PA406 Number of Free Vends without Cups Since Last Reset. */
+void d_PA406() :
+{}
+{
+  integer(8)
+}
+
+/** EA101 Event Identification. */
+void d_EA101() :
+{}
+{
+  alphanumeric(20)
+}
+
+/** EA102 Data of Event Occurance. */
+void d_EA102() :
+{}
+{
+  integer(8) // DT
+}
+
+/** EA103 Time of Event Occurance. */
+void d_EA103() :
+{}
+{
+  integer(6) // TM
+}
+
+/** EA104 Event Duration In Minutes. */
+void d_EA104() :
+{}
+{
+  integer(8)
+}
+
+/** EA105 Event Duration In Milliseconds. */
+void d_EA105() :
+{}
+{
+  integer(8)
+}
+
+/** EA106 User Defined Field User Defined Data. */
+void d_EA106() :
+{}
+{
+  alphanumeric(12)
+}
+
+/** EA201 Event Identification. */
+void d_EA201() :
+{}
+{
+  alphanumeric(20)
+}
+
+/** EA202 Number of Events Since Last Reset. */
+void d_EA202() :
+{}
+{
+  integer(6)
+}
+
+/** EA203 Number of Events Since Initialisation. */
+void d_EA203() :
+{}
+{
+  integer(6)
+}
+
+/** EA204 User Defined Field. */
+void d_EA204() :
+{}
+{
+  alphanumeric(12)
+}
+
+/** EA205 Event Activity. */
+void d_EA205() :
+{}
+{
+  integer(1)
+}
+
+/** EA206 Event Duration In Minutes. */
+void d_EA206() :
+{}
+{
+  integer(8)
+}
+
+/** SA101 Stock Item Identification. */
+void d_SA101() :
+{}
+{
+  alphanumeric(20)
+}
+
+/** SA102 Quantity Added To The Machine. */
+void d_SA102() :
+{}
+{
+  integer(6)
+}
+
+/** SA103 Quantity Removed From The Machine. */
+void d_SA103() :
+{}
+{
+  integer(6)
+}
+
+/** SA104 Stock Item Machine Price. */
+void d_SA104() :
+{}
+{
+  integer(8)
+}
+
+/** SA105 Stock Item Machine Location. */
+void d_SA105() :
+{}
+{
+  alphanumeric(20)
+}
+
+/** SA106 User Defined Field. */
+void d_SA106() :
+{}
+{
+  alphanumeric(12)
+}
+
+/** SA201 Ingredient Number. */
+void d_SA201() :
+{}
+{
+  alphanumeric(20)
+}
+
+/** SA202 Quantity of Ingredient Vended Since Last Reset. */
+void d_SA202() :
+{}
+{
+  integer(6)
+}
+
+/** SA203 Quantity of Ingredients Vended Since Initialisation. */
+void d_SA203() :
+{}
+{
+  integer(6)
+}
+
+/** EA301 Number Of Reads with RESET Since Initialisation. */
+void d_EA301() :
+{}
+{
+  integer(8)
+}
+
+/** EA302 Date Of This Read Out. */
+void d_EA302() :
+{}
+{
+  integer(8) // DT
+}
+
+/** EA303 Time Of This Read Out. */
+void d_EA303() :
+{}
+{
+  integer(6) // TM
+}
+
+/** EA304 This Terminal interrogator Identification. */
+void d_EA304() :
+{}
+{
+  alphanumeric(20)
+}
+
+/** EA305 Date Of Last Read Out. */
+void d_EA305() :
+{}
+{
+  integer(8) // DT
+}
+
+/** EA306 Time Of Last Read Out. */
+void d_EA306() :
+{}
+{
+  integer(6) // TM
+}
+
+/** EA307 Last Terminal interrogator Identification. */
+void d_EA307() :
+{}
+{
+  alphanumeric(12)
+}
+
+/** EA308 User Defined Field. */
+void d_EA308() :
+{}
+{
+  alphanumeric(12)
+}
+
+/** EA309 Number of Reads with or without RESET since Initialization. */
+void d_EA309() :
+{}
+{
+  integer(8)
+}
+
+/** EA310 Number of Resets since Initialization. */
+void d_EA310() :
+{}
+{
+  integer(8)
+}
+
+/** EA701 Number of Power Outages Since Last Reset. */
+void d_EA701() :
+{}
+{
+  integer(6)
+}
+
+/** EA702 Number of Power Outages Since Initialisation. */
+void d_EA702() :
+{}
+{
+  integer(8)
+}
+
+/** PP101 Preselection Number. */
+void d_PP101() :
+{}
+{
+  alphanumeric(6)
+}
+
+/** PP102 Preselection Price. */
+void d_PP102() :
+{}
+{
+  integer(8)
+}
+
+/** PP103 Preselection Identification. */
+void d_PP103() :
+{}
+{
+  alphanumeric(20)
+}
+
+/** PP104 Preselection Incremental Price. */
+void d_PP104() :
+{}
+{
+  integer(6)
+}
+
+/** PP105 Number of Times Preselection Used Since Initialisation. */
+void d_PP105() :
+{}
+{
+  integer(6)
+}
+
+/** PP106 Value of Preselection Used since initialisation. */
+void d_PP106() :
+{}
+{
+  integer(8)
+}
+
+/** PP107 Number of Times Preselection Used Since Reset. */
+void d_PP107() :
+{}
+{
+  integer(6)
+}
+
+/** PP108 Value of Preselection Used Since Reset. */
+void d_PP108() :
+{}
+{
+  integer(8)
+}
+
+/** TA201 Value of Vend Token Vends Since Initialisation. */
+void d_TA201() :
+{}
+{
+  integer(8)
+}
+
+/** TA202 No. of Vend Token Vends Since Initialisation. */
+void d_TA202() :
+{}
+{
+  integer(8)
+}
+
+/** TA203 Value of Vend Token Sales Since Last Reset. */
+void d_TA203() :
+{}
+{
+  integer(6)
+}
+
+/** TA204 No. of Vend Token Sales Since Last Reset. */
+void d_TA204() :
+{}
+{
+  integer(6)
+}
+
+/** TA205 Value of Value Token Since Initialisation. */
+void d_TA205() :
+{}
+{
+  integer(8)
+}
+
+/** TA206 No. of Value Token Since Initialisation. */
+void d_TA206() :
+{}
+{
+  integer(8)
+}
+
+/** TA207 Value of Value Token Sales Since Last Reset. */
+void d_TA207() :
+{}
+{
+  integer(6)
+}
+
+/** TA208 No. of Value Token Vends Since Last Reset. */
+void d_TA208() :
+{}
+{
+  integer(6)
+}
+
+/** CA101 Coin Mechanism Serial Number. */
+void d_CA101() :
+{}
+{
+  alphanumeric(20)
+}
+
+/** CA102 Coin Mechanism Model Number. */
+void d_CA102() :
+{}
+{
+  alphanumeric(20)
+}
+
+/** CA103 Coin Mechanism Software Revision. */
+void d_CA103() :
+{}
+{
+  integer(4)
+}
+
+/** CA104 User Defined Field. */
+void d_CA104() :
+{}
+{
+  alphanumeric(12)
+}
+
+/** CA105 Coin Mechanism Asset Number. */
+void d_CA105() :
+{}
+{
+  alphanumeric(20)
+}
+
+/** CA201 Value of Cash Sales Since Initialisation. */
+void d_CA201() :
+{}
+{
+  integer(8)
+}
+
+/** CA202 Number of Cash Vends Since Initialisation. */
+void d_CA202() :
+{}
+{
+  integer(6)
+}
+
+/** CA203 Value of Cash Sales Since Last Reset. */
+void d_CA203() :
+{}
+{
+  integer(8)
+}
+
+/** CA204 Number of Cash Vends Since Last Reset. */
+void d_CA204() :
+{}
+{
+  integer(6)
+}
+
+/** CA301 Value of Cash In Since Last Reset. */
+void d_CA301() :
+{}
+{
+  integer(8)
+}
+
+/** CA302 Value of Cash To Cash Box Since Last Reset. */
+void d_CA302() :
+{}
+{
+  integer(8)
+}
+
+/** CA303 Value of Cash to Tubes Since Last Reset. */
+void d_CA303() :
+{}
+{
+  integer(8)
+}
+
+/** CA304 Value of Bills In Since Last Reset. */
+void d_CA304() :
+{}
+{
+  integer(8)
+}
+
+/** CA305 Value of Cash In Since Initialisation. */
+void d_CA305() :
+{}
+{
+  integer(8)
+}
+
+/** CA306 Value of Cash To Cash Box Since Initialisation. */
+void d_CA306() :
+{}
+{
+  integer(8)
+}
+
+/** CA307 Value of Cash To Tubes Since Initilisation. */
+void d_CA307() :
+{}
+{
+  integer(8)
+}
+
+/** CA308 Value of Bills In Since Initialisation. */
+void d_CA308() :
+{}
+{
+  integer(8)
+}
+
+/** CA309 Value of Bills In Since Last Reset. */
+void d_CA309() :
+{}
+{
+  integer(8)
+}
+
+/** CA310 Value of Bills In Since Initialisation. */
+void d_CA310() :
+{}
+{
+  integer(8)
+}
+
+/** CA311 Value of Bills To Recycler Since Last Reset. */
+void d_CA311() :
+{}
+{
+  integer(8)
+}
+
+/** CA312 Value of Bills To Recycler Since Initialisation. */
+void d_CA312() :
+{}
+{
+  integer(8)
+}
+
+/** CA401 Value of Cash Dispensed Since Last Reset. */
+void d_CA401() :
+{}
+{
+  integer(8)
+}
+
+/** CA402 Value of Cash Manually Dispensed Since Last Reset. */
+void d_CA402() :
+{}
+{
+  integer(8)
+}
+
+/** CA403 Value of Cash Dispensed Since Initialisation. */
+void d_CA403() :
+{}
+{
+  integer(8)
+}
+
+/** CA404 Value of Cash Manually Dispensed Since Initiatlisation. */
+void d_CA404() :
+{}
+{
+  integer(8)
+}
+
+/** CA405 Value of Bills Dispensed Since Last Reset. */
+void d_CA405() :
+{}
+{
+  integer(8)
+}
+
+/** CA406 Value of Bills Manually Dispensed Since Last Reset. */
+void d_CA406() :
+{}
+{
+  integer(8)
+}
+
+/** CA407 Value of Bills Dispensed To Recycler Since Last Reset. */
+void d_CA407() :
+{}
+{
+  integer(8)
+}
+
+/** CA408 Value of Bills Dispensed Since Initialisation. */
+void d_CA408() :
+{}
+{
+  integer(8)
+}
+
+/** CA409 Value of Bills Manually Dispensed Since Initiatlisation. */
+void d_CA409() :
+{}
+{
+  integer(8)
+}
+
+/** CA410 Value of Bills Manually Dispensed To Recycler Since Initiatlisation. */
+void d_CA410() :
+{}
+{
+  integer(8)
+}
+
+/** CA501 Number of Power Outages Since Last Reset. */
+void d_CA501() :
+{}
+{
+  integer(8)
+}
+
+/** CA502 Number of Power Outages Since Initialisation. */
+void d_CA502() :
+{}
+{
+  integer(8)
+}
+
+/** CA601 Number Of Reads Performed Since Initialisation. */
+void d_CA601() :
+{}
+{
+  integer(8)
+}
+
+/** CA602 Number of Door Openings Since initialsiation. */
+void d_CA602() :
+{}
+{
+  integer(8)
+}
+
+/** CA701 Value of Cash Discounts Since Last Reset. */
+void d_CA701() :
+{}
+{
+  integer(8)
+}
+
+/** CA702 Value of Cash Discounts Since Initialisation. */
+void d_CA702() :
+{}
+{
+  integer(8)
+}
+
+/** CA703 Number of Cash Discounts Since Last Reset. */
+void d_CA703() :
+{}
+{
+  integer(8)
+}
+
+/** CA704 Number of Cash Discounts Since Initialisation. */
+void d_CA704() :
+{}
+{
+  integer(8)
+}
+
+/** CA705 Value of Cash Surcharges Since Last Reset. */
+void d_CA705() :
+{}
+{
+  integer(8)
+}
+
+/** CA706 Value of Cash Surcharges Since Initialization. */
+void d_CA706() :
+{}
+{
+  integer(8)
+}
+
+/** CA707 Number of Cash Surcharges Since Last Reset. */
+void d_CA707() :
+{}
+{
+  integer(8)
+}
+
+/** CA708 Number of Cash Surcharges Since Initialisation. */
+void d_CA708() :
+{}
+{
+  integer(8)
+}
+
+/** CA801 Value of Cash Overpay Since Last Reset. */
+void d_CA801() :
+{}
+{
+  integer(8)
+}
+
+/** CA802 Value of Cash Overpay Since Initialisation. */
+void d_CA802() :
+{}
+{
+  integer(8)
+}
+
+/** CA901 Value of Pay Vends Exact Change Since Last Reset. */
+void d_CA901() :
+{}
+{
+  integer(8)
+}
+
+/** CA902 Value of Pay Vends Exact Change Since Initialisation. */
+void d_CA902() :
+{}
+{
+  integer(8)
+}
+
+/** CA1001 Value of Cash Filled Since Last Reset. */
+void d_CA1001() :
+{}
+{
+  integer(8)
+}
+
+/** CA1002 Value of Cash Filled Since Initialisation. */
+void d_CA1002() :
+{}
+{
+  integer(8)
+}
+
+/** CA1003 Value of Bills Filled Since Last Reset. */
+void d_CA1003() :
+{}
+{
+  integer(8)
+}
+
+/** CA1004 Value of Cash Filled Since Initialisation. */
+void d_CA1004() :
+{}
+{
+  integer(8)
+}
+
+/** DA101 Cashless 1 Serial Number. */
+void d_DA101() :
+{}
+{
+  alphanumeric(20)
+}
+
+/** DA102 Cashless 1 Model Number. */
+void d_DA102() :
+{}
+{
+  alphanumeric(20)
+}
+
+/** DA103 Cashless 1 Software Revision. */
+void d_DA103() :
+{}
+{
+  integer(4)
+}
+
+/** DA104 User Defined Field. */
+void d_DA104() :
+{}
+{
+  alphanumeric(12)
+}
+
+/** DA105 Cashless 1 Asset Number. */
+void d_DA105() :
+{}
+{
+  alphanumeric(20)
+}
+
+/** DA201 Value of Cashless 1 Sales Since Initiatlisation. */
+void d_DA201() :
+{}
+{
+  integer(8)
+}
+
+/** DA202 Number Of Cashless 1 Vends Since Initialisation. */
+void d_DA202() :
+{}
+{
+  integer(8)
+}
+
+/** DA203 Value of Cashless 1 Sales Since Last Reset. */
+void d_DA203() :
+{}
+{
+  integer(8)
+}
+
+/** DA204 Number of Cashless 1 Vends Since Last Reset. */
+void d_DA204() :
+{}
+{
+  integer(6)
+}
+
+/** DA205 User Defined Field. */
+void d_DA205() :
+{}
+{
+  alphanumeric(12)
+}
+
+/** DA301 Value Debited From Cashless 1 Since Initialisation. */
+void d_DA301() :
+{}
+{
+  integer(8)
+}
+
+/** DA302 Value Debited From Cashless 1 Since last Reset. */
+void d_DA302() :
+{}
+{
+  integer(8)
+}
+
+/** DA303 User Defined Field. */
+void d_DA303() :
+{}
+{
+  alphanumeric(12)
+}
+
+/** DA401 Value Credited To Cashless 1 Since Initialisation. */
+void d_DA401() :
+{}
+{
+  integer(8)
+}
+
+/** DA402 Value Credited To Cashless 1 Since Last Reset. */
+void d_DA402() :
+{}
+{
+  integer(8)
+}
+
+/** DA403 User Defined Field. */
+void d_DA403() :
+{}
+{
+  alphanumeric(12)
+}
+
+/** DA501 Value of Cashless 1 Discounts Since Last Reset. */
+void d_DA501() :
+{}
+{
+  integer(8)
+}
+
+/** DA502 Number Of Discount Cashless 1 Vends Since Last Reset. */
+void d_DA502() :
+{}
+{
+  integer(6)
+}
+
+/** DA503 Value Of Cashless 1 Discounts Since Initialisation. */
+void d_DA503() :
+{}
+{
+  integer(8)
+}
+
+/** DA504 Number Of Discount Cashless 1 Vends Since Initialisation. */
+void d_DA504() :
+{}
+{
+  integer(8)
+}
+
+/** DA505 Value of Cashless 1 Surcharges Since Last Reset. */
+void d_DA505() :
+{}
+{
+  integer(8)
+}
+
+/** DA506 Number of Surcharge Cashless 1 Vends Since Last Reset. */
+void d_DA506() :
+{}
+{
+  integer(6)
+}
+
+/** DA507 Value Of Cashless 1 Surcharges Since Initialisation. */
+void d_DA507() :
+{}
+{
+  integer(8)
+}
+
+/** DA508 Number of Surcharge Cashless 1 Vends Since Initialisation. */
+void d_DA508() :
+{}
+{
+  integer(8)
+}
+
+/** DA601 Revaluation Incentive on Cashless 1 Since Initialisation. */
+void d_DA601() :
+{}
+{
+  integer(8)
+}
+
+/** DA602 Revaluation Incentive on Cashless 1 Since Last Reset. */
+void d_DA602() :
+{}
+{
+  integer(8)
+}
+
+/** DA701 Cashless 1 User Group Number. */
+void d_DA701() :
+{}
+{
+  integer(13)
+}
+
+/** DA702 Cashless 1 User Group Net Sales since last reset. */
+void d_DA702() :
+{}
+{
+  integer(8)
+}
+
+/** DA703 User Group Value Added To Cashless 1 since last reset. */
+void d_DA703() :
+{}
+{
+  integer(8)
+}
+
+/** DA704 Cashless 1 User Group Discounts since last reset. */
+void d_DA704() :
+{}
+{
+  integer(8)
+}
+
+/** DA705 Number of products sold to Cashless 1 user group since initialisation. */
+void d_DA705() :
+{}
+{
+  integer(8)
+}
+
+/** DA706 Number of products sold to Cashless 1 user group since last reset. */
+void d_DA706() :
+{}
+{
+  integer(6)
+}
+
+/** DA707 Cashless 1 User Group Net Sales since initialization. */
+void d_DA707() :
+{}
+{
+  integer(8)
+}
+
+/** DA708 User Group Value Added To Cashless 1 since initialization. */
+void d_DA708() :
+{}
+{
+  integer(8)
+}
+
+/** DA709 Cashless 1 User Group Discounts since initialization. */
+void d_DA709() :
+{}
+{
+  integer(8)
+}
+
+void alphanumeric(int maxLength) :
+{
+  Token token;
+}
+{
+  token = < ALPHANUMERIC >
+  {
+    if (maxLength < token.image.length())
+    {
+      throw new ParseException("MaxLength exceeded: " + maxLength + " with '" + token.image + "' at (" + token.beginLine + ", " + token.beginColumn + ")");
+    }
+  }
+}
+
+void integer(int maxLength) :
+{
+  Token token;
+}
+{
+  token = < ALPHANUMERIC >
+  {
+    if (maxLength < token.image.length())
+    {
+      throw new ParseException("MaxLength exceeded: " + maxLength + " with '" + token.image + "' at (" + token.beginLine + ", " + token.beginColumn + ")");
+    }
+  }
+}
+
+void numeric(int maxLength) :
+{
+  Token token;
+}
+{
+  token = < ALPHANUMERIC >
+  {
+    if (maxLength < token.image.length())
+    {
+      throw new ParseException("MaxLength exceeded: " + maxLength + " with '" + token.image + "' at (" + token.beginLine + ", " + token.beginColumn + ")");
+    }
+  }
+}
+
+/************************************************ TOKENS *********************************************************/
+/************************************************ TOKENS *********************************************************/
+/************************************************ TOKENS *********************************************************/
+/************************************************ TOKENS *********************************************************/
+/************************************************ TOKENS *********************************************************/
+
+SKIP :
+{
+  < " "
+  | "\t" >
+}
+
+TOKEN :
+{
+  < ASTERISK : "*" >
+}
+
+TOKEN :
+{
+  < PLUS : "+" >
+}
+
+TOKEN :
+{
+  < COLON : ":" >
+}
+
+TOKEN :
+{
+  < EOL :
+    "\n" >
+}
+
+TOKEN :
+{
+  < ALPHANUMERIC :
+    (
+    [ "A"-"Z", "a"-"z", "0"-"9", "\u00f1", "\u00d1", " ", "/", ",", ".", "-", "?", "%", "#" ]
+    )+ >
+}
+
+TOKEN :
+{
+  < INTEGER : ([ "0"-"9" ])+ >
+}
