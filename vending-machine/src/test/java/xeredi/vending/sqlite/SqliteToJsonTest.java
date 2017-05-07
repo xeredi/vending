@@ -35,18 +35,12 @@ public final class SqliteToJsonTest {
 				try {
 					processedFiles++;
 
-					// System.out.println("getting db '" +
-					// file.getAbsolutePath() + "'");
-
-					final String jsonData = sqliteToJson.generateJsonData(file.getAbsolutePath(), "tipob_id38005");
+					final byte[] jsonData = sqliteToJson.generateJsonData(file.getAbsolutePath(), "tipob_id38005");
 
 					if (jsonData != null) {
-						// System.out.println(file.getAbsolutePath() + ": " +
-						// jsonData);
+						generatedBytes += jsonData.length;
 
-						generatedBytes += jsonData.length();
-
-						mqttWriter.write("json", jsonData.getBytes());
+						mqttWriter.write("json", jsonData);
 
 						dbsWithData++;
 					}

@@ -4,7 +4,7 @@ import org.eclipse.paho.client.mqttv3.IMqttDeliveryToken;
 import org.eclipse.paho.client.mqttv3.MqttCallback;
 import org.eclipse.paho.client.mqttv3.MqttMessage;
 
-import com.jsoniter.JsonIterator;
+import com.google.gson.Gson;
 
 import xeredi.vending.json.Telemetria;
 
@@ -46,9 +46,7 @@ public final class MessageJsonCallback implements MqttCallback {
 			System.out.print(".");
 		}
 
-//		final Telemetria telemetria = JsonIterator.deserialize(message.getPayload(), Telemetria.class);
-//
-//		System.out.println("Telemetria: " + telemetria.getRawData());
+		final Gson gson = new Gson();
+		final Telemetria telemetria = gson.fromJson(new String(message.getPayload()), Telemetria.class);
 	}
-
 }

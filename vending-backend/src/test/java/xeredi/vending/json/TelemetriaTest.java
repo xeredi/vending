@@ -7,8 +7,7 @@ import java.io.InputStream;
 import org.apache.commons.io.IOUtils;
 import org.junit.Test;
 
-import com.jsoniter.JsonIterator;
-import com.jsoniter.annotation.JsoniterAnnotationSupport;
+import com.google.gson.Gson;
 
 // TODO: Auto-generated Javadoc
 /**
@@ -24,15 +23,12 @@ public final class TelemetriaTest {
 	 * @throws IOException
 	 *             Signals that an I/O exception has occurred.
 	 */
-	private void testFile(final String filename) throws IOException {
+	private Telemetria testFile(final String filename) throws IOException {
 		try (final InputStream is = new FileInputStream(filename)) {
 			final byte[] content = IOUtils.toByteArray(is);
 
 			// System.out.println("Content: " + new String(content));
-
-			final Telemetria telemetria = JsonIterator.deserialize(new String(content), Telemetria.class);
-
-			// System.out.println("Telemetria: " + telemetria.getRawData());
+			return (new Gson()).fromJson(new String(content), Telemetria.class);
 		}
 	}
 
@@ -43,10 +39,11 @@ public final class TelemetriaTest {
 	public void test() {
 		final TelemetriaTest test = new TelemetriaTest();
 
-		JsoniterAnnotationSupport.enable();
-
 		try {
 			final int fileIterations = 10000;
+
+			System.out.println(
+					"Unit test: " + test.testFile("/home/xeredi/git/vending/vending-backend/samples/test.json"));
 
 			System.out.println("File Test. Iterations: " + fileIterations);
 

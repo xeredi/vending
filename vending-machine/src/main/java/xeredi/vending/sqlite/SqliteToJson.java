@@ -7,8 +7,9 @@ import java.sql.ResultSet;
 import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.Map;
+
+import com.google.gson.Gson;
 
 // TODO: Auto-generated Javadoc
 /**
@@ -29,13 +30,14 @@ public final class SqliteToJson {
 	 *            the db path
 	 * @param tableName
 	 *            the table name
-	 * @return the string
+	 * @return the byte[]
 	 * @throws SQLException
 	 *             the SQL exception
 	 */
-	public String generateJsonData(final String dbPath, final String tableName) throws SQLException {
+	public byte[] generateJsonData(final String dbPath, final String tableName) throws SQLException {
 		final String dbUrl = JDBC_URL_PREFIX + dbPath;
-		StringBuffer jsonData = null;
+		final Map<String, Object> map = new HashMap<>();
+		final Gson mapper = new Gson();
 
 		try {
 			Class.forName(JDBC_DRIVER_CLASS);
@@ -49,11 +51,6 @@ public final class SqliteToJson {
 							final ResultSetMetaData rsmd = rs.getMetaData();
 							final int columnCount = rsmd.getColumnCount();
 
-							jsonData = new StringBuffer();
-							jsonData.append("{");
-
-							final Map<String, Object> map = new HashMap<>();
-
 							for (int i = 0; i < columnCount; i++) {
 								final String columnName = rsmd.getColumnName(i + 1);
 								final Object value = rs.getObject(i + 1);
@@ -62,29 +59,12 @@ public final class SqliteToJson {
 									map.put(columnName, value);
 								}
 							}
-
-							final Iterator<String> iterator = map.keySet().iterator();
-
-							while (iterator.hasNext()) {
-								final String columnName = iterator.next();
-
-								jsonData.append("\"").append(columnName).append("\":\"").append(map.get(columnName))
-										.append("\"");
-
-								if (iterator.hasNext()) {
-									jsonData.append(',');
-								}
-							}
-
-							jsonData.append("}");
 						}
-
 					}
 				}
-
 			}
 
-			return jsonData == null ? null : jsonData.toString();
+			return map.isEmpty() ? null : mapper.toJson(map).getBytes();
 		} catch (final ClassNotFoundException ex) {
 			throw new SQLException("Driver '" + JDBC_DRIVER_CLASS + "' not found");
 		}

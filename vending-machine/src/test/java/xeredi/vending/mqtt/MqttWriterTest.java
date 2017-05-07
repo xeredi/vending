@@ -41,7 +41,7 @@ public final class MqttWriterTest {
 		final MqttWriterTest test = new MqttWriterTest();
 
 		try {
-			final int fileIterations = 10000;
+			final int fileIterations = 1000;
 
 			System.out.println("Byte Test");
 
