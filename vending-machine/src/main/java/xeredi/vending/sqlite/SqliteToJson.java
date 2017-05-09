@@ -10,6 +10,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 
 // TODO: Auto-generated Javadoc
 /**
@@ -37,7 +38,7 @@ public final class SqliteToJson {
 	public byte[] generateJsonData(final String dbPath, final String tableName) throws SQLException {
 		final String dbUrl = JDBC_URL_PREFIX + dbPath;
 		final Map<String, Object> map = new HashMap<>();
-		final Gson mapper = new Gson();
+		final Gson mapper = new GsonBuilder().create();
 
 		try {
 			Class.forName(JDBC_DRIVER_CLASS);

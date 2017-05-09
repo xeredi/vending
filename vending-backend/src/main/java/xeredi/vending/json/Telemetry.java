@@ -1,5 +1,7 @@
 package xeredi.vending.json;
 
+import java.util.Date;
+
 import com.google.gson.annotations.SerializedName;
 
 import lombok.Data;
@@ -8,15 +10,64 @@ import lombok.Data;
 /**
  * The Class Telemetria.
  */
-
-/**
- * Instantiates a new telemetria.
- */
 @Data
-public final class Telemetria {
+public final class Telemetry {
 
 	/** The id. */
+	@SerializedName("id")
 	private Long id;
+
+	/** The fecha. */
+	@SerializedName("p_fechahora")
+	private Date fecha;
+
+	/** The fecha ultimo volcado. */
+	@SerializedName("timestamp_ult_volcado")
+	private Date fechaUltimoVolcado;
+
+	/** The fecha lectura. */
+	@SerializedName("timestamp_lectura_p")
+	private Date fechaLectura;
+
+	/** The version prot. */
+	@SerializedName("p_version_prot")
+	private String versionProt;
+
+	/** The modelo. */
+	@SerializedName("p_modelo")
+	private String modelo;
+
+	/** The maquina. */
+	@SerializedName("p_id_maquina")
+	private String maquina;
+
+	/** The fabricante. */
+	@SerializedName("p_fabricante")
+	private String fabricante;
+
+	/** The num volcados. */
+	@SerializedName("num_volcados")
+	private Long numVolcados;
+
+	/** The num lect intentos. */
+	@SerializedName("num_lect_intentos_tot")
+	private Long numLectIntentos;
+
+	/** The num lect intentos ok. */
+	@SerializedName("num_lect_intentos_ok")
+	private Long numLectIntentosOk;
+
+	/** The accion id. */
+	@SerializedName("id_accion")
+	private Long accionId;
+
+	/** The bytes leidos. */
+	@SerializedName("bytes_leidos")
+	private Long bytesLeidos;
+
+	/** The bytes escritos. */
+	@SerializedName("bytes_escritos")
+	private Long bytesEscritos;
 
 	/** The estado V 1. */
 	@SerializedName("p_estado_v1")
@@ -113,6 +164,18 @@ public final class Telemetria {
 	/** The tot 1 ap. */
 	@SerializedName("p_TOT_1AP")
 	private Long tot1ap;
+
+	/** The porcent. */
+	@SerializedName("p_PORCENT")
+	private Long porcent;
+
+	/** The play 10 sal. */
+	@SerializedName("p_PLAY10_SAL")
+	private Long play10Sal;
+
+	/** The play 10 ent. */
+	@SerializedName("p_PLAY10_ENT")
+	private Long play10Ent;
 
 	/** The hop 5000. */
 	@SerializedName("p_HOP_5000")
@@ -257,6 +320,10 @@ public final class Telemetria {
 	/** The caj 0010. */
 	@SerializedName("p_CAJ_0010")
 	private Long caj0010;
+
+	/** The config maquina. */
+	@SerializedName("p_config_maquina")
+	private String configMaquina;
 
 	/** The raw data. */
 	@SerializedName("rawdata")

@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE configuration
+    PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
+    "http://mybatis.org/dtd/mybatis-3-config.dtd">
+
+<configuration>
+	<properties resource="Configuration.properties" />
+
+	<settings>
+		<setting name="logImpl" value="NO_LOGGING" />
+		<setting name="proxyFactory" value="CGLIB" />
+		<setting name="jdbcTypeForNull" value="NULL" />
+	</settings>
+
+	<typeAliases>
+		<package name="xeredi.vending" />
+	</typeAliases>
+
+	<!-- <typeHandlers> <typeHandler handler="xeredi.argo.model.util.mybatis.BooleanTypeHandler"
+		javaType="java.lang.Boolean" jdbcType="INTEGER" /> </typeHandlers> -->
+	<environments default="local">
+		<environment id="local">
+			<transactionManager type="JDBC">
+				<!-- <property name="DataSource" value="${db.dataSource}" /> <property
+					name="JDBC.Driver" value="${db.dataSource.driver}" /> <property name="JDBC.ConnectionURL"
+					value="${db.dataSource.url}" /> <property name="JDBC.Username" value="${db.dataSource.username}"
+					/> <property name="JDBC.Password" value="${db.dataSource.password}" /> <property
+					name="JDBC.DefaultAutoCommit" value="false" /> <property name="Pool.MaximumActiveConnections"
+					value="10" /> <property name="Pool.MaximumIdleConnections" value="5" /> <property
+					name="Pool.MaximumWait" value="60000" /> <property name="Pool.ValidationQuery"
+					value="select 1+1" /> <property name="Pool.LogAbandoned" value="false" />
+					<property name="Pool.RemoveAbandoned" value="false" /> <property name="Pool.RemoveAbandonedTimeout"
+					value="50000" /> -->
+			</transactionManager>
+
+			<dataSource type="xeredi.util.mybatis.HikaryDataSourceFactory">
+				<property name="jdbcUrl" value="${db.dataSource.url}" />
+				<property name="driverClassName" value="${db.dataSource.driver}" />
+				<property name="username" value="${db.dataSource.username}" />
+				<property name="password" value="${db.dataSource.password}" />
+				<property name="isAutoCommit" value="false" />
+				<property name="isReadOnly" value="false" />
+				<property name="maxPoolSize" value="8" />
+				<property name="minIdle" value="4" />
+				<property name="connectionTestQuery" value="select 1" />
+			</dataSource>
+
+			<!-- <dataSource type="xeredi.util.mybatis.DbcpDataSourceFactory"> <property
+				name="url" value="${db.dataSource.url}" /> <property name="driverClassName"
+				value="${db.dataSource.driver}" /> <property name="username" value="${db.dataSource.username}"
+				/> <property name="password" value="${db.dataSource.password}" /> <property
+				name="defaultAutoCommit" value="false" /> <property name="rollbackOnReturn"
+				value="false" /> <property name="initialSize" value="4" /> <property name="maxTotal"
+				value="8" /> <property name="minIdle" value="4" /> <property name="maxIdle"
+				value="4" /> <property name="validationQuery" value="select 1" /> </dataSource> -->
+
+			<!-- <dataSource type="xeredi.util.mybatis.C3P0DataSourceFactory"> <property
+				name="jdbcUrl" value="${db.dataSource.url}" /> <property name="driverClass"
+				value="${db.dataSource.driver}" /> <property name="user" value="${db.dataSource.username}"
+				/> <property name="password" value="${db.dataSource.password}" /> <property
+				name="autoCommitOnClose" value="false" /> <property name="initialPoolSize"
+				value="4" /> <property name="minPoolSize" value="4" /> <property name="maxPoolSize"
+				value="8" /> <property name="preferredTestQuery" value="select 1" /> <property
+				name="testConnectionOnCheckin" value="true" /> <property name="idleConnectionTestPeriod"
+				value="300" /> <property name="maxIdleTimeExcessConnections" value="240"
+				/> </dataSource> -->
+		</environment>
+	</environments>
+
+	<databaseIdProvider type="DB_VENDOR">
+		<property name="SQL Server" value="sqlserver" />
+		<property name="Oracle" value="oracle" />
+		<property name="PostgreSQL" value="postgres" />
+	</databaseIdProvider>
+
+	<mappers>
+		<package name="xeredi.vending.mapper" />
+	</mappers>
+</configuration>

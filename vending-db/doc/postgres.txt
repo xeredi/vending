@@ -1,0 +1,82 @@
+INSTALACION
+	Add repository
+	$ yum install  https://download.postgresql.org/pub/repos/yum/9.6/redhat/rhel-7-x86_64/pgdg-redhat96-9.6-3.noarch.rpm -y
+	Install
+	$ yum -y install postgresql96 postgresql96-server postgresql96-contrib postgresql96-libs -y
+	Initialize
+	$ /usr/pgsql-9.6/bin/postgresql96-setup initdb
+	Start
+	$ systemctl enable postgresql-9.6.service
+	$ systemctl start postgresql-9.6.service
+
+CAMBIAR CONTRASEÑA DE USUARIO postgres
+	$ sudo -u postgres psql
+	\password
+
+PERMISOS A USUARIOS
+	$ sudo -u postgres psql
+	     postgres=> alter user postgres password 'apassword';
+	     postgres=> create user yerusername createdb createrole password 'somepass';
+	     postgres=> create database yerusername owner yerusername;
+	     postgres=> \q
+
+PRUEBA DE CONFIGURACION TCP (Para acceso remotas)
+	$ psql -U postgres -h localhost
+
+ACCESO REMOTO
+	$ vi /var/lib/pgsql/9.6/data/postgresql.conf
+		Replace
+			listen_addresses = 'localhost'
+		With
+			listen_addresses = '*'
+	$ vi /var/lib/pgsql/9.6/data/pg_hba.conf
+		Replace
+			# IPv4 local connections:
+			host    all             all             127.0.0.1/32            md5
+			# IPv6 local connections:
+			host    all             all             ::1/128                 md5
+
+		Add lines
+			host    all             all              0.0.0.0/0                       md5
+			host    all             all              ::/0                            md5
+	$ systemctl restart postgresql-9.6
+
+TUNING (https://www.pgconfig.org)
+	Test sin tuning
+	$ /usr/pgsql-9.6/bin/pgbench -i
+	$ /usr/pgsql-9.6/bin/pgbench -c 10 -T 30
+
+	starting vacuum...end.
+	transaction type: <builtin: TPC-B (sort of)>
+	scaling factor: 1
+	query mode: simple
+	number of clients: 10
+	number of threads: 1
+	duration: 30 s
+	number of transactions actually processed: 2053
+	latency average = 146.825 ms
+	tps = 68.108081 (including connections establishing)
+	tps = 68.110893 (excluding connections establishing)
+
+	$ vi /var/lib/pgsql/9.6/data/postgresql.conf
+
+	synchronous_commit = off
+
+	$ systemctl restart postgresql-9.6
+
+	Test con tuning
+	$ /usr/pgsql-9.6/bin/pgbench -i
+	$ /usr/pgsql-9.6/bin/pgbench -c 10 -T 30
+
+	starting vacuum...end.
+	transaction type: <builtin: TPC-B (sort of)>
+	scaling factor: 1
+	query mode: simple
+	number of clients: 10
+	number of threads: 1
+	duration: 30 s
+	number of transactions actually processed: 2040
+	latency average = 147.739 ms
+	tps = 67.686952 (including connections establishing)
+	tps = 67.691057 (excluding connections establishing)
+

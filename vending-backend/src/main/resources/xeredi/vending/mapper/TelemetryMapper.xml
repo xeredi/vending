@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="xeredi.vending.mapper.TelemetryMapper">
+	<resultMap type="Telemetry" id="ResultMap">
+		<id column="tlmy_pk" property="id" />
+		<result column="tlmy_date" property="fecha" />
+		<result column="tlmy_protocol_release" property="versionProt" />
+		<result column="tlmy_rawdata" property="rawData" />
+	</resultMap>
+
+	<sql id="SelectPrefix">
+    <![CDATA[
+	SELECT
+		tlmy_pk, tlmy_date, tlmy_protocol_release, tlmy_rawdata
+	FROM
+		tbl_telemetry_tlmy
+    ]]>
+	</sql>
+
+	<sql id="SelectCountPrefix">
+    <![CDATA[
+		SELECT COUNT(1)
+		FROM tbl_telemetry_tlmy
+    ]]>
+	</sql>
+
+	<insert id="insert" parameterType="Telemetry">
+        <![CDATA[
+        INSERT INTO tbl_telemetry_tlmy (tlmy_pk, tlmy_date, tlmy_protocol_release, tlmy_rawdata)
+        VALUES (#{id}, #{fecha}, #{versionProt}, #{rawData})
+        ]]>
+	</insert>
+
+	<update id="update" parameterType="Telemetry">
+        <![CDATA[
+		UPDATE tbl_telemetry_tlmy SET
+			tlmy_date = #{fecha}
+			, tlmy_protocol_release = #{versionProt}
+			, tlmy_rawdata = #{rawData}
+		WHERE tlmy_pk = #{id}
+        ]]>
+	</update>
+</mapper>

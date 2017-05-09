@@ -7,13 +7,15 @@ import java.io.InputStream;
 import org.apache.commons.io.IOUtils;
 import org.junit.Test;
 
-import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+
+import xeredi.vending.service.TelemetryBO;
 
 // TODO: Auto-generated Javadoc
 /**
  * The Class TelemetriaTest.
  */
-public final class TelemetriaTest {
+public final class TelemetryTest {
 
 	/**
 	 * Test file.
@@ -23,12 +25,19 @@ public final class TelemetriaTest {
 	 * @throws IOException
 	 *             Signals that an I/O exception has occurred.
 	 */
-	private Telemetria testFile(final String filename) throws IOException {
+	private Telemetry testFile(final String filename) throws IOException {
 		try (final InputStream is = new FileInputStream(filename)) {
 			final byte[] content = IOUtils.toByteArray(is);
 
 			// System.out.println("Content: " + new String(content));
-			return (new Gson()).fromJson(new String(content), Telemetria.class);
+			final Telemetry tlmy = (new GsonBuilder().setDateFormat("yyyy-MM-dd HH:mm:ss").create())
+					.fromJson(new String(content), Telemetry.class);
+
+			final TelemetryBO tlmyBO = new TelemetryBO();
+
+			tlmyBO.insert(tlmy);
+
+			return tlmy;
 		}
 	}
 
@@ -37,10 +46,10 @@ public final class TelemetriaTest {
 	 */
 	@Test
 	public void test() {
-		final TelemetriaTest test = new TelemetriaTest();
+		final TelemetryTest test = new TelemetryTest();
 
 		try {
-			final int fileIterations = 10000;
+			final int fileIterations = 20000;
 
 			System.out.println(
 					"Unit test: " + test.testFile("/home/xeredi/git/vending/vending-backend/samples/test.json"));

@@ -5,8 +5,9 @@ import org.eclipse.paho.client.mqttv3.MqttCallback;
 import org.eclipse.paho.client.mqttv3.MqttMessage;
 
 import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 
-import xeredi.vending.json.Telemetria;
+import xeredi.vending.json.Telemetry;
 
 // TODO: Auto-generated Javadoc
 /**
@@ -46,7 +47,7 @@ public final class MessageJsonCallback implements MqttCallback {
 			System.out.print(".");
 		}
 
-		final Gson gson = new Gson();
-		final Telemetria telemetria = gson.fromJson(new String(message.getPayload()), Telemetria.class);
+		final Gson mapper = new GsonBuilder().setDateFormat("yyyy-MM-dd HH:mm:ss").create();
+		final Telemetry telemetria = mapper.fromJson(new String(message.getPayload()), Telemetry.class);
 	}
 }
