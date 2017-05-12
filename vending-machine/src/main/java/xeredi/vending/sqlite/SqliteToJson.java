@@ -1,5 +1,6 @@
 package xeredi.vending.sqlite;
 
+import java.io.File;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
@@ -35,8 +36,8 @@ public final class SqliteToJson {
 	 * @throws SQLException
 	 *             the SQL exception
 	 */
-	public byte[] generateJsonData(final String dbPath, final String tableName) throws SQLException {
-		final String dbUrl = JDBC_URL_PREFIX + dbPath;
+	public byte[] generateJsonData(final File file, final String tableName) throws SQLException {
+		final String dbUrl = JDBC_URL_PREFIX + file.getAbsolutePath();
 		final Map<String, Object> map = new HashMap<>();
 		final Gson mapper = new GsonBuilder().create();
 

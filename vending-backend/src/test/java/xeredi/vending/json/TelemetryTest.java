@@ -9,6 +9,7 @@ import org.junit.Test;
 
 import com.google.gson.GsonBuilder;
 
+import xeredi.vending.service.MachineStatusBO;
 import xeredi.vending.service.TelemetryBO;
 
 // TODO: Auto-generated Javadoc
@@ -33,9 +34,16 @@ public final class TelemetryTest {
 			final Telemetry tlmy = (new GsonBuilder().setDateFormat("yyyy-MM-dd HH:mm:ss").create())
 					.fromJson(new String(content), Telemetry.class);
 
-			final TelemetryBO tlmyBO = new TelemetryBO();
+			tlmy.setReaderCode("tlmy1");
 
-			tlmyBO.insert(tlmy);
+			// final TelemetryBO tlmyBO = new TelemetryBO();
+
+			// tlmyBO.insert(tlmy);
+			// tlmyBO.update(tlmy);
+
+			final MachineStatusBO mcstBO = new MachineStatusBO();
+
+			mcstBO.merge(tlmy);
 
 			return tlmy;
 		}

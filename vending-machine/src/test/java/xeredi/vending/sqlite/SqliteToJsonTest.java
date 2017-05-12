@@ -2,8 +2,10 @@ package xeredi.vending.sqlite;
 
 import java.io.File;
 import java.sql.SQLException;
+import java.util.Arrays;
 import java.util.Calendar;
 
+import org.apache.commons.io.comparator.NameFileComparator;
 import org.eclipse.paho.client.mqttv3.MqttException;
 import org.junit.Test;
 
@@ -30,15 +32,20 @@ public final class SqliteToJsonTest {
 		int processedFiles = 0;
 		int generatedBytes = 0;
 
-		for (final File file : folder.listFiles()) {
+		final File[] files = folder.listFiles();
+
+		Arrays.sort(files, NameFileComparator.NAME_COMPARATOR);
+
+		for (final File file : files) {
 			if (file.getName().endsWith(".db")) {
 				try {
 					processedFiles++;
 
-					final byte[] jsonData = sqliteToJson.generateJsonData(file.getAbsolutePath(), "tipob_id38005");
+					final byte[] jsonData = sqliteToJson.generateJsonData(file, "tipob_id38005");
 
 					if (jsonData != null) {
-						// System.out.println(file.getAbsolutePath() + ": " + new String(jsonData));
+						// System.out.println(file.getAbsolutePath() + ": " +
+						// new String(jsonData));
 
 						generatedBytes += jsonData.length;
 

@@ -1,0 +1,120 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="xeredi.vending.mapper.MachineActivityMapper">
+	<resultMap type="MachineActivity" id="ResultMap">
+		<id column="mcac_pk" property="id" />
+		<result column="mcac_date" property="date" />
+		<result column="mcac_hour" property="hour" />
+
+		<result column="mcac_ent5000" property="ent5000" />
+		<result column="mcac_ent2000" property="ent2000" />
+		<result column="mcac_ent1000" property="ent1000" />
+		<result column="mcac_ent0500" property="ent0500" />
+		<result column="mcac_ent0200" property="ent0200" />
+		<result column="mcac_ent0100" property="ent0100" />
+		<result column="mcac_ent0050" property="ent0050" />
+		<result column="mcac_ent0020" property="ent0020" />
+		<result column="mcac_ent0010" property="ent0010" />
+		<result column="mcac_hop5000" property="hop5000" />
+		<result column="mcac_hop2000" property="hop2000" />
+		<result column="mcac_hop1000" property="hop1000" />
+		<result column="mcac_hop0500" property="hop0500" />
+		<result column="mcac_hop0200" property="hop0200" />
+		<result column="mcac_hop0100" property="hop0100" />
+		<result column="mcac_hop0050" property="hop0050" />
+		<result column="mcac_hop0020" property="hop0020" />
+		<result column="mcac_hop0010" property="hop0010" />
+		<result column="mcac_sal5000" property="sal5000" />
+		<result column="mcac_sal2000" property="sal2000" />
+		<result column="mcac_sal1000" property="sal1000" />
+		<result column="mcac_sal0500" property="sal0500" />
+		<result column="mcac_sal0200" property="sal0200" />
+		<result column="mcac_sal0100" property="sal0100" />
+		<result column="mcac_sal0050" property="sal0050" />
+		<result column="mcac_sal0020" property="sal0020" />
+		<result column="mcac_sal0010" property="sal0010" />
+
+		<association property="machine" javaType="Machine">
+			<id column="mcac_mchn_pk" property="id" />
+			<id column="mchn_code" property="code" />
+		</association>
+	</resultMap>
+
+	<sql id="SelectPrefix">
+    <![CDATA[
+		SELECT
+			mcac_pk, mcac_date, mcac_hour, mcac_mchn_pk
+			, mcac_ent5000, mcac_ent2000, mcac_ent1000, mcac_ent0500, mcac_ent0200, mcac_ent0100, mcac_ent0050, mcac_ent0020, mcac_ent0010
+			, mcac_hop5000, mcac_hop2000, mcac_hop1000, mcac_hop0500, mcac_hop0200, mcac_hop0100, mcac_hop0050, mcac_hop0020, mcac_hop0010
+			, mcac_sal5000, mcac_sal2000, mcac_sal1000, mcac_sal0500, mcac_sal0200, mcac_sal0100, mcac_sal0050, mcac_sal0020, mcac_sal0010
+			, mchn_code
+		FROM
+			tbl_machine_activity_mcac
+			INNER JOIN tbl_machine_mchn ON mchn_pk = mcac_mchn_pk
+    ]]>
+	</sql>
+
+	<sql id="SelectCountPrefix">
+    <![CDATA[
+		SELECT COUNT(1)
+		FROM
+			tbl_machine_activity_mcac
+    ]]>
+	</sql>
+
+	<select id="selectObject" parameterType="MachineActivityCriteria"
+		resultMap="ResultMap">
+		<include refid="SelectPrefix"></include>
+		<where>
+			<if test="machine != null">
+				<if test="machine.id != null">
+					AND mcac_mchn_pk = #{machine.id}
+				</if>
+			</if>
+			<if test="id != null">
+				AND mcac_pk = #{id}
+			</if>
+			<if test="date != null">
+				AND mcac_date = #{date}
+			</if>
+			<if test="hour != null">
+				AND mcac_hour = #{hour}
+			</if>
+		</where>
+	</select>
+
+	<insert id="insert" parameterType="MachineActivity">
+    <![CDATA[
+		INSERT INTO tbl_machine_activity_mcac (
+			mcac_pk, mcac_date, mcac_hour, mcac_mchn_pk
+			, mcac_ent5000, mcac_ent2000, mcac_ent1000, mcac_ent0500, mcac_ent0200, mcac_ent0100, mcac_ent0050, mcac_ent0020, mcac_ent0010
+			, mcac_hop5000, mcac_hop2000, mcac_hop1000, mcac_hop0500, mcac_hop0200, mcac_hop0100, mcac_hop0050, mcac_hop0020, mcac_hop0010
+			, mcac_sal5000, mcac_sal2000, mcac_sal1000, mcac_sal0500, mcac_sal0200, mcac_sal0100, mcac_sal0050, mcac_sal0020, mcac_sal0010
+		)
+		VALUES (
+			#{id}, #{date}, #{hour}, #{machine.id}
+			, #{ent5000}, #{ent2000}, #{ent1000}, #{ent0500}, #{ent0200}, #{ent0100}, #{ent0050}, #{ent0020}, #{ent0010}
+			, #{hop5000}, #{hop2000}, #{hop1000}, #{hop0500}, #{hop0200}, #{hop0100}, #{hop0050}, #{hop0020}, #{hop0010}
+			, #{sal5000}, #{sal2000}, #{sal1000}, #{sal0500}, #{sal0200}, #{sal0100}, #{sal0050}, #{sal0020}, #{sal0010}
+		)
+    ]]>
+	</insert>
+
+	<update id="update" parameterType="MachineActivity">
+    <![CDATA[
+		UPDATE tbl_machine_activity_mcac SET
+			  mcac_ent5000 = #{ent5000}, mcac_ent2000 = #{ent2000}, mcac_ent1000 = #{ent1000}
+			, mcac_ent0500 = #{ent0500}, mcac_ent0200 = #{ent0200}, mcac_ent0100 = #{ent0100}
+			, mcac_ent0050 = #{ent0050}, mcac_ent0020 = #{ent0020}, mcac_ent0010 = #{ent0010}
+			, mcac_hop5000 = #{hop5000}, mcac_hop2000 = #{hop2000}, mcac_hop1000 = #{hop1000}
+			, mcac_hop0500 = #{hop0500}, mcac_hop0200 = #{hop0200}, mcac_hop0100 = #{hop0100}
+			, mcac_hop0050 = #{hop0050}, mcac_hop0020 = #{hop0020}, mcac_hop0010 = #{hop0010}
+			, mcac_sal5000 = #{sal5000}, mcac_sal2000 = #{sal2000}, mcac_sal1000 = #{sal1000}
+			, mcac_sal0500 = #{sal0500}, mcac_sal0200 = #{sal0200}, mcac_sal0100 = #{sal0100}
+			, mcac_sal0050 = #{sal0050}, mcac_sal0020 = #{sal0020}, mcac_sal0010 = #{sal0010}
+		WHERE mcac_pk = #{id}
+    ]]>
+	</update>
+</mapper>

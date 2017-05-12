@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="xeredi.vending.mapper.TelemetryReaderMapper">
+	<resultMap type="TelemetryReader" id="ResultMap">
+		<id column="tlrd_pk" property="id" />
+		<result column="tlrd_code" property="code" />
+
+		<association property="machine" javaType="Machine">
+			<id column="tlrd_mchn_pk" property="id" />
+			<id column="mchn_code" property="code" />
+		</association>
+	</resultMap>
+
+	<sql id="SelectPrefix">
+    <![CDATA[
+		SELECT
+			tlrd_pk, tlrd_code, tlrd_mchn_pk
+			, mchn_code
+		FROM
+			tbl_telemetry_reader_tlrd
+			LEFT JOIN tbl_machine_mchn ON mchn_pk = tlrd_mchn_pk
+    ]]>
+	</sql>
+
+	<sql id="SelectCountPrefix">
+    <![CDATA[
+		SELECT COUNT(1)
+		FROM
+			tbl_telemetry_reader_tlrd
+    ]]>
+	</sql>
+
+	<select id="selectObject" parameterType="TelemetryReaderCriteria"
+		resultMap="ResultMap">
+		<include refid="SelectPrefix"></include>
+		<where>
+			<if test="code != null">
+				AND tlrd_code = #{code}
+			</if>
+		</where>
+	</select>
+</mapper>

@@ -1,0 +1,7 @@
+MOSQUITTO (https://mosquitto.org/)
+==================================
+
+Start mosquitto
+$ mosquitto
+
+Configuration	/etc/mosquitto/mosquitto.conf

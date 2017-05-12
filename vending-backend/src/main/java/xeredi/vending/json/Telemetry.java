@@ -17,6 +17,8 @@ public final class Telemetry {
 	@SerializedName("id")
 	private Long id;
 
+	private String readerCode;
+
 	/** The fecha. */
 	@SerializedName("p_fechahora")
 	private Date fecha;
@@ -254,7 +256,7 @@ public final class Telemetry {
 	private Long sal5000;
 
 	/** The sal 2000. */
-	@SerializedName("p_SAL_2000")
+	@SerializedName(value = "p_SAL_2000")
 	private Long sal2000;
 
 	/** The sal 1000. */
