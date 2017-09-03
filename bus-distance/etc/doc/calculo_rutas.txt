@@ -1,0 +1,73 @@
+1.- Sincronizacion ERP
+	- Pendiente ver las tablas
+	- Traer vehiculos, conductores
+
+
+1.- Lectura de puntos agrupados por placa y vehiculo, ordenados por fecha ascendente y con id de lectura mayor que la ultima lectura procesada para cada placa (si existe)
+	El id de ultima lectura procesada se guardará en la tabla PLACA
+
+	SELECT *
+	FROM lectura
+		INNER JOIN placa
+		INNER JOIN vehiculo
+	WHERE placa.ultimoId IS NULL OR placa.ultimoId > lectura.id
+	ORDER BY placa.id, lectura.fecha
+
+2.- Recorremos lecturas:
+	- Para cada placa, iteramos las lecturas de esa placa
+		lecturaInicioId = null
+		lecturaInicioUtilId = null
+		lecturaFinId = null
+		lecturaFinUtilId = null
+
+		* Para cada lectura:
+			- fecha inicio parada nula?
+				* Si -> fechaInicioParada = lectura.fecha
+				* No ->
+					- ¿lectura.distancia <> 0?
+						* Si -> fechaInicioParada = lectura.fecha
+
+			- lecturaInicioId nula?
+				* Si -> lecturaInicioId.id
+
+			- ¿Tenemos ya servicio?
+				* No ->
+					- Si no hemos inicializado km en vacio, lo hacemos
+					- Buscar servicios con punto de inicio proximo al punto de nuestra lectura.
+					Devolverlos ordenados por proximidad en fecha de inicio a la fecha de la lectura.
+					- ¿Hay Servicios?
+						* No -> Incrementamos km en vacio
+						* Si -> Cogemos servicio. Inicializamos km en lleno.
+							lecturaInicioUtilId = lectura.id
+				* Si
+					- ¿Hemos pasado ya por fin de ruta?
+						* No
+							- ¿Es el punto de la lectura proximo al punto de fin de servicio?
+								* No -> Incrementamos km en lleno
+								* Si -> Marcamos fin de ruta
+									lecturaFinUtilId = lectura.id
+									lecturaFinId = lectura.id
+						* Si
+							- Buscar servicios con punto de inicio proximo al punto de nuestra lectura.
+							Devolverlos ordenados por proximidad en fecha de inicio a la fecha de la lectura.
+							- ¿Hay Servicios?
+								* No ->
+									- Incrementamos km en vacio
+										lecturaFinId = lectura.id
+									- ¿Distancia de lectura es 0?
+										* Si
+											- ¿lectura.fecha - fechaInicioParada > X minutos?
+												* Si ->
+													Damos por finalizado el servicio
+													- Guardar km en vacio y km en lleno
+													- Inicializar km en vacio
+								* Si -> Cogemos servicio. Inicializamos km en lleno.
+													Damos por finalizado el servicio anterior
+													- Guardar km en vacio y km en lleno
+													- Inicializar km en vacio
+
+
+
+
+
+
