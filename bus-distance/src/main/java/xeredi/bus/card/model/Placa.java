@@ -1,20 +1,17 @@
-package xered.bus.card.model;
+package xeredi.bus.card.model;
 
 import lombok.Data;
 
 // TODO: Auto-generated Javadoc
 /**
- * Instantiates a new conductor.
+ * Instantiates a new placa.
  */
 @Data
-public class Conductor {
+public class Placa {
 
 	/** The id. */
 	private Long id;
 
 	/** The codigo. */
 	private String codigo;
-
-	/** The nombre. */
-	private String nombre;
 }

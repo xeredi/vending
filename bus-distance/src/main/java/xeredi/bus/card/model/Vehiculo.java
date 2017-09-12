@@ -1,4 +1,4 @@
-package xered.bus.card.model;
+package xeredi.bus.card.model;
 
 import lombok.Data;
 

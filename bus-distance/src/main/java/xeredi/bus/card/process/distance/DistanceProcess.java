@@ -1,4 +1,4 @@
-package xered.bus.card.process.distance;
+package xeredi.bus.card.process.distance;
 
 import java.io.File;
 import java.io.FileFilter;
@@ -15,12 +15,28 @@ import java.util.Set;
 import org.apache.commons.io.comparator.NameFileComparator;
 import org.apache.commons.io.filefilter.FileFileFilter;
 
-import xered.bus.card.model.ArchivoGps;
-import xered.bus.card.model.LecturaGps;
-import xered.bus.card.model.Placa;
+import xeredi.bus.card.model.ArchivoGps;
+import xeredi.bus.card.model.LecturaGps;
+import xeredi.bus.card.model.Placa;
 
 public final class DistanceProcess {
 	public static final String DB_BASE_PATH = "/home/xeredi/Downloads/galisur/mnt/autobuses/rsync_placas_tvehiculos";
+
+	private void loadErpChanges() {
+
+	}
+
+	private void loadSqliteChanges() {
+
+	}
+
+	private void calculateDistance() {
+
+	}
+
+	private void saveErpChanges() {
+
+	}
 
 	public void execute() {
 		// TODO Leer de BD codigos de placas

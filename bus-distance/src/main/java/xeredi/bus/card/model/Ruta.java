@@ -1,8 +1,12 @@
-package xered.bus.card.model;
+package xeredi.bus.card.model;
 
 import lombok.Data;
 
 // TODO: Auto-generated Javadoc
+/**
+ * Instantiates a new ruta.
+ */
+
 /**
  * Instantiates a new ruta.
  */
@@ -17,6 +21,21 @@ public class Ruta {
 
 	/** The nombre. */
 	private String nombre;
+	
+	/** The lugar inicio. */
+	private String lugarInicio;
+	
+	/** The lugar fin. */
+	private String lugarFin;
+	
+	/** The itinerario. */
+	private String itinerario;
+	
+	/** The km. */
+	private Double km;
+	
+	/** The km vacio. */
+	private Double kmVacio;
 
 	/** The orig lat. */
 	private Double origLat;
