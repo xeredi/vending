@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="xeredi.bus.card.model.mapper.PlacaMapper">
+	<resultMap type="Placa" id="ResultMap">
+		<id column="plca_pk" />
+
+		<result column="plca_pk" property="id" />
+		<result column="plca_codigo" property="codigo" />
+
+		<association property="vehiculo" javaType="Vehiculo">
+			<result column="vhcl_pk" property="id" />
+			<result column="vhcl_codigo" property="codigo" />
+		</association>
+	</resultMap>
+
+	<sql id="SelectPrefix">
+    <![CDATA[
+		SELECT plca_pk, plca_codigo
+			, vhcl_pk, vhcl_codigo
+		FROM tbl_placa_plca
+			LEFT JOIN tbl_vehiculo_vhcl ON vhcl_plca_pk = plca_pk
+    ]]>
+	</sql>
+
+	<sql id="SelectWhere">
+		<where>
+			<if test="id != null">
+				AND plca_pk = #{id}
+			</if>
+
+			<if test="codigo != null">
+				AND plca_codigo = #{codigo}
+			</if>
+		</where>
+	</sql>
+
+	<select id="selectList" parameterType="PlacaCriteria" resultMap="ResultMap">
+		<include refid="SelectPrefix" />
+		<include refid="SelectWhere" />
+		ORDER BY plca_codigo
+	</select>
+
+	<select id="selectObject" parameterType="PlacaCriteria" resultMap="ResultMap">
+		<include refid="SelectPrefix" />
+		<include refid="SelectWhere" />
+	</select>
+
+	<select id="exists" parameterType="Placa" resultType="Boolean">
+    <![CDATA[
+        SELECT COUNT(1)
+        FROM tbl_placa_plca
+        WHERE plca_codigo = #{codigo}
+    ]]>
+	</select>
+
+	<insert id="insert" parameterType="Placa">
+    <![CDATA[
+        INSERT INTO tbl_placa_plca (plca_pk, plca_codigo)
+        VALUES (#{id}, #{codigo})
+    ]]>
+	</insert>
+
+	<delete id="delete" parameterType="Placa">
+    <![CDATA[
+        DELETE FROM tbl_placa_plca
+        WHERE plca_pk = #{id}
+    ]]>
+	</delete>
+</mapper>

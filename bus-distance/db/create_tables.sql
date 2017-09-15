@@ -6,7 +6,7 @@ DROP TABLE tbl_conductor_cdtr;
 DROP TABLE tbl_vehiculo_vhcl;
 DROP TABLE tbl_placa_plca;
 
-
+CREATE SEQUENCE seq_bus;
 
 CREATE TABLE tbl_placa_plca (
 	plca_pk NUMBER(19) NOT NULL
@@ -15,6 +15,8 @@ CREATE TABLE tbl_placa_plca (
 	, CONSTRAINT pk_plca PRIMARY KEY (plca_pk)
 	, CONSTRAINT uk_plca_codigo UNIQUE (plca_codigo)
 );
+
+INSERT INTO tbl_placa_plca (plca_pk, plca_codigo) VALUES (1000, '28022');
 
 CREATE TABLE tbl_vehiculo_vhcl (
 	vhcl_pk NUMBER(19) NOT NULL
@@ -26,6 +28,8 @@ CREATE TABLE tbl_vehiculo_vhcl (
 	, CONSTRAINT uk_vhcl_plca_pk UNIQUE (vhcl_plca_pk)
 	, CONSTRAINT fk_vhcl_plca_pk FOREIGN KEY (vhcl_plca_pk) REFERENCES tbl_placa_plca (plca_pk)
 );
+
+INSERT INTO tbl_vehiculo_vhcl (vhcl_pk, vhcl_plca_pk, vhcl_codigo) VALUES (2000, 1000, '28022v');
 
 CREATE TABLE tbl_conductor_cdtr (
 	cdtr_pk NUMBER(19) NOT NULL

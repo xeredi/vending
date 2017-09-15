@@ -6,6 +6,10 @@ import lombok.Data;
 /**
  * Instantiates a new placa.
  */
+
+/**
+ * Instantiates a new placa.
+ */
 @Data
 public class Placa {
 
@@ -14,4 +18,7 @@ public class Placa {
 
 	/** The codigo. */
 	private String codigo;
+
+	/** The vehiculo. */
+	private Vehiculo vehiculo;
 }

@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="xeredi.bus.card.model.mapper.ArchivoGpsMapper">
+	<resultMap type="ArchivoGps" id="ResultMap">
+		<id column="agps_pk" />
+
+		<result column="agps_pk" property="id" />
+		<result column="agps_nombre" property="nombre" />
+		<result column="agps_fecha" property="fecha" />
+
+		<association property="placa">
+			<result column="agps_plca_pk" property="id" />
+		</association>
+
+		<association property="vehiculo">
+			<result column="agps_vhcl_pk" property="id" />
+		</association>
+	</resultMap>
+
+	<sql id="SelectPrefix">
+    <![CDATA[
+		SELECT agps_pk, agps_nombre, agps_fecha
+			, agps_plca_pk
+			, agps_vhcl_pk
+		FROM tbl_archivo_gps_agps
+    ]]>
+	</sql>
+
+	<sql id="SelectWhere">
+		<where>
+			<if test="id != null">
+				AND agps_pk = #{id}
+			</if>
+
+			<if test="nombre != null">
+				AND agps_nombre = #{nombre}
+			</if>
+		</where>
+	</sql>
+
+	<select id="exists" parameterType="Placa" resultType="Boolean">
+    <![CDATA[
+        SELECT COUNT(1)
+        FROM tbl_archivo_gps_agps
+        WHERE agps_nombre = #{nombre}
+    ]]>
+	</select>
+
+	<insert id="insert" parameterType="Placa">
+    <![CDATA[
+        INSERT INTO tbl_archivo_gps_agps (agps_pk, agps_nombre, agps_fecha, agps_plca_pk, agps_vhcl_pk)
+        VALUES (#{id}, #{nombre}, #{fecha}, #{placa.id}, #{vehiculo.id})
+    ]]>
+	</insert>
+</mapper>
