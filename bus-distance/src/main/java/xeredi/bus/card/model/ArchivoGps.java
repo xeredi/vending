@@ -8,6 +8,10 @@ import lombok.Data;
 /**
  * Instantiates a new archivo gps.
  */
+
+/**
+ * Instantiates a new archivo gps.
+ */
 @Data
 public class ArchivoGps {
 
@@ -25,4 +29,7 @@ public class ArchivoGps {
 
 	/** The fecha. */
 	private Date fecha;
+
+	/** The fecha proceso. */
+	private Date fechaProceso;
 }

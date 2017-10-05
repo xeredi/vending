@@ -9,6 +9,7 @@
 		<result column="agps_pk" property="id" />
 		<result column="agps_nombre" property="nombre" />
 		<result column="agps_fecha" property="fecha" />
+		<result column="agps_fecha_proceso" property="fechaProceso" />
 
 		<association property="placa">
 			<result column="agps_plca_pk" property="id" />
@@ -21,7 +22,7 @@
 
 	<sql id="SelectPrefix">
     <![CDATA[
-		SELECT agps_pk, agps_nombre, agps_fecha
+		SELECT agps_pk, agps_nombre, agps_fecha, agps_fecha_proceso
 			, agps_plca_pk
 			, agps_vhcl_pk
 		FROM tbl_archivo_gps_agps
@@ -40,7 +41,7 @@
 		</where>
 	</sql>
 
-	<select id="exists" parameterType="Placa" resultType="Boolean">
+	<select id="exists" parameterType="ArchivoGps" resultType="Boolean">
     <![CDATA[
         SELECT COUNT(1)
         FROM tbl_archivo_gps_agps
@@ -48,10 +49,18 @@
     ]]>
 	</select>
 
-	<insert id="insert" parameterType="Placa">
+	<insert id="insert" parameterType="ArchivoGps">
     <![CDATA[
-        INSERT INTO tbl_archivo_gps_agps (agps_pk, agps_nombre, agps_fecha, agps_plca_pk, agps_vhcl_pk)
-        VALUES (#{id}, #{nombre}, #{fecha}, #{placa.id}, #{vehiculo.id})
+        INSERT INTO tbl_archivo_gps_agps (agps_pk, agps_nombre, agps_fecha, agps_fecha_proceso, agps_plca_pk, agps_vhcl_pk)
+        VALUES (#{id}, #{nombre}, #{fecha}, #{fechaProceso}, #{placa.id}, #{vehiculo.id})
+    ]]>
+	</insert>
+
+	<insert id="updateProcesado" parameterType="ArchivoGps">
+    <![CDATA[
+        UPDATE tbl_archivo_gps_agps SET
+        	agps_fecha_proceso = #{fechaProceso}
+        WHERE agps_pk = #{id}
     ]]>
 	</insert>
 </mapper>

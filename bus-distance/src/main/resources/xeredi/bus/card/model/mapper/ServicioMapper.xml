@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="xeredi.bus.card.model.mapper.ServicioMapper">
+	<select id="exists" parameterType="Servicio" resultType="Boolean">
+    <![CDATA[
+        SELECT COUNT(1)
+        FROM tbl_servicio_srvc
+        WHERE srvc_codigo_parte = #{codigoParte}
+    ]]>
+	</select>
+
+	<insert id="insertErpData" parameterType="Servicio">
+    <![CDATA[
+        INSERT INTO tbl_servicio_srvc (srvc_pk, srvc_codigo_servicio, srvc_codigo_parte, srvc_ruta_pk
+        	, srvc_cdtr1_pk, srvc_cdtr2_pk, srvc_vhcl_pk, srvc_fecha_desde, srvc_fecha_hasta, srvc_util_km, srvc_vacio_km)
+        VALUES (#{id}, #{codigoServicio}, #{codigoParte}
+        	, (SELECT ruta_pk FROM tbl_ruta_ruta WHERE ruta_codigo = #{ruta.codigo})
+        	, (SELECT cdtr_pk FROM tbl_conductor_cdtr WHERE cdtr_codigo = #{conductor1.codigo})
+        	, (SELECT cdtr_pk FROM tbl_conductor_cdtr WHERE cdtr_codigo = #{conductor2.codigo})
+        	, (SELECT vhcl_pk FROM tbl_vehiculo_vhcl WHERE vhcl_codigo = #{vehiculo.codigo})
+        	, #{fechaDesde}, #{fechaHasta}, #{utilKm}, #{vacioKm}
+       	)
+    ]]>
+	</insert>
+
+	<update id="updateErpData" parameterType="Servicio">
+    <![CDATA[
+        UPDATE tbl_servicio_srvc SET
+        	srvc_codigo_servicio = #{codigoServicio}
+        	, srvc_ruta_pk = (SELECT ruta_pk FROM tbl_ruta_ruta WHERE ruta_codigo = #{ruta.codigo})
+        	, srvc_cdtr1_pk = (SELECT cdtr_pk FROM tbl_conductor_cdtr WHERE cdtr_codigo = #{conductor1.codigo})
+        	, srvc_cdtr2_pk = (SELECT cdtr_pk FROM tbl_conductor_cdtr WHERE cdtr_codigo = #{conductor2.codigo})
+        	, srvc_vhcl_pk = (SELECT vhcl_pk FROM tbl_vehiculo_vhcl WHERE vhcl_codigo = #{vehiculo.codigo})
+        	, srvc_fecha_desde = #{fechaDesde}
+        	, srvc_fecha_hasta = #{fechaHasta}
+       	WHERE srvc_codigo_parte = #{codigoParte}
+    ]]>
+	</update>
+</mapper>

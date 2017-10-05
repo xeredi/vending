@@ -19,13 +19,30 @@ import org.apache.commons.io.filefilter.FileFileFilter;
 import org.apache.ibatis.session.SqlSession;
 
 import xeredi.bus.card.model.ArchivoGps;
+import xeredi.bus.card.model.Conductor;
+import xeredi.bus.card.model.ConductorCriteria;
 import xeredi.bus.card.model.LecturaGps;
+import xeredi.bus.card.model.LecturaGpsCriteria;
 import xeredi.bus.card.model.Placa;
 import xeredi.bus.card.model.PlacaCriteria;
+import xeredi.bus.card.model.Ruta;
+import xeredi.bus.card.model.RutaCriteria;
+import xeredi.bus.card.model.Servicio;
+import xeredi.bus.card.model.ServicioCriteria;
+import xeredi.bus.card.model.Vehiculo;
+import xeredi.bus.card.model.VehiculoCriteria;
 import xeredi.bus.card.model.mapper.ArchivoGpsMapper;
+import xeredi.bus.card.model.mapper.ConductorErpMapper;
+import xeredi.bus.card.model.mapper.ConductorMapper;
 import xeredi.bus.card.model.mapper.LecturaGpsMapper;
 import xeredi.bus.card.model.mapper.PlacaMapper;
+import xeredi.bus.card.model.mapper.RutaErpMapper;
+import xeredi.bus.card.model.mapper.RutaMapper;
 import xeredi.bus.card.model.mapper.SequenceMapper;
+import xeredi.bus.card.model.mapper.ServicioErpMapper;
+import xeredi.bus.card.model.mapper.ServicioMapper;
+import xeredi.bus.card.model.mapper.VehiculoErpMapper;
+import xeredi.bus.card.model.mapper.VehiculoMapper;
 import xeredi.bus.card.model.util.mybatis.SqlMapperLocator;
 
 // TODO: Auto-generated Javadoc
@@ -41,44 +58,69 @@ public final class DistanceProcess {
 	 * Load erp changes.
 	 */
 	private void loadErpChanges() throws SQLException {
+		try (final SqlSession session = SqlMapperLocator.getSqlSession();
+				final SqlSession erpSession = SqlMapperLocator.getErpSqlSession()) {
+
+			final SequenceMapper sequenceMapper = session.getMapper(SequenceMapper.class);
+			final VehiculoMapper vehiculoMapper = session.getMapper(VehiculoMapper.class);
+			final ConductorMapper conductorMapper = session.getMapper(ConductorMapper.class);
+			final RutaMapper rutaMapper = session.getMapper(RutaMapper.class);
+			final ServicioMapper servicioMapper = session.getMapper(ServicioMapper.class);
+
+			final VehiculoErpMapper vehiculoErpMapper = erpSession.getMapper(VehiculoErpMapper.class);
+			final ConductorErpMapper conductorErpMapper = erpSession.getMapper(ConductorErpMapper.class);
+			final RutaErpMapper rutaErpMapper = erpSession.getMapper(RutaErpMapper.class);
+			final ServicioErpMapper servicioErpMapper = erpSession.getMapper(ServicioErpMapper.class);
+
+			for (final Vehiculo vehiculo : vehiculoErpMapper.selectList(new VehiculoCriteria())) {
+				if (vehiculoMapper.exists(vehiculo)) {
+					// vehiculoMapper.updateErpData(vehiculo);
+				} else {
+					vehiculo.setId(sequenceMapper.nextVal());
+
+					vehiculoMapper.insert(vehiculo);
+				}
+			}
+
+			for (final Conductor conductor : conductorErpMapper.selectList(new ConductorCriteria())) {
+				if (conductorMapper.exists(conductor)) {
+					conductorMapper.updateErpData(conductor);
+				} else {
+					conductor.setId(sequenceMapper.nextVal());
+
+					conductorMapper.insert(conductor);
+				}
+			}
+
+			for (final Ruta ruta : rutaErpMapper.selectList(new RutaCriteria())) {
+				if (rutaMapper.exists(ruta)) {
+					rutaMapper.updateErpData(ruta);
+				} else {
+					ruta.setId(sequenceMapper.nextVal());
+
+					rutaMapper.insert(ruta);
+				}
+			}
+
+			for (final Servicio servicio : servicioErpMapper.selectList(new ServicioCriteria())) {
+				if (servicioMapper.exists(servicio)) {
+					servicioMapper.updateErpData(servicio);
+				} else {
+					servicio.setId(sequenceMapper.nextVal());
+
+					servicioMapper.insertErpData(servicio);
+				}
+			}
+
+			session.commit();
+		}
 	}
 
 	/**
 	 * Load sqlite changes.
 	 */
 	private void loadSqliteChanges() throws SQLException {
-		final String sqliteDriver = "org.sqlite.JDBC";
-
-		try {
-			Class.forName(sqliteDriver);
-
-			// DriverManager.getConnection(url);
-		} catch (final ClassNotFoundException ex) {
-			throw new SQLException(ex);
-		}
-	}
-
-	/**
-	 * Calculate distance.
-	 */
-	private void calculateDistance() {
-
-	}
-
-	/**
-	 * Save erp changes.
-	 */
-	private void saveErpChanges() {
-
-	}
-
-	/**
-	 * Execute.
-	 */
-	public void execute() {
-		// TODO Leer de BD codigos de placas
-
-		try (final SqlSession session = SqlMapperLocator.getSqlSessionFactory().openSession()) {
+		try (final SqlSession session = SqlMapperLocator.getSqlSession()) {
 			final SequenceMapper sequenceMapper = session.getMapper(SequenceMapper.class);
 			final PlacaMapper placaMapper = session.getMapper(PlacaMapper.class);
 			final ArchivoGpsMapper archivoGpsMapper = session.getMapper(ArchivoGpsMapper.class);
@@ -149,14 +191,13 @@ public final class DistanceProcess {
 									lecturaGps.setTrack(rs.getDouble("track"));
 									lecturaGps.setFecha(rs.getDate("timestamp_lectura_p"));
 
-									lecturaGpsMapper.insert(lecturaGps);
+									if (lecturaGps.getLatitude() != 0 && lecturaGps.getLongitude() != 0) {
+										lecturaGpsMapper.insert(lecturaGps);
+									}
 
 									// System.out.println("lecturaGps: " +
 									// lecturaGps);
 								}
-
-							} catch (final SQLException ex) {
-								ex.printStackTrace(System.err);
 							}
 						}
 					}
@@ -164,6 +205,68 @@ public final class DistanceProcess {
 			}
 
 			session.commit();
+		}
+	}
+
+	/**
+	 * Calculate distance.
+	 */
+	private void calculateDistance() throws SQLException {
+		System.out.println("Calculate Distance");
+
+		try (final SqlSession session = SqlMapperLocator.getSqlSession()) {
+			final PlacaMapper placaMapper = session.getMapper(PlacaMapper.class);
+			final LecturaGpsMapper lecturaGpsMapper = session.getMapper(LecturaGpsMapper.class);
+
+			for (final Placa placa : placaMapper.selectList(new PlacaCriteria())) {
+				System.out.println("Placa: " + placa);
+
+				final LecturaGpsCriteria lecturaGpsCriteria = new LecturaGpsCriteria();
+
+				Servicio servicio = null;
+
+				LecturaGps lecturaGpsInicio = null;
+				LecturaGps lecturaGpsUtilInicio = null;
+				LecturaGps lecturaGpsFin = null;
+				LecturaGps lecturaGpsUtilFin = null;
+
+				lecturaGpsCriteria.setPlacaId(placa.getId());
+
+				for (final LecturaGps lecturaGps : lecturaGpsMapper.selectListProceso(lecturaGpsCriteria)) {
+					System.out.println("LecturaGps: " + lecturaGps);
+
+					if (lecturaGpsInicio == null) {
+						lecturaGpsInicio = lecturaGps;
+					}
+
+					if (servicio == null) {
+
+					}
+				}
+			}
+
+			session.commit();
+		}
+	}
+
+	/**
+	 * Save erp changes.
+	 */
+	private void saveErpChanges() {
+
+	}
+
+	/**
+	 * Execute.
+	 */
+	public void execute() {
+		try {
+			loadSqliteChanges();
+			loadErpChanges();
+			calculateDistance();
+			saveErpChanges();
+		} catch (final SQLException ex) {
+			ex.printStackTrace(System.err);
 		}
 	}
 
@@ -177,7 +280,6 @@ public final class DistanceProcess {
 		final DistanceProcess distanceProcess = new DistanceProcess();
 		final long start = Calendar.getInstance().getTimeInMillis();
 
-		// distanceProcess.loadSqliteChanges();
 		distanceProcess.execute();
 
 		System.out.println("Time: " + (Calendar.getInstance().getTimeInMillis() - start));

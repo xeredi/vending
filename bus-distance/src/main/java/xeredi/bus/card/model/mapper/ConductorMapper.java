@@ -32,5 +32,5 @@ public interface ConductorMapper {
 	 *            the conductor
 	 * @return the int
 	 */
-	int update(final Conductor conductor);
+	int updateErpData(final Conductor conductor);
 }

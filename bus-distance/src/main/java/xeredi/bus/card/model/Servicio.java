@@ -8,23 +8,43 @@ import lombok.Data;
 /**
  * Instantiates a new servicio.
  */
+
+/**
+ * Instantiates a new servicio.
+ */
+
+/**
+ * Instantiates a new servicio.
+ */
 @Data
 public class Servicio {
 
 	/** The id. */
 	private Long id;
 
+	/** The codigo servicio. */
+	private String codigoServicio;
+
+	/** The codigo parte. */
+	private String codigoParte;
+
 	/** The ruta. */
 	private Ruta ruta;
 
 	/** The conductor. */
-	private Conductor conductor;
+	private Conductor conductor1;
+
+	/** The conductor 2. */
+	private Conductor conductor2;
 
 	/** The vehiculo. */
 	private Vehiculo vehiculo;
 
 	/** The fecha. */
-	private Date fecha;
+	private Date fechaDesde;
+
+	/** The fecha hasta. */
+	private Date fechaHasta;
 
 	/** The util km. */
 	private Double utilKm;

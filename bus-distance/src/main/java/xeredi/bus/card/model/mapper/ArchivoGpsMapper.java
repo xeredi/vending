@@ -24,4 +24,11 @@ public interface ArchivoGpsMapper {
 	 *            the archivo gps
 	 */
 	void insert(final ArchivoGps archivoGps);
+
+	/**
+	 * Update procesado.
+	 *
+	 * @param archivoGps the archivo gps
+	 */
+	void updateProcesado(final ArchivoGps archivoGps);
 }

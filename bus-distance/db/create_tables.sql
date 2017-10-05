@@ -25,7 +25,6 @@ CREATE TABLE tbl_vehiculo_vhcl (
 
 	, CONSTRAINT pk_vhcl PRIMARY KEY (vhcl_pk)
 	, CONSTRAINT uk_vhcl_codigo UNIQUE (vhcl_codigo)
-	, CONSTRAINT uk_vhcl_plca_pk UNIQUE (vhcl_plca_pk)
 	, CONSTRAINT fk_vhcl_plca_pk FOREIGN KEY (vhcl_plca_pk) REFERENCES tbl_placa_plca (plca_pk)
 );
 
@@ -44,10 +43,10 @@ CREATE TABLE tbl_ruta_ruta (
 	ruta_pk NUMBER(19) NOT NULL
 	, ruta_codigo VARCHAR2(20) NOT NULL
 	, ruta_nombre VARCHAR2(100) NOT NULL
-	, ruta_orig_lat NUMBER(12, 8) NOT NULL
-	, ruta_orig_lon NUMBER(12, 8) NOT NULL
-	, ruta_dest_lat NUMBER(12, 8) NOT NULL
-	, ruta_dest_lon NUMBER(12, 8) NOT NULL
+	, ruta_orig_lat NUMBER(12, 8)
+	, ruta_orig_lon NUMBER(12, 8)
+	, ruta_dest_lat NUMBER(12, 8)
+	, ruta_dest_lon NUMBER(12, 8)
 
 	, CONSTRAINT pk_ruta PRIMARY KEY (ruta_pk)
 	, CONSTRAINT uk_ruta_codigo UNIQUE (ruta_codigo)
@@ -55,17 +54,22 @@ CREATE TABLE tbl_ruta_ruta (
 
 CREATE TABLE tbl_servicio_srvc (
 	srvc_pk NUMBER(19) NOT NULL
-	, srvc_ruta_pk NUMBER(19) NOT NULL
-	, srvc_cdtr_pk NUMBER(19) NOT NULL
-	, srvc_vhcl_pk NUMBER(19) NOT NULL
-	, srvc_fecha TIMESTAMP NOT NULL
+	, srvc_codigo_servicio VARCHAR2(20) NOT NULL
+	, srvc_codigo_parte VARCHAR2(20) NOT NULL
+	, srvc_ruta_pk NUMBER(19)
+	, srvc_cdtr1_pk NUMBER(19)
+	, srvc_cdtr2_pk NUMBER(19)
+	, srvc_vhcl_pk NUMBER(19)
+	, srvc_fecha_desde TIMESTAMP
+	, srvc_fecha_hasta TIMESTAMP
 	, srvc_util_km NUMBER(10, 3)
 	, srvc_vacio_km NUMBER(10, 3)
 
 	, CONSTRAINT pk_srvc PRIMARY KEY (srvc_pk)
-	, CONSTRAINT uk_srvc UNIQUE (srvc_ruta_pk, srvc_cdtr_pk, srvc_vhcl_pk, srvc_fecha)
+	, CONSTRAINT uk_srvc UNIQUE (srvc_codigo_parte)
 	, CONSTRAINT fk_srvc_ruta_pk FOREIGN KEY (srvc_ruta_pk) REFERENCES tbl_ruta_ruta (ruta_pk)
-	, CONSTRAINT fk_srvc_cdtr_pk FOREIGN KEY (srvc_cdtr_pk) REFERENCES tbl_conductor_cdtr (cdtr_pk)
+	, CONSTRAINT fk_srvc_cdtr1_pk FOREIGN KEY (srvc_cdtr1_pk) REFERENCES tbl_conductor_cdtr (cdtr_pk)
+	, CONSTRAINT fk_srvc_cdtr2_pk FOREIGN KEY (srvc_cdtr2_pk) REFERENCES tbl_conductor_cdtr (cdtr_pk)
 	, CONSTRAINT fk_srvc_vhcl_pk FOREIGN KEY (srvc_vhcl_pk) REFERENCES tbl_vehiculo_vhcl (vhcl_pk)
 );
 
@@ -75,6 +79,7 @@ CREATE TABLE tbl_archivo_gps_agps (
 	, agps_plca_pk NUMBER(19) NOT NULL
 	, agps_nombre VARCHAR2(50) NOT NULL
 	, agps_fecha TIMESTAMP NOT NULL
+	, agps_fecha_proceso TIMESTAMP
 
 	, CONSTRAINT pk_agps PRIMARY KEY (agps_pk)
 	, CONSTRAINT fk_agps_vhcl_pk FOREIGN KEY (agps_vhcl_pk) REFERENCES tbl_vehiculo_vhcl (vhcl_pk)
@@ -103,4 +108,5 @@ CREATE TABLE tbl_lectura_gps_lgps (
 	, CONSTRAINT pk_lgps PRIMARY KEY (lgps_pk)
 	, CONSTRAINT fk_lgps_agps_pk FOREIGN KEY (lgps_agps_pk) REFERENCES tbl_archivo_gps_agps (agps_pk)
 );
+
 

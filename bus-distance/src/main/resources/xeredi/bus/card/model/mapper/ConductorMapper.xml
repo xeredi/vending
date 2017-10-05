@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="xeredi.bus.card.model.mapper.ConductorMapper">
+	<select id="exists" parameterType="Conductor" resultType="Boolean">
+    <![CDATA[
+        SELECT COUNT(1)
+        FROM tbl_conductor_cdtr
+        WHERE cdtr_codigo = #{codigo}
+    ]]>
+	</select>
+
+	<insert id="insert" parameterType="Conductor">
+    <![CDATA[
+        INSERT INTO tbl_conductor_cdtr (cdtr_pk, cdtr_codigo, cdtr_nombre)
+        VALUES (#{id}, #{codigo}, #{nombre})
+    ]]>
+	</insert>
+
+	<update id="updateErpData" parameterType="Conductor">
+    <![CDATA[
+        UPDATE tbl_conductor_cdtr SET
+        	cdtr_nombre = #{nombre}
+        WHERE cdtr_codigo = #{codigo}
+    ]]>
+	</update>
+</mapper>

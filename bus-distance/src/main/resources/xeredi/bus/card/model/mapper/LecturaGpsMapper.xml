@@ -22,9 +22,54 @@
 		<result column="lgps_track" property="track" />
 
 		<association property="archivoGps" javaType="ArchivoGps">
-			<result column="lgps_agps_pk" property="id" />
+			<result column="agps_pk" property="id" />
+			<result column="agps_nombre" property="nombre" />
+			<result column="agps_fecha" property="fecha" />
+			<result column="agps_fecha_proceso" property="fechaProceso" />
+
+			<association property="placa" javaType="Placa">
+				<result column="agps_plca_pk" property="id" />
+			</association>
+
+			<association property="vehiculo" javaType="Vehiculo">
+				<result column="agps_vhcl_pk" property="id" />
+			</association>
 		</association>
 	</resultMap>
+
+	<sql id="SelectPrefix">
+    <![CDATA[
+		SELECT lgps_pk, lgps_agps_pk, lgps_fecha, lgps_altitude, lgps_climb, lgps_distance, lgps_eps, lgps_ept, lgps_epv, lgps_epx
+		    , lgps_latitude, lgps_longitude, lgps_mode, lgps_number_sats, lgps_speed, lgps_track
+		    , agps_vhcl_pk
+		    , agps_plca_pk
+		    , agps_nombre, agps_fecha, agps_fecha_proceso
+		FROM
+		    tbl_lectura_gps_lgps lgps
+		    INNER JOIN tbl_archivo_gps_agps agps ON
+		        agps_pk = lgps_agps_pk
+    ]]>
+	</sql>
+
+	<select id="selectListProceso" parameterType="LecturaGpsCriteria"
+		resultMap="ResultMap">
+		<include refid="SelectPrefix"></include>
+
+		<where>
+	    <![CDATA[
+	    	agps_fecha_proceso IS NULL
+	    ]]>
+			<if test="placaId != null">
+		    <![CDATA[
+		    	AND agps_plca_pk = #{placaId}
+		    ]]>
+			</if>
+		</where>
+
+	    <![CDATA[
+			ORDER BY agps_plca_pk, agps_vhcl_pk, lgps_fecha
+    	]]>
+	</select>
 
 	<insert id="insert" parameterType="LecturaGps">
     <![CDATA[

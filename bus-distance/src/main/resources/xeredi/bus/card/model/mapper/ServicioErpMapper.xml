@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="xeredi.bus.card.model.mapper.ServicioErpMapper">
+	<resultMap type="Servicio" id="ResultMap">
+		<id column="codParte" />
+
+		<result column="codParte" property="codigoParte" />
+		<result column="codServicio" property="codigoServicio" />
+
+		<association property="ruta" javaType="Ruta">
+			<result column="codRuta" property="codigo" />
+		</association>
+		<association property="conductor1" javaType="Conductor">
+			<result column="codConductor1" property="codigo" />
+		</association>
+		<association property="conductor2" javaType="Conductor">
+			<result column="codConductor2" property="codigo" />
+		</association>
+		<association property="vehiculo" javaType="Vehiculo">
+			<result column="codAutocar" property="codigo" />
+		</association>
+	</resultMap>
+
+	<sql id="SelectPrefix">
+    <![CDATA[
+		SELECT p.codServicio, p.codParte, p.idParte
+			, inc.DesdeFecha, inc.desdeHora, inc.HastaFecha, inc.HastaHora
+			, (SELECT codruta FROM SerAutocares aut
+				WHERE aut.codservicio = p.codServicio
+					AND aut.NumAutocar = p.NumAutocar) AS codRuta
+			, (SELECT codEnlace FROM IncidenciasMovimientosLin lin
+				WHERE lin.IdMovimiento = p.IdMovimiento
+					AND AUTOCARCONDUCTOR = 'A') AS codAutocar
+			, (SELECT codEnlace FROM IncidenciasMovimientosLin lin
+				WHERE lin.IdMovimiento = p.IdMovimiento and AUTOCARCONDUCTOR = 'C'
+					AND conductor1o2 = 1) AS codConductor1
+			, (SELECT codEnlace FROM IncidenciasMovimientosLin lin
+				WHERE lin.IdMovimiento = p.IdMovimiento and AUTOCARCONDUCTOR = 'C'
+					AND conductor1o2 = 2) AS codConductor2
+		FROM PartesTrabajo p
+			LEFT JOIN IncidenciasMovimientos inc ON
+				inc.IdMovimiento = p.IdMovimiento
+    ]]>
+	</sql>
+
+	<select id="selectList" parameterType="ServicioCriteria" resultMap="ResultMap">
+		<include refid="SelectPrefix" />
+	</select>
+</mapper>

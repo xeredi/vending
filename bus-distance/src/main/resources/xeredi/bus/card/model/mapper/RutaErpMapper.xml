@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="xeredi.bus.card.model.mapper.RutaErpMapper">
+	<resultMap type="Ruta" id="ResultMap">
+		<id column="codRuta" />
+
+		<result column="codRuta" property="codigo" />
+		<result column="descripcion" property="nombre" />
+	</resultMap>
+
+	<sql id="SelectPrefix">
+    <![CDATA[
+		SELECT codRuta, descripcion
+		FROM Rutas
+    ]]>
+	</sql>
+
+	<select id="selectList" parameterType="RutaCriteria" resultMap="ResultMap">
+		<include refid="SelectPrefix" />
+	</select>
+</mapper>

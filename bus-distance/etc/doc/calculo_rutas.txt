@@ -1,7 +1,37 @@
+SQL Server
+
+$ /opt/mssql-tools/bin/sqlcmd -U sa -P Licor43licor43 -H localhost -d Ofibus009
+
+select DesdeFecha, DesdeHora, HastaFecha, HastaHora from IncidenciasMovimientos;;
+select DesdeFecha, DesdeHora, HastaFecha, HastaHora, CONVERT(DATETIME, CONVERT(CHAR(20), HastaFecha, 112) + ' ' + CONVERT(CHAR(20), HastaHora,108)) from IncidenciasMovimientos where len(hastafecha) = 8 and len(hastahora) = 5;
+select DesdeFecha, DesdeHora, HastaFecha, HastaHora, CONVERT(DATETIME, CONVERT(CHAR(20), HastaFecha, 112) + ' ' + CONVERT(CHAR(20), HastaHora,108)) from IncidenciasMovimientos order by desdefecha OFFSET 1 ROWS FETCH NEXT 1700 ROWS ONLY;
+GO
+
+select DesdeFecha, DesdeHora, HastaFecha, HastaHora from IncidenciasMovimientos order by desdefecha OFFSET 1 ROWS FETCH NEXT 1700 ROWS ONLY;
+
 1.- Sincronizacion ERP
 	- Pendiente ver las tablas
 	- Traer vehiculos, conductores
 
+
+43.31823667
+-8.36503667
+42.101445
+-8.81574
+
+select *
+from tbl_servicio_srvc
+    INNER JOIN tbl_ruta_ruta ON
+        ruta_pk = srvc_ruta_pk
+where
+    srvc_util_km IS null
+    AND srvc_vacio_km IS null
+    AND EXISTS (
+        SELECT 1 FROM tbl_vehiculo_vhcl
+        WHERE vhcl_pk = srvc_vhcl_pk
+            AND vhcl_codigo LIKE '0125'
+    )
+;
 
 1.- Lectura de puntos agrupados por placa y vehiculo, ordenados por fecha ascendente y con id de lectura mayor que la ultima lectura procesada para cada placa (si existe)
 	El id de ultima lectura procesada se guardará en la tabla PLACA

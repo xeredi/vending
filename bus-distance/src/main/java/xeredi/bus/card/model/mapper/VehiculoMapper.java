@@ -1,6 +1,7 @@
 package xeredi.bus.card.model.mapper;
 
 import xeredi.bus.card.model.Vehiculo;
+import xeredi.bus.card.model.VehiculoCriteria;
 
 // TODO: Auto-generated Javadoc
 /**
@@ -32,5 +33,5 @@ public interface VehiculoMapper {
 	 *            the vehiculo
 	 * @return the int
 	 */
-	int update(final Vehiculo vehiculo);
+	int updateErpData(final Vehiculo vehiculo);
 }

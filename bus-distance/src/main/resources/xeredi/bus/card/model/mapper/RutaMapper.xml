@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="xeredi.bus.card.model.mapper.RutaMapper">
+	<select id="exists" parameterType="Ruta" resultType="Boolean">
+    <![CDATA[
+        SELECT COUNT(1)
+        FROM tbl_ruta_ruta
+        WHERE ruta_codigo = #{codigo}
+    ]]>
+	</select>
+
+	<insert id="insert" parameterType="Ruta">
+    <![CDATA[
+        INSERT INTO tbl_ruta_ruta (ruta_pk, ruta_codigo, ruta_nombre)
+        VALUES (#{id}, #{codigo}, #{nombre})
+    ]]>
+	</insert>
+
+	<update id="updateErpData" parameterType="Ruta">
+    <![CDATA[
+        UPDATE tbl_ruta_ruta SET
+        	ruta_nombre = #{nombre}
+        WHERE ruta_codigo = #{codigo}
+    ]]>
+	</update>
+</mapper>

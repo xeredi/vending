@@ -26,10 +26,10 @@
 			<transactionManager type="JDBC"></transactionManager>
 
 			<dataSource type="xeredi.bus.card.model.util.mybatis.DbcpDataSourceFactory">
-				<property name="url" value="${db.dataSource.url}" />
-				<property name="driverClassName" value="${db.dataSource.driver}" />
-				<property name="username" value="${db.dataSource.username}" />
-				<property name="password" value="${db.dataSource.password}" />
+				<property name="url" value="${dbErp.dataSource.url}" />
+				<property name="driverClassName" value="${dbErp.dataSource.driver}" />
+				<property name="username" value="${dbErp.dataSource.username}" />
+				<property name="password" value="${dbErp.dataSource.password}" />
 				<property name="defaultAutoCommit" value="false" />
 				<property name="rollbackOnReturn" value="false" />
 				<property name="initialSize" value="4" />

@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="xeredi.bus.card.model.mapper.VehiculoErpMapper">
+	<resultMap type="Vehiculo" id="ResultMap">
+		<id column="codAutocar" />
+
+		<result column="codAutocar" property="codigo" />
+	</resultMap>
+
+	<sql id="SelectPrefix">
+    <![CDATA[
+		SELECT codAutocar
+		FROM Autocares
+    ]]>
+	</sql>
+
+	<select id="selectList" parameterType="VehiculoCriteria" resultMap="ResultMap">
+		<include refid="SelectPrefix" />
+	</select>
+</mapper>

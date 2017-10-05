@@ -32,5 +32,5 @@ public interface RutaMapper {
 	 *            the ruta
 	 * @return the int
 	 */
-	int update(final Ruta ruta);
+	int updateErpData(final Ruta ruta);
 }
