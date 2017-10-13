@@ -1,6 +1,6 @@
+DROP TABLE tbl_servicio_srvc;
 DROP TABLE tbl_lectura_gps_lgps;
 DROP TABLE tbl_archivo_gps_agps;
-DROP TABLE tbl_servicio_srvc;
 DROP TABLE tbl_ruta_ruta;
 DROP TABLE tbl_conductor_cdtr;
 DROP TABLE tbl_vehiculo_vhcl;
@@ -28,7 +28,7 @@ CREATE TABLE tbl_vehiculo_vhcl (
 	, CONSTRAINT fk_vhcl_plca_pk FOREIGN KEY (vhcl_plca_pk) REFERENCES tbl_placa_plca (plca_pk)
 );
 
-INSERT INTO tbl_vehiculo_vhcl (vhcl_pk, vhcl_plca_pk, vhcl_codigo) VALUES (2000, 1000, '28022v');
+INSERT INTO tbl_vehiculo_vhcl (vhcl_pk, vhcl_plca_pk, vhcl_codigo) VALUES (2000, 1000, '0125');
 
 CREATE TABLE tbl_conductor_cdtr (
 	cdtr_pk NUMBER(19) NOT NULL
@@ -52,26 +52,16 @@ CREATE TABLE tbl_ruta_ruta (
 	, CONSTRAINT uk_ruta_codigo UNIQUE (ruta_codigo)
 );
 
-CREATE TABLE tbl_servicio_srvc (
-	srvc_pk NUMBER(19) NOT NULL
-	, srvc_codigo_servicio VARCHAR2(20) NOT NULL
-	, srvc_codigo_parte VARCHAR2(20) NOT NULL
-	, srvc_ruta_pk NUMBER(19)
-	, srvc_cdtr1_pk NUMBER(19)
-	, srvc_cdtr2_pk NUMBER(19)
-	, srvc_vhcl_pk NUMBER(19)
-	, srvc_fecha_desde TIMESTAMP
-	, srvc_fecha_hasta TIMESTAMP
-	, srvc_util_km NUMBER(10, 3)
-	, srvc_vacio_km NUMBER(10, 3)
+INSERT INTO tbl_ruta_ruta (ruta_pk, ruta_codigo, ruta_nombre, ruta_orig_lat, ruta_orig_lon, ruta_dest_lat, ruta_dest_lon)
+VALUES (4000, '00013', 'Cerceda', 43.41823667, -8.46503667, 42.201445, -8.91574);
+INSERT INTO tbl_ruta_ruta (ruta_pk, ruta_codigo, ruta_nombre, ruta_orig_lat, ruta_orig_lon, ruta_dest_lat, ruta_dest_lon)
+VALUES (4001, '00105', 'Colegio Angel de la Guarda Ruta 2 Baiona', 42.106826,	-8.874202, 42.165117, -8.796242);
+INSERT INTO tbl_ruta_ruta (ruta_pk, ruta_codigo, ruta_nombre, ruta_orig_lat, ruta_orig_lon, ruta_dest_lat, ruta_dest_lon)
+VALUES (4002, '00071', 'Gondomar', 43.21823667, -8.26503667, 42.001445, -8.71574);
+INSERT INTO tbl_ruta_ruta (ruta_pk, ruta_codigo, ruta_nombre, ruta_orig_lat, ruta_orig_lon, ruta_dest_lat, ruta_dest_lon)
+VALUES (4003, '00052', 'Santiago de Compostela', NULL, NULL, NULL, NULL);
 
-	, CONSTRAINT pk_srvc PRIMARY KEY (srvc_pk)
-	, CONSTRAINT uk_srvc UNIQUE (srvc_codigo_parte)
-	, CONSTRAINT fk_srvc_ruta_pk FOREIGN KEY (srvc_ruta_pk) REFERENCES tbl_ruta_ruta (ruta_pk)
-	, CONSTRAINT fk_srvc_cdtr1_pk FOREIGN KEY (srvc_cdtr1_pk) REFERENCES tbl_conductor_cdtr (cdtr_pk)
-	, CONSTRAINT fk_srvc_cdtr2_pk FOREIGN KEY (srvc_cdtr2_pk) REFERENCES tbl_conductor_cdtr (cdtr_pk)
-	, CONSTRAINT fk_srvc_vhcl_pk FOREIGN KEY (srvc_vhcl_pk) REFERENCES tbl_vehiculo_vhcl (vhcl_pk)
-);
+
 
 CREATE TABLE tbl_archivo_gps_agps (
 	agps_pk NUMBER(19) NOT NULL
@@ -89,8 +79,8 @@ CREATE TABLE tbl_archivo_gps_agps (
 CREATE TABLE tbl_lectura_gps_lgps (
 	lgps_pk NUMBER(19) NOT NULL
 	, lgps_agps_pk NUMBER(19) NOT NULL
+	, lgps_vhcl_pk NUMBER(19) NOT NULL
 	, lgps_fecha TIMESTAMP NOT NULL
-
 	, lgps_altitude NUMBER(19, 8) NOT NULL
 	, lgps_climb NUMBER(19, 8) NOT NULL
 	, lgps_distance NUMBER(19, 8) NOT NULL
@@ -107,6 +97,36 @@ CREATE TABLE tbl_lectura_gps_lgps (
 
 	, CONSTRAINT pk_lgps PRIMARY KEY (lgps_pk)
 	, CONSTRAINT fk_lgps_agps_pk FOREIGN KEY (lgps_agps_pk) REFERENCES tbl_archivo_gps_agps (agps_pk)
+	, CONSTRAINT fk_lgps_vhcl_pk FOREIGN KEY (lgps_vhcl_pk) REFERENCES tbl_vehiculo_vhcl (vhcl_pk)
 );
 
+CREATE INDEX ix_lgps ON tbl_lectura_gps_lgps (lgps_vhcl_pk, lgps_fecha);
 
+
+
+CREATE TABLE tbl_servicio_srvc (
+	srvc_pk NUMBER(19) NOT NULL
+	, srvc_codigo_servicio VARCHAR2(20) NOT NULL
+	, srvc_codigo_parte VARCHAR2(20) NOT NULL
+	, srvc_ruta_pk NUMBER(19)
+	, srvc_cdtr1_pk NUMBER(19)
+	, srvc_cdtr2_pk NUMBER(19)
+	, srvc_vhcl_pk NUMBER(19)
+	, srvc_fecha_desde TIMESTAMP
+	, srvc_fecha_hasta TIMESTAMP
+	, srvc_util_km NUMBER(10, 3)
+	, srvc_vacio_km NUMBER(10, 3)
+	, srvc_lgps_orig_pk NUMBER(19)
+	, srvc_lgps_dest_pk NUMBER(19)
+
+	, CONSTRAINT pk_srvc PRIMARY KEY (srvc_pk)
+	, CONSTRAINT uk_srvc UNIQUE (srvc_codigo_parte)
+	, CONSTRAINT fk_srvc_ruta_pk FOREIGN KEY (srvc_ruta_pk) REFERENCES tbl_ruta_ruta (ruta_pk)
+	, CONSTRAINT fk_srvc_cdtr1_pk FOREIGN KEY (srvc_cdtr1_pk) REFERENCES tbl_conductor_cdtr (cdtr_pk)
+	, CONSTRAINT fk_srvc_cdtr2_pk FOREIGN KEY (srvc_cdtr2_pk) REFERENCES tbl_conductor_cdtr (cdtr_pk)
+	, CONSTRAINT fk_srvc_vhcl_pk FOREIGN KEY (srvc_vhcl_pk) REFERENCES tbl_vehiculo_vhcl (vhcl_pk)
+	, CONSTRAINT fk_srvc_lgps_orig_pk FOREIGN KEY (srvc_lgps_orig_pk) REFERENCES tbl_lectura_gps_lgps (lgps_pk)
+	, CONSTRAINT fk_srvc_lgps_dest_pk FOREIGN KEY (srvc_lgps_dest_pk) REFERENCES tbl_lectura_gps_lgps (lgps_pk)
+);
+
+CREATE INDEX ix_srvc ON tbl_servicio_srvc (srvc_vhcl_pk, srvc_fecha_desde);

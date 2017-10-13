@@ -8,6 +8,10 @@
 
 		<result column="codParte" property="codigoParte" />
 		<result column="codServicio" property="codigoServicio" />
+		<result column="fechaDesde" property="fechaDesde" />
+		<result column="fechaHasta" property="fechaHasta" />
+		<result column="kilometros" property="utilKm" />
+		<result column="kilometrosExentos" property="vacioKm" />
 
 		<association property="ruta" javaType="Ruta">
 			<result column="codRuta" property="codigo" />
@@ -26,7 +30,8 @@
 	<sql id="SelectPrefix">
     <![CDATA[
 		SELECT p.codServicio, p.codParte, p.idParte
-			, inc.DesdeFecha, inc.desdeHora, inc.HastaFecha, inc.HastaHora
+			, CONVERT(DATETIME, CONVERT(CHAR(20), inc.DesdeFecha, 112) + ' ' + CONVERT(CHAR(20), inc.DesdeHora,108)) AS fechaDesde
+			, CONVERT(DATETIME, CONVERT(CHAR(20), inc.HastaFecha, 112) + ' ' + CONVERT(CHAR(20), inc.HastaHora,108)) AS fechaHasta
 			, (SELECT codruta FROM SerAutocares aut
 				WHERE aut.codservicio = p.codServicio
 					AND aut.NumAutocar = p.NumAutocar) AS codRuta
@@ -39,13 +44,35 @@
 			, (SELECT codEnlace FROM IncidenciasMovimientosLin lin
 				WHERE lin.IdMovimiento = p.IdMovimiento and AUTOCARCONDUCTOR = 'C'
 					AND conductor1o2 = 2) AS codConductor2
+			, p.kilometros
+			, p.kilometrosExentos
 		FROM PartesTrabajo p
 			LEFT JOIN IncidenciasMovimientos inc ON
 				inc.IdMovimiento = p.IdMovimiento
+		WHERE
+			len(inc.desdefecha) = 8
+			AND len(inc.desdehora) = 5
+			AND len(inc.hastafecha) = 8
+			AND len(inc.hastahora) = 5
+			AND CONVERT(DATETIME, CONVERT(CHAR(20), inc.DesdeFecha, 112) + ' ' + CONVERT(CHAR(20), inc.DesdeHora,108)) >= #{fechaInicio}
     ]]>
 	</sql>
 
+<!--
+FIXME
+			AND p.kilometros <= 0
+			AND p.kilometrosExentos <= 0
+ -->
 	<select id="selectList" parameterType="ServicioCriteria" resultMap="ResultMap">
 		<include refid="SelectPrefix" />
 	</select>
+
+	<update id="update" parameterType="Servicio">
+    <![CDATA[
+    	UPDATE PartesTrabajo SET
+    		kilometros = COALESCE(#{utilKm}, 0)
+    		, kilometrosExentos = COALESCE(#{vacioKm}, 0)
+    	WHERE codParte = #{codigoParte}
+    ]]>
+	</update>
 </mapper>

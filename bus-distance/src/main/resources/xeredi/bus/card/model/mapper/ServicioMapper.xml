@@ -3,6 +3,105 @@
 "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
 <mapper namespace="xeredi.bus.card.model.mapper.ServicioMapper">
+	<resultMap type="Servicio" id="ResultMap">
+		<id column="srvc_pk" />
+
+		<result column="srvc_pk" property="id" />
+		<result column="srvc_codigo_servicio" property="codigoServicio" />
+		<result column="srvc_codigo_parte" property="codigoParte" />
+		<result column="srvc_fecha_desde" property="fechaDesde" />
+		<result column="srvc_fecha_hasta" property="fechaHasta" />
+		<result column="srvc_util_km" property="utilKm" />
+		<result column="srvc_vacio_km" property="vacioKm" />
+
+		<association property="ruta" javaType="Ruta">
+			<result column="srvc_ruta_pk" property="id" />
+		</association>
+
+		<association property="conductor1" javaType="Conductor">
+			<result column="srvc_cdtr1_pk" property="id" />
+		</association>
+
+		<association property="conductor2" javaType="Conductor">
+			<result column="srvc_cdtr2_pk" property="id" />
+		</association>
+
+		<association property="vehiculo" javaType="Vehiculo">
+			<result column="srvc_vhcl_pk" property="id" />
+		</association>
+
+		<association property="lecturaGpsOrigen" javaType="LecturaGps">
+			<result column="srvc_lgps_orig_pk" property="id" />
+		</association>
+
+		<association property="lecturaGpsDestino" javaType="LecturaGps">
+			<result column="srvc_lgps_dest_pk" property="id" />
+		</association>
+	</resultMap>
+
+	<sql id="SelectPrefix">
+    <![CDATA[
+		SELECT srvc_pk, srvc_codigo_servicio, srvc_codigo_parte, srvc_fecha_desde, srvc_fecha_hasta, srvc_util_km, srvc_vacio_km
+			, srvc_ruta_pk
+			, srvc_cdtr1_pk
+			, srvc_cdtr2_pk
+			, srvc_vhcl_pk
+			, srvc_lgps_orig_pk
+			, srvc_lgps_dest_pk
+		FROM
+		    tbl_servicio_srvc
+    ]]>
+	</sql>
+
+	<select id="selectCalculo" parameterType="ServicioCriteria" resultMap="ResultMap">
+    <![CDATA[
+		SELECT srvc_pk, srvc_codigo_servicio, srvc_codigo_parte, srvc_fecha_desde, srvc_fecha_hasta, srvc_util_km, srvc_vacio_km
+			, srvc_ruta_pk
+			, srvc_cdtr1_pk
+			, srvc_cdtr2_pk
+			, srvc_vhcl_pk
+		    , (
+		        SELECT lgps_pk
+		        FROM tbl_lectura_gps_lgps
+		        WHERE
+		            1 = 1
+		            AND lgps_vhcl_pk = srvc_vhcl_pk
+		            AND srvc_fecha_desde BETWEEN (lgps_fecha - #{distanciaMaximaDias}) AND (lgps_fecha + #{distanciaMaximaDias})
+		            AND distanciaKm(lgps_latitude, lgps_longitude, ruta_orig_lat, ruta_orig_lon) < #{distanciaMaximaKm}
+		        ORDER BY distanciaKm(lgps_latitude, lgps_longitude, ruta_orig_lat, ruta_orig_lon)
+		        FETCH NEXT 1 ROWS ONLY
+		    ) AS srvc_lgps_orig_pk
+		    , (
+		        SELECT lgps_pk
+		        FROM tbl_lectura_gps_lgps
+		        WHERE
+		            1 = 1
+		            AND lgps_vhcl_pk = srvc_vhcl_pk
+		            AND srvc_fecha_hasta BETWEEN (lgps_fecha - #{distanciaMaximaDias}) AND (lgps_fecha + #{distanciaMaximaDias})
+		            AND distanciaKm(lgps_latitude, lgps_longitude, ruta_dest_lat, ruta_dest_lon) < #{distanciaMaximaKm}
+		        ORDER BY distanciaKm(lgps_latitude, lgps_longitude, ruta_dest_lat, ruta_dest_lon)
+		        FETCH NEXT 1 ROWS ONLY
+		    ) AS srvc_lgps_dest_pk
+		FROM tbl_servicio_srvc s
+		    INNER JOIN tbl_ruta_ruta r ON
+		        ruta_pk = srvc_ruta_pk
+		WHERE
+		    1 = 1
+		    AND srvc_ruta_pk IS NOT NULL
+		    AND srvc_vhcl_pk IS NOT NULL
+		    AND srvc_fecha_desde >= (
+		        SELECT MIN(lgps_fecha) - 1
+		        FROM tbl_lectura_gps_lgps
+		    )
+		ORDER BY srvc_vhcl_pk, srvc_fecha_desde
+    ]]>
+	</select>
+<!--
+FIXME
+		    AND srvc_util_km <= 0
+		    AND srvc_vacio_km <= 0
+ -->
+
 	<select id="exists" parameterType="Servicio" resultType="Boolean">
     <![CDATA[
         SELECT COUNT(1)
@@ -35,7 +134,24 @@
         	, srvc_vhcl_pk = (SELECT vhcl_pk FROM tbl_vehiculo_vhcl WHERE vhcl_codigo = #{vehiculo.codigo})
         	, srvc_fecha_desde = #{fechaDesde}
         	, srvc_fecha_hasta = #{fechaHasta}
+        	, srvc_util_km = #{utilKm}
+        	, srvc_vacio_km = #{vacioKm}
        	WHERE srvc_codigo_parte = #{codigoParte}
+    ]]>
+	</update>
+
+	<update id="update" parameterType="Servicio">
+    <![CDATA[
+		UPDATE tbl_servicio_srvc SET
+		    srvc_lgps_orig_pk = #{lecturaGpsOrigen.id}
+		    , srvc_lgps_dest_pk = #{lecturaGpsDestino.id}
+		    , srvc_util_km = (
+		        SELECT SUM(lgps_distance) / 1000
+		        FROM tbl_lectura_gps_lgps
+		        WHERE lgps_vhcl_pk = srvc_vhcl_pk
+		            AND lgps_pk BETWEEN #{lecturaGpsOrigen.id} AND #{lecturaGpsDestino.id}
+		    )
+		WHERE srvc_pk = #{id}
     ]]>
 	</update>
 </mapper>

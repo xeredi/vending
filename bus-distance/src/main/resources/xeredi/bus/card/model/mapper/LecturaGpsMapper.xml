@@ -22,7 +22,7 @@
 		<result column="lgps_track" property="track" />
 
 		<association property="archivoGps" javaType="ArchivoGps">
-			<result column="agps_pk" property="id" />
+			<result column="lgps_agps_pk" property="id" />
 			<result column="agps_nombre" property="nombre" />
 			<result column="agps_fecha" property="fecha" />
 			<result column="agps_fecha_proceso" property="fechaProceso" />
@@ -32,16 +32,20 @@
 			</association>
 
 			<association property="vehiculo" javaType="Vehiculo">
-				<result column="agps_vhcl_pk" property="id" />
+				<result column="lgps_vhcl_pk" property="id" />
 			</association>
+		</association>
+
+		<association property="vehiculo" javaType="Vehiculo">
+			<result column="lgps_vhcl_pk" property="id" />
 		</association>
 	</resultMap>
 
 	<sql id="SelectPrefix">
     <![CDATA[
-		SELECT lgps_pk, lgps_agps_pk, lgps_fecha, lgps_altitude, lgps_climb, lgps_distance, lgps_eps, lgps_ept, lgps_epv, lgps_epx
+		SELECT lgps_pk, lgps_agps_pk, lgps_vhcl_pk, lgps_fecha, lgps_altitude, lgps_climb, lgps_distance, lgps_eps, lgps_ept, lgps_epv, lgps_epx
 		    , lgps_latitude, lgps_longitude, lgps_mode, lgps_number_sats, lgps_speed, lgps_track
-		    , agps_vhcl_pk
+
 		    , agps_plca_pk
 		    , agps_nombre, agps_fecha, agps_fecha_proceso
 		FROM
@@ -74,11 +78,11 @@
 	<insert id="insert" parameterType="LecturaGps">
     <![CDATA[
         INSERT INTO tbl_lectura_gps_lgps (
-			lgps_pk, lgps_agps_pk, lgps_fecha, lgps_altitude, lgps_climb, lgps_distance, lgps_eps, lgps_ept, lgps_epv, lgps_epx
+			lgps_pk, lgps_agps_pk, lgps_vhcl_pk, lgps_fecha, lgps_altitude, lgps_climb, lgps_distance, lgps_eps, lgps_ept, lgps_epv, lgps_epx
 			, lgps_latitude, lgps_longitude, lgps_mode, lgps_number_sats, lgps_speed, lgps_track
         )
         VALUES (
-        	#{id}, #{archivoGps.id}, #{fecha}, #{altitude}, #{climb}, #{distance}, #{eps}, #{ept}, #{epv}, #{epx}
+        	#{id}, #{archivoGps.id}, #{vehiculo.id}, #{fecha}, #{altitude}, #{climb}, #{distance}, #{eps}, #{ept}, #{epv}, #{epx}
         	, #{latitude}, #{longitude}, #{mode}, #{numberSats}, #{speed}, #{track}
         )
     ]]>

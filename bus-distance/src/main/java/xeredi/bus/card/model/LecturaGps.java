@@ -17,6 +17,8 @@ public class LecturaGps {
 	/** The archivo gps. */
 	private ArchivoGps archivoGps;
 
+	private Vehiculo vehiculo;
+
 	/** The fecha. */
 	private Date fecha;
 

@@ -7,6 +7,7 @@ import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Arrays;
@@ -22,7 +23,6 @@ import xeredi.bus.card.model.ArchivoGps;
 import xeredi.bus.card.model.Conductor;
 import xeredi.bus.card.model.ConductorCriteria;
 import xeredi.bus.card.model.LecturaGps;
-import xeredi.bus.card.model.LecturaGpsCriteria;
 import xeredi.bus.card.model.Placa;
 import xeredi.bus.card.model.PlacaCriteria;
 import xeredi.bus.card.model.Ruta;
@@ -58,6 +58,8 @@ public final class DistanceProcess {
 	 * Load erp changes.
 	 */
 	private void loadErpChanges() throws SQLException {
+		System.out.println("Load ERP");
+
 		try (final SqlSession session = SqlMapperLocator.getSqlSession();
 				final SqlSession erpSession = SqlMapperLocator.getErpSqlSession()) {
 
@@ -72,6 +74,7 @@ public final class DistanceProcess {
 			final RutaErpMapper rutaErpMapper = erpSession.getMapper(RutaErpMapper.class);
 			final ServicioErpMapper servicioErpMapper = erpSession.getMapper(ServicioErpMapper.class);
 
+			System.out.println("Vehiculo");
 			for (final Vehiculo vehiculo : vehiculoErpMapper.selectList(new VehiculoCriteria())) {
 				if (vehiculoMapper.exists(vehiculo)) {
 					// vehiculoMapper.updateErpData(vehiculo);
@@ -82,6 +85,7 @@ public final class DistanceProcess {
 				}
 			}
 
+			System.out.println("Conductor");
 			for (final Conductor conductor : conductorErpMapper.selectList(new ConductorCriteria())) {
 				if (conductorMapper.exists(conductor)) {
 					conductorMapper.updateErpData(conductor);
@@ -92,6 +96,7 @@ public final class DistanceProcess {
 				}
 			}
 
+			System.out.println("Ruta");
 			for (final Ruta ruta : rutaErpMapper.selectList(new RutaCriteria())) {
 				if (rutaMapper.exists(ruta)) {
 					rutaMapper.updateErpData(ruta);
@@ -102,7 +107,17 @@ public final class DistanceProcess {
 				}
 			}
 
-			for (final Servicio servicio : servicioErpMapper.selectList(new ServicioCriteria())) {
+			System.out.println("Servicio");
+			final ServicioCriteria servicioCriteria = new ServicioCriteria();
+			final Calendar fechaInicio = Calendar.getInstance();
+
+			fechaInicio.set(Calendar.YEAR, 2017);
+			fechaInicio.set(Calendar.MONTH, 1);
+			fechaInicio.set(Calendar.DAY_OF_MONTH, 1);
+
+			servicioCriteria.setFechaInicio(fechaInicio.getTime());
+
+			for (final Servicio servicio : servicioErpMapper.selectList(servicioCriteria)) {
 				if (servicioMapper.exists(servicio)) {
 					servicioMapper.updateErpData(servicio);
 				} else {
@@ -119,7 +134,9 @@ public final class DistanceProcess {
 	/**
 	 * Load sqlite changes.
 	 */
-	private void loadSqliteChanges() throws SQLException {
+	private void loadSqliteChanges() throws SQLException, ParseException {
+		System.out.println("Load SQLITE");
+
 		try (final SqlSession session = SqlMapperLocator.getSqlSession()) {
 			final SequenceMapper sequenceMapper = session.getMapper(SequenceMapper.class);
 			final PlacaMapper placaMapper = session.getMapper(PlacaMapper.class);
@@ -166,6 +183,8 @@ public final class DistanceProcess {
 							archivoGpsMapper.insert(archivoGps);
 
 							final String dbUrl = "jdbc:sqlite:" + file.getAbsolutePath();
+							final DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
+
 							// create a connection to the database
 							try (final Connection con = DriverManager.getConnection(dbUrl);
 									final PreparedStatement stmt = con
@@ -175,6 +194,7 @@ public final class DistanceProcess {
 									final LecturaGps lecturaGps = new LecturaGps();
 
 									lecturaGps.setArchivoGps(archivoGps);
+									lecturaGps.setVehiculo(archivoGps.getVehiculo());
 									lecturaGps.setId(sequenceMapper.nextVal());
 									lecturaGps.setAltitude(rs.getDouble("altitude"));
 									lecturaGps.setClimb(rs.getDouble("climb"));
@@ -189,7 +209,8 @@ public final class DistanceProcess {
 									lecturaGps.setNumberSats(rs.getLong("number_sats"));
 									lecturaGps.setSpeed(rs.getDouble("speed"));
 									lecturaGps.setTrack(rs.getDouble("track"));
-									lecturaGps.setFecha(rs.getDate("timestamp_lectura_p"));
+									// lecturaGps.setFecha(rs.getDate("timestamp_lectura_p"));
+									lecturaGps.setFecha(dateFormat.parse(rs.getString("timestamp_lectura_p")));
 
 									if (lecturaGps.getLatitude() != 0 && lecturaGps.getLongitude() != 0) {
 										lecturaGpsMapper.insert(lecturaGps);
@@ -215,33 +236,18 @@ public final class DistanceProcess {
 		System.out.println("Calculate Distance");
 
 		try (final SqlSession session = SqlMapperLocator.getSqlSession()) {
-			final PlacaMapper placaMapper = session.getMapper(PlacaMapper.class);
-			final LecturaGpsMapper lecturaGpsMapper = session.getMapper(LecturaGpsMapper.class);
+			final ServicioMapper servicioMapper = session.getMapper(ServicioMapper.class);
 
-			for (final Placa placa : placaMapper.selectList(new PlacaCriteria())) {
-				System.out.println("Placa: " + placa);
+			final ServicioCriteria servicioCriteria = new ServicioCriteria();
 
-				final LecturaGpsCriteria lecturaGpsCriteria = new LecturaGpsCriteria();
+			servicioCriteria.setDistanciaMaximaDias(0.04);
+			servicioCriteria.setDistanciaMaximaKm(0.05);
 
-				Servicio servicio = null;
+			for (final Servicio servicio : servicioMapper.selectCalculo(servicioCriteria)) {
+				if (servicio.getLecturaGpsOrigen() != null && servicio.getLecturaGpsDestino() != null) {
+					System.out.println("servicio: " + servicio);
 
-				LecturaGps lecturaGpsInicio = null;
-				LecturaGps lecturaGpsUtilInicio = null;
-				LecturaGps lecturaGpsFin = null;
-				LecturaGps lecturaGpsUtilFin = null;
-
-				lecturaGpsCriteria.setPlacaId(placa.getId());
-
-				for (final LecturaGps lecturaGps : lecturaGpsMapper.selectListProceso(lecturaGpsCriteria)) {
-					System.out.println("LecturaGps: " + lecturaGps);
-
-					if (lecturaGpsInicio == null) {
-						lecturaGpsInicio = lecturaGps;
-					}
-
-					if (servicio == null) {
-
-					}
+					servicioMapper.update(servicio);
 				}
 			}
 
@@ -266,6 +272,8 @@ public final class DistanceProcess {
 			calculateDistance();
 			saveErpChanges();
 		} catch (final SQLException ex) {
+			ex.printStackTrace(System.err);
+		} catch (final ParseException ex) {
 			ex.printStackTrace(System.err);
 		}
 	}

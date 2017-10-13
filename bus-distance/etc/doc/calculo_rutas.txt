@@ -19,6 +19,8 @@ select DesdeFecha, DesdeHora, HastaFecha, HastaHora from IncidenciasMovimientos 
 42.101445
 -8.81574
 
+43.31819167	-8.365175
+
 select *
 from tbl_servicio_srvc
     INNER JOIN tbl_ruta_ruta ON
