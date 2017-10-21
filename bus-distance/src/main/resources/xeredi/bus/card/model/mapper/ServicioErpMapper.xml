@@ -10,8 +10,8 @@
 		<result column="codServicio" property="codigoServicio" />
 		<result column="fechaDesde" property="fechaDesde" />
 		<result column="fechaHasta" property="fechaHasta" />
-		<result column="kilometros" property="utilKm" />
-		<result column="kilometrosExentos" property="vacioKm" />
+		<result column="kilometros" property="utilErpKm" />
+		<result column="kilometrosExentos" property="vacioErpKm" />
 
 		<association property="ruta" javaType="Ruta">
 			<result column="codRuta" property="codigo" />

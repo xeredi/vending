@@ -12,11 +12,14 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Arrays;
 import java.util.Calendar;
+import java.util.HashSet;
 import java.util.List;
 import java.util.StringTokenizer;
 
 import org.apache.commons.io.comparator.NameFileComparator;
 import org.apache.commons.io.filefilter.FileFileFilter;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.apache.ibatis.session.SqlSession;
 
 import xeredi.bus.card.model.ArchivoGps;
@@ -44,252 +47,278 @@ import xeredi.bus.card.model.mapper.ServicioMapper;
 import xeredi.bus.card.model.mapper.VehiculoErpMapper;
 import xeredi.bus.card.model.mapper.VehiculoMapper;
 import xeredi.bus.card.model.util.mybatis.SqlMapperLocator;
+import xeredi.bus.card.util.ConfigurationKey;
+import xeredi.bus.card.util.ConfigurationUtil;
 
 // TODO: Auto-generated Javadoc
 /**
  * The Class DistanceProcess.
  */
 public final class DistanceProcess {
+    private static final Log LOG = LogFactory.getLog(DistanceProcess.class);
 
-	/** The Constant DB_BASE_PATH. */
-	public static final String DB_BASE_PATH = "/home/xeredi/git/vending/bus-distance/sqlite/rsync_placas_tvehiculos";
+    /**
+     * Load erp changes.
+     */
+    private void loadErpChanges() throws SQLException {
+        System.out.println("Load ERP");
 
-	/**
-	 * Load erp changes.
-	 */
-	private void loadErpChanges() throws SQLException {
-		System.out.println("Load ERP");
+        try (final SqlSession session = SqlMapperLocator.getSqlSession();
+                final SqlSession erpSession = SqlMapperLocator.getErpSqlSession()) {
 
-		try (final SqlSession session = SqlMapperLocator.getSqlSession();
-				final SqlSession erpSession = SqlMapperLocator.getErpSqlSession()) {
+            final SequenceMapper sequenceMapper = session.getMapper(SequenceMapper.class);
+            final VehiculoMapper vehiculoMapper = session.getMapper(VehiculoMapper.class);
+            final ConductorMapper conductorMapper = session.getMapper(ConductorMapper.class);
+            final RutaMapper rutaMapper = session.getMapper(RutaMapper.class);
+            final ServicioMapper servicioMapper = session.getMapper(ServicioMapper.class);
 
-			final SequenceMapper sequenceMapper = session.getMapper(SequenceMapper.class);
-			final VehiculoMapper vehiculoMapper = session.getMapper(VehiculoMapper.class);
-			final ConductorMapper conductorMapper = session.getMapper(ConductorMapper.class);
-			final RutaMapper rutaMapper = session.getMapper(RutaMapper.class);
-			final ServicioMapper servicioMapper = session.getMapper(ServicioMapper.class);
+            final VehiculoErpMapper vehiculoErpMapper = erpSession.getMapper(VehiculoErpMapper.class);
+            final ConductorErpMapper conductorErpMapper = erpSession.getMapper(ConductorErpMapper.class);
+            final RutaErpMapper rutaErpMapper = erpSession.getMapper(RutaErpMapper.class);
+            final ServicioErpMapper servicioErpMapper = erpSession.getMapper(ServicioErpMapper.class);
 
-			final VehiculoErpMapper vehiculoErpMapper = erpSession.getMapper(VehiculoErpMapper.class);
-			final ConductorErpMapper conductorErpMapper = erpSession.getMapper(ConductorErpMapper.class);
-			final RutaErpMapper rutaErpMapper = erpSession.getMapper(RutaErpMapper.class);
-			final ServicioErpMapper servicioErpMapper = erpSession.getMapper(ServicioErpMapper.class);
+            System.out.println("Vehiculo");
+            for (final Vehiculo vehiculo : vehiculoErpMapper.selectList(new VehiculoCriteria())) {
+                if (vehiculoMapper.exists(vehiculo)) {
+                    // vehiculoMapper.updateErpData(vehiculo);
+                } else {
+                    vehiculo.setId(sequenceMapper.nextVal());
 
-			System.out.println("Vehiculo");
-			for (final Vehiculo vehiculo : vehiculoErpMapper.selectList(new VehiculoCriteria())) {
-				if (vehiculoMapper.exists(vehiculo)) {
-					// vehiculoMapper.updateErpData(vehiculo);
-				} else {
-					vehiculo.setId(sequenceMapper.nextVal());
+                    vehiculoMapper.insert(vehiculo);
+                }
+            }
 
-					vehiculoMapper.insert(vehiculo);
-				}
-			}
+            System.out.println("Conductor");
+            for (final Conductor conductor : conductorErpMapper.selectList(new ConductorCriteria())) {
+                if (conductorMapper.exists(conductor)) {
+                    conductorMapper.updateErpData(conductor);
+                } else {
+                    conductor.setId(sequenceMapper.nextVal());
 
-			System.out.println("Conductor");
-			for (final Conductor conductor : conductorErpMapper.selectList(new ConductorCriteria())) {
-				if (conductorMapper.exists(conductor)) {
-					conductorMapper.updateErpData(conductor);
-				} else {
-					conductor.setId(sequenceMapper.nextVal());
+                    conductorMapper.insert(conductor);
+                }
+            }
 
-					conductorMapper.insert(conductor);
-				}
-			}
+            System.out.println("Ruta");
+            for (final Ruta ruta : rutaErpMapper.selectList(new RutaCriteria())) {
+                if (rutaMapper.exists(ruta)) {
+                    rutaMapper.updateErpData(ruta);
+                } else {
+                    ruta.setId(sequenceMapper.nextVal());
 
-			System.out.println("Ruta");
-			for (final Ruta ruta : rutaErpMapper.selectList(new RutaCriteria())) {
-				if (rutaMapper.exists(ruta)) {
-					rutaMapper.updateErpData(ruta);
-				} else {
-					ruta.setId(sequenceMapper.nextVal());
+                    rutaMapper.insert(ruta);
+                }
+            }
 
-					rutaMapper.insert(ruta);
-				}
-			}
+            System.out.println("Servicio");
+            final ServicioCriteria servicioCriteria = new ServicioCriteria();
+            final Calendar fechaInicio = Calendar.getInstance();
 
-			System.out.println("Servicio");
-			final ServicioCriteria servicioCriteria = new ServicioCriteria();
-			final Calendar fechaInicio = Calendar.getInstance();
+            final DateFormat dateFormat = new SimpleDateFormat(
+                    ConfigurationUtil.getString(ConfigurationKey.procesoDistancia_fechaInicioFormat));
 
-			fechaInicio.set(Calendar.YEAR, 2017);
-			fechaInicio.set(Calendar.MONTH, 1);
-			fechaInicio.set(Calendar.DAY_OF_MONTH, 1);
+            try {
+                servicioCriteria.setFechaInicio(
+                        dateFormat.parse(ConfigurationUtil.getString(ConfigurationKey.procesoDistancia_fechaInicio)));
 
-			servicioCriteria.setFechaInicio(fechaInicio.getTime());
+                for (final Servicio servicio : servicioErpMapper.selectList(servicioCriteria)) {
+                    final boolean print = new HashSet<>(
+                            Arrays.asList(new String[] { "17080973", "17081068", "17081111", "17081035", "17081008",
+                                    "17081036", "17081063", "17080947", "17081022", "17081256", "17081346", "17081902",
+                                    "17082252", "17082403", "17082447", "17082436", "17082490", "17082395" }))
+                                            .contains(servicio.getCodigoParte());
 
-			for (final Servicio servicio : servicioErpMapper.selectList(servicioCriteria)) {
-				if (servicioMapper.exists(servicio)) {
-					servicioMapper.updateErpData(servicio);
-				} else {
-					servicio.setId(sequenceMapper.nextVal());
+                    if (print) {
+                        LOG.info("servicio: " + servicio);
+                    }
 
-					servicioMapper.insertErpData(servicio);
-				}
-			}
+                    if (servicioMapper.exists(servicio)) {
+                        if (print) {
+                            LOG.info("UPDATE");
+                        }
 
-			session.commit();
-		}
-	}
+                        servicioMapper.updateErpData(servicio);
+                    } else {
+                        if (print) {
+                            LOG.info("INSERT");
+                        }
 
-	/**
-	 * Load sqlite changes.
-	 */
-	private void loadSqliteChanges() throws SQLException, ParseException {
-		System.out.println("Load SQLITE");
+                        servicio.setId(sequenceMapper.nextVal());
 
-		try (final SqlSession session = SqlMapperLocator.getSqlSession()) {
-			final SequenceMapper sequenceMapper = session.getMapper(SequenceMapper.class);
-			final PlacaMapper placaMapper = session.getMapper(PlacaMapper.class);
-			final ArchivoGpsMapper archivoGpsMapper = session.getMapper(ArchivoGpsMapper.class);
-			final LecturaGpsMapper lecturaGpsMapper = session.getMapper(LecturaGpsMapper.class);
+                        servicioMapper.insertErpData(servicio);
+                    }
+                }
+            } catch (final ParseException ex) {
+                ex.printStackTrace(System.err);
+            }
 
-			final List<Placa> placasList = placaMapper.selectList(new PlacaCriteria());
+            session.commit();
+        }
+    }
 
-			for (final Placa placa : placasList) {
-				final String dbPlacaFolder = DB_BASE_PATH + "/" + placa.getCodigo() + "/datos";
+    /**
+     * Load sqlite changes.
+     */
+    private void loadSqliteChanges() throws SQLException, ParseException {
+        System.out.println("Load SQLITE");
 
-				final File directory = new File(dbPlacaFolder);
-				final File[] files = directory.listFiles((FileFilter) FileFileFilter.FILE);
+        try (final SqlSession session = SqlMapperLocator.getSqlSession()) {
+            final SequenceMapper sequenceMapper = session.getMapper(SequenceMapper.class);
+            final PlacaMapper placaMapper = session.getMapper(PlacaMapper.class);
+            final ArchivoGpsMapper archivoGpsMapper = session.getMapper(ArchivoGpsMapper.class);
+            final LecturaGpsMapper lecturaGpsMapper = session.getMapper(LecturaGpsMapper.class);
 
-				Arrays.sort(files, NameFileComparator.NAME_COMPARATOR);
-				System.out.println("\nNames, case sensitive ascending order (NAME_COMPARATOR)");
+            final List<Placa> placasList = placaMapper.selectList(new PlacaCriteria());
 
-				for (final File file : files) {
-					if (file.getName().startsWith("regs_" + placa.getCodigo() + "__")) {
-						final ArchivoGps archivoGps = new ArchivoGps();
+            for (final Placa placa : placasList) {
+                final String dbPlacaFolder = ConfigurationUtil.getString(
+                        ConfigurationKey.procesoDistancia_sqliteBasePath) + "/" + placa.getCodigo() + "/datos";
 
-						archivoGps.setId(sequenceMapper.nextVal());
-						archivoGps.setNombre(file.getName());
-						archivoGps.setFecha(Calendar.getInstance().getTime());
-						archivoGps.setPlaca(placa);
-						archivoGps.setVehiculo(placa.getVehiculo());
+                final File directory = new File(dbPlacaFolder);
+                final File[] files = directory.listFiles((FileFilter) FileFileFilter.FILE);
 
-						if (!archivoGpsMapper.exists(archivoGps)) {
-							System.out.println("New File: " + file.getName());
+                Arrays.sort(files, NameFileComparator.NAME_COMPARATOR);
+                System.out.println("\nNames, case sensitive ascending order (NAME_COMPARATOR)");
 
-							try {
-								final StringTokenizer tokenizer = new StringTokenizer(file.getName(), "_");
+                for (final File file : files) {
+                    if (file.getName().startsWith("regs_" + placa.getCodigo() + "__")) {
+                        final ArchivoGps archivoGps = new ArchivoGps();
 
-								tokenizer.nextToken();
-								tokenizer.nextToken();
+                        archivoGps.setId(sequenceMapper.nextVal());
+                        archivoGps.setNombre(file.getName());
+                        archivoGps.setFecha(Calendar.getInstance().getTime());
+                        archivoGps.setPlaca(placa);
+                        archivoGps.setVehiculo(placa.getVehiculo());
 
-								final SimpleDateFormat dateFormat = new SimpleDateFormat("yyyyMMdd");
+                        if (!archivoGpsMapper.exists(archivoGps)) {
+                            System.out.println("New File: " + file.getName());
 
-								archivoGps.setFecha(dateFormat.parse(tokenizer.nextToken()));
-							} catch (final ParseException ex) {
-								ex.printStackTrace(System.err);
-							}
+                            try {
+                                final StringTokenizer tokenizer = new StringTokenizer(file.getName(), "_");
 
-							archivoGpsMapper.insert(archivoGps);
+                                tokenizer.nextToken();
+                                tokenizer.nextToken();
 
-							final String dbUrl = "jdbc:sqlite:" + file.getAbsolutePath();
-							final DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
+                                final SimpleDateFormat dateFormat = new SimpleDateFormat("yyyyMMdd");
 
-							// create a connection to the database
-							try (final Connection con = DriverManager.getConnection(dbUrl);
-									final PreparedStatement stmt = con
-											.prepareStatement("SELECT * FROM gps_id" + placa.getCodigo());
-									final ResultSet rs = stmt.executeQuery();) {
-								while (rs.next()) {
-									final LecturaGps lecturaGps = new LecturaGps();
+                                archivoGps.setFecha(dateFormat.parse(tokenizer.nextToken()));
+                            } catch (final ParseException ex) {
+                                ex.printStackTrace(System.err);
+                            }
 
-									lecturaGps.setArchivoGps(archivoGps);
-									lecturaGps.setVehiculo(archivoGps.getVehiculo());
-									lecturaGps.setId(sequenceMapper.nextVal());
-									lecturaGps.setAltitude(rs.getDouble("altitude"));
-									lecturaGps.setClimb(rs.getDouble("climb"));
-									lecturaGps.setDistance(rs.getDouble("distance"));
-									lecturaGps.setEps(rs.getDouble("eps"));
-									lecturaGps.setEpt(rs.getDouble("ept"));
-									lecturaGps.setEpv(rs.getDouble("epv"));
-									lecturaGps.setEpx(rs.getDouble("epx"));
-									lecturaGps.setLatitude(rs.getDouble("latitude"));
-									lecturaGps.setLongitude(rs.getDouble("longitude"));
-									lecturaGps.setMode(rs.getLong("mode"));
-									lecturaGps.setNumberSats(rs.getLong("number_sats"));
-									lecturaGps.setSpeed(rs.getDouble("speed"));
-									lecturaGps.setTrack(rs.getDouble("track"));
-									// lecturaGps.setFecha(rs.getDate("timestamp_lectura_p"));
-									lecturaGps.setFecha(dateFormat.parse(rs.getString("timestamp_lectura_p")));
+                            archivoGpsMapper.insert(archivoGps);
 
-									if (lecturaGps.getLatitude() != 0 && lecturaGps.getLongitude() != 0) {
-										lecturaGpsMapper.insert(lecturaGps);
-									}
+                            final String dbUrl = "jdbc:sqlite:" + file.getAbsolutePath();
+                            final DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
 
-									// System.out.println("lecturaGps: " +
-									// lecturaGps);
-								}
-							}
-						}
-					}
-				}
-			}
+                            // create a connection to the database
+                            try (final Connection con = DriverManager.getConnection(dbUrl);
+                                    final PreparedStatement stmt = con
+                                            .prepareStatement("SELECT * FROM gps_id" + placa.getCodigo());
+                                    final ResultSet rs = stmt.executeQuery();) {
+                                while (rs.next()) {
+                                    final LecturaGps lecturaGps = new LecturaGps();
 
-			session.commit();
-		}
-	}
+                                    lecturaGps.setArchivoGps(archivoGps);
+                                    lecturaGps.setVehiculo(archivoGps.getVehiculo());
+                                    lecturaGps.setId(sequenceMapper.nextVal());
+                                    lecturaGps.setAltitude(rs.getDouble("altitude"));
+                                    lecturaGps.setClimb(rs.getDouble("climb"));
+                                    lecturaGps.setDistance(rs.getDouble("distance"));
+                                    lecturaGps.setEps(rs.getDouble("eps"));
+                                    lecturaGps.setEpt(rs.getDouble("ept"));
+                                    lecturaGps.setEpv(rs.getDouble("epv"));
+                                    lecturaGps.setEpx(rs.getDouble("epx"));
+                                    lecturaGps.setLatitude(rs.getDouble("latitude"));
+                                    lecturaGps.setLongitude(rs.getDouble("longitude"));
+                                    lecturaGps.setMode(rs.getLong("mode"));
+                                    lecturaGps.setNumberSats(rs.getLong("number_sats"));
+                                    lecturaGps.setSpeed(rs.getDouble("speed"));
+                                    lecturaGps.setTrack(rs.getDouble("track"));
+                                    // lecturaGps.setFecha(rs.getDate("timestamp_lectura_p"));
+                                    lecturaGps.setFecha(dateFormat.parse(rs.getString("timestamp_lectura_p")));
 
-	/**
-	 * Calculate distance.
-	 */
-	private void calculateDistance() throws SQLException {
-		System.out.println("Calculate Distance");
+                                    if (lecturaGps.getLatitude() != 0 && lecturaGps.getLongitude() != 0) {
+                                        lecturaGpsMapper.insert(lecturaGps);
+                                    }
 
-		try (final SqlSession session = SqlMapperLocator.getSqlSession()) {
-			final ServicioMapper servicioMapper = session.getMapper(ServicioMapper.class);
+                                    // System.out.println("lecturaGps: " +
+                                    // lecturaGps);
+                                }
+                            }
+                        }
+                    }
+                }
+            }
 
-			final ServicioCriteria servicioCriteria = new ServicioCriteria();
+            session.commit();
+        }
+    }
 
-			servicioCriteria.setDistanciaMaximaDias(0.04);
-			servicioCriteria.setDistanciaMaximaKm(0.05);
+    /**
+     * Calculate distance.
+     */
+    private void calculateDistance() throws SQLException {
+        System.out.println("Calculate Distance");
 
-			for (final Servicio servicio : servicioMapper.selectCalculo(servicioCriteria)) {
-				if (servicio.getLecturaGpsOrigen() != null && servicio.getLecturaGpsDestino() != null) {
-					System.out.println("servicio: " + servicio);
+        try (final SqlSession session = SqlMapperLocator.getSqlSession()) {
+            final ServicioMapper servicioMapper = session.getMapper(ServicioMapper.class);
 
-					servicioMapper.update(servicio);
-				}
-			}
+            final ServicioCriteria servicioCriteria = new ServicioCriteria();
 
-			session.commit();
-		}
-	}
+            servicioCriteria.setDistanciaMaximaDias(
+                    ConfigurationUtil.getDouble(ConfigurationKey.procesoDistancia_distanciaMaximaDias));
+            servicioCriteria.setDistanciaMaximaKm(
+                    ConfigurationUtil.getDouble(ConfigurationKey.procesoDistancia_distanciaMaximaKm));
 
-	/**
-	 * Save erp changes.
-	 */
-	private void saveErpChanges() {
+            for (final Servicio servicio : servicioMapper.selectCalculo(servicioCriteria)) {
+                if (servicio.getLecturaGpsOrigen() != null && servicio.getLecturaGpsDestino() != null) {
+                    System.out.println("servicio: " + servicio);
 
-	}
+                    servicioMapper.update(servicio);
+                    servicioMapper.updateKmVacio(servicio);
+                }
+            }
 
-	/**
-	 * Execute.
-	 */
-	public void execute() {
-		try {
-			loadSqliteChanges();
-			loadErpChanges();
-			calculateDistance();
-			saveErpChanges();
-		} catch (final SQLException ex) {
-			ex.printStackTrace(System.err);
-		} catch (final ParseException ex) {
-			ex.printStackTrace(System.err);
-		}
-	}
+            session.commit();
+        }
+    }
 
-	/**
-	 * The main method.
-	 *
-	 * @param args
-	 *            the arguments
-	 */
-	public static void main(final String[] args) {
-		final DistanceProcess distanceProcess = new DistanceProcess();
-		final long start = Calendar.getInstance().getTimeInMillis();
+    /**
+     * Save erp changes.
+     */
+    private void saveErpChanges() {
 
-		distanceProcess.execute();
+    }
 
-		System.out.println("Time: " + (Calendar.getInstance().getTimeInMillis() - start));
-	}
+    /**
+     * Execute.
+     */
+    public void execute() {
+        try {
+            loadSqliteChanges();
+            loadErpChanges();
+            calculateDistance();
+            saveErpChanges();
+        } catch (final SQLException ex) {
+            ex.printStackTrace(System.err);
+        } catch (final ParseException ex) {
+            ex.printStackTrace(System.err);
+        }
+    }
+
+    /**
+     * The main method.
+     *
+     * @param args
+     *            the arguments
+     */
+    public static void main(final String[] args) {
+        final DistanceProcess distanceProcess = new DistanceProcess();
+        final long start = Calendar.getInstance().getTimeInMillis();
+
+        distanceProcess.execute();
+
+        System.out.println("Time: " + (Calendar.getInstance().getTimeInMillis() - start));
+    }
 }

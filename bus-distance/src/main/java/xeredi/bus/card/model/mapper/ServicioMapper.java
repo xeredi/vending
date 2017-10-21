@@ -54,4 +54,6 @@ public interface ServicioMapper {
 	 * @return the int
 	 */
 	int update(final Servicio servicio);
+
+	int updateKmVacio(final Servicio servicio);
 }

@@ -53,13 +53,42 @@ CREATE TABLE tbl_ruta_ruta (
 );
 
 INSERT INTO tbl_ruta_ruta (ruta_pk, ruta_codigo, ruta_nombre, ruta_orig_lat, ruta_orig_lon, ruta_dest_lat, ruta_dest_lon)
-VALUES (4000, '00013', 'Cerceda', 43.41823667, -8.46503667, 42.201445, -8.91574);
+VALUES (4001, '00105', 'Colegio Angel de la Guarda Ruta 2 Baiona', 42.106828,	-8.874192, 42.165089, -8.796310);
 INSERT INTO tbl_ruta_ruta (ruta_pk, ruta_codigo, ruta_nombre, ruta_orig_lat, ruta_orig_lon, ruta_dest_lat, ruta_dest_lon)
-VALUES (4001, '00105', 'Colegio Angel de la Guarda Ruta 2 Baiona', 42.106826,	-8.874202, 42.165117, -8.796242);
+VALUES (4002, '00121', 'Eso Camos Con', 42.136458,-8.774341, 42.135656,-8.800163);
 INSERT INTO tbl_ruta_ruta (ruta_pk, ruta_codigo, ruta_nombre, ruta_orig_lat, ruta_orig_lon, ruta_dest_lat, ruta_dest_lon)
-VALUES (4002, '00071', 'Gondomar', 43.21823667, -8.26503667, 42.001445, -8.71574);
+VALUES (4003, '00123', 'Camos Piñeiros', 42.153310,-8.768611, 42.153024,-8.786511);
 INSERT INTO tbl_ruta_ruta (ruta_pk, ruta_codigo, ruta_nombre, ruta_orig_lat, ruta_orig_lon, ruta_dest_lat, ruta_dest_lon)
-VALUES (4003, '00052', 'Santiago de Compostela', NULL, NULL, NULL, NULL);
+VALUES (4004, '00125', 'Nigran Tarela Cean r-2', 42.143178,-8.783027, 42.141949,-8.807676);
+INSERT INTO tbl_ruta_ruta (ruta_pk, ruta_codigo, ruta_nombre, ruta_orig_lat, ruta_orig_lon, ruta_dest_lat, ruta_dest_lon)
+VALUES (4005, '00127', 'Eso Pinete', 42.114979,-8.812869, 42.113487,-8.764992);
+INSERT INTO tbl_ruta_ruta (ruta_pk, ruta_codigo, ruta_nombre, ruta_orig_lat, ruta_orig_lon, ruta_dest_lat, ruta_dest_lon)
+VALUES (4006, '00128', 'Eso Pinete 2', 42.113487,-8.764992, 42.114979,-8.812869);
+INSERT INTO tbl_ruta_ruta (ruta_pk, ruta_codigo, ruta_nombre, ruta_orig_lat, ruta_orig_lon, ruta_dest_lat, ruta_dest_lon)
+VALUES (4007, '00130', 'Carrasqueira 4', 42.198007,-8.779829, 42.166821,-8.802028);
+INSERT INTO tbl_ruta_ruta (ruta_pk, ruta_codigo, ruta_nombre, ruta_orig_lat, ruta_orig_lon, ruta_dest_lat, ruta_dest_lon)
+VALUES (4008, '00131', 'Vilariño Ramallosa', 42.116153,-8.812116, 42.117892,-8.792012);
+INSERT INTO tbl_ruta_ruta (ruta_pk, ruta_codigo, ruta_nombre, ruta_orig_lat, ruta_orig_lon, ruta_dest_lat, ruta_dest_lon)
+VALUES (4009, '00132', 'Vilariño Ramallosa 2', 42.117892,-8.792012, 42.116153,-8.812116);
+INSERT INTO tbl_ruta_ruta (ruta_pk, ruta_codigo, ruta_nombre, ruta_orig_lat, ruta_orig_lon, ruta_dest_lat, ruta_dest_lon)
+VALUES (4010, '00133', 'Sauces 8', 42.170316,-8.676061, 42.206236,-8.730547);
+INSERT INTO tbl_ruta_ruta (ruta_pk, ruta_codigo, ruta_nombre, ruta_orig_lat, ruta_orig_lon, ruta_dest_lat, ruta_dest_lon)
+VALUES (4011, '00136', 'Eso Priegue', 42.135656,-8.800163, 42.160451,-8.796269);
+INSERT INTO tbl_ruta_ruta (ruta_pk, ruta_codigo, ruta_nombre, ruta_orig_lat, ruta_orig_lon, ruta_dest_lat, ruta_dest_lon)
+VALUES (4012, '00137', 'Carrasqueira 8', 42.189865,-8.776250, 42.198007,-8.779829);
+INSERT INTO tbl_ruta_ruta (ruta_pk, ruta_codigo, ruta_nombre, ruta_orig_lat, ruta_orig_lon, ruta_dest_lat, ruta_dest_lon)
+VALUES (4013, '00139', 'Gondomar Razas r-1', 42.112446,-8.768225, 42.098639,-8.750252);
+INSERT INTO tbl_ruta_ruta (ruta_pk, ruta_codigo, ruta_nombre, ruta_orig_lat, ruta_orig_lon, ruta_dest_lat, ruta_dest_lon)
+VALUES (4014, '00141', 'Ies Proval', 42.136458,-8.774341, 42.113421,-8.779378);
+INSERT INTO tbl_ruta_ruta (ruta_pk, ruta_codigo, ruta_nombre, ruta_orig_lat, ruta_orig_lon, ruta_dest_lat, ruta_dest_lon)
+VALUES (4015, '00143', 'Gondomar Villaza r-3', 42.120201,-8.753692, 42.112446,-8.768225);
+INSERT INTO tbl_ruta_ruta (ruta_pk, ruta_codigo, ruta_nombre, ruta_orig_lat, ruta_orig_lon, ruta_dest_lat, ruta_dest_lon)
+VALUES (4016, '00145', 'Peitieiros Zapa', 42.111059,-8.759529, 42.112446,-8.768225);
+INSERT INTO tbl_ruta_ruta (ruta_pk, ruta_codigo, ruta_nombre, ruta_orig_lat, ruta_orig_lon, ruta_dest_lat, ruta_dest_lon)
+VALUES (4017, '00147', 'Eso Zapa', 42.113487,-8.764992, 42.114691,-8.729232);
+
+
+
 
 
 
@@ -116,6 +145,8 @@ CREATE TABLE tbl_servicio_srvc (
 	, srvc_fecha_hasta TIMESTAMP
 	, srvc_util_km NUMBER(10, 3)
 	, srvc_vacio_km NUMBER(10, 3)
+	, srvc_util_erp_km NUMBER(10, 3)
+	, srvc_vacio_erp_km NUMBER(10, 3)
 	, srvc_lgps_orig_pk NUMBER(19)
 	, srvc_lgps_dest_pk NUMBER(19)
 
@@ -130,3 +161,4 @@ CREATE TABLE tbl_servicio_srvc (
 );
 
 CREATE INDEX ix_srvc ON tbl_servicio_srvc (srvc_vhcl_pk, srvc_fecha_desde);
+CREATE INDEX ix_srvc_ruta_pk ON tbl_servicio_srvc (srvc_ruta_pk);

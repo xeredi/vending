@@ -12,14 +12,6 @@ import lombok.Data;
 /**
  * Instantiates a new servicio.
  */
-
-/**
- * Instantiates a new servicio.
- */
-
-/**
- * Instantiates a new servicio.
- */
 @Data
 public class Servicio {
 
@@ -55,6 +47,12 @@ public class Servicio {
 
 	/** The vacio km. */
 	private Double vacioKm;
+
+	/** The util erp km. */
+	private Double utilErpKm;
+
+	/** The vacio erp km. */
+	private Double vacioErpKm;
 
 	/** The lectura gps origen. */
 	private LecturaGps lecturaGpsOrigen;
