@@ -119,12 +119,16 @@ FROM sql
 SELECT * FROM tbl_servicio_srvc WHERE srvc_codigo_parte = '17081256'
 ;
 
+SELECT s.*, s.srvc_codigo_parte, r.ruta_codigo
+FROM tbl_servicio_srvc s
+    inner join tbl_ruta_ruta r on ruta_pk = srvc_ruta_pk
+ORDER BY srvc_vhcl_pk, srvc_fecha_desde
+;
 
 
 
 
-
-SELECT s.*, r.*
+SELECT s.*, s.srvc_codigo_parte, r.ruta_codigo
 FROM tbl_servicio_srvc s
     left join tbl_ruta_ruta r on ruta_pk = srvc_ruta_pk
 WHERE

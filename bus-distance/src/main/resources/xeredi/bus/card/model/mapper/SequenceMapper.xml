@@ -5,8 +5,14 @@
 <mapper namespace="xeredi.bus.card.model.mapper.SequenceMapper">
 	<select id="nextVal" resultType="Long">
     <![CDATA[
+        SELECT nextval('seq_bus')
+    ]]>
+	</select>
+
+	<!-- select id="nextVal" resultType="Long">
+    <![CDATA[
         SELECT seq_bus.nextval
         FROM dual
     ]]>
-	</select>
+	</select-->
 </mapper>

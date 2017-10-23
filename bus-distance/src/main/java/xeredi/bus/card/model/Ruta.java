@@ -10,6 +10,10 @@ import lombok.Data;
 /**
  * Instantiates a new ruta.
  */
+
+/**
+ * Instantiates a new ruta.
+ */
 @Data
 public class Ruta {
 
@@ -21,19 +25,25 @@ public class Ruta {
 
 	/** The nombre. */
 	private String nombre;
-	
+
 	/** The lugar inicio. */
 	private String lugarInicio;
-	
+
 	/** The lugar fin. */
 	private String lugarFin;
-	
+
+	/** The hora inicio. */
+	private String horaInicio;
+
+	/** The hora fin. */
+	private String horaFin;
+
 	/** The itinerario. */
 	private String itinerario;
-	
+
 	/** The km. */
 	private Double km;
-	
+
 	/** The km vacio. */
 	private Double kmVacio;
 

@@ -36,7 +36,8 @@
 				<property name="maxTotal" value="8" />
 				<property name="minIdle" value="4" />
 				<property name="maxIdle" value="4" />
-				<property name="validationQuery" value="select 1+1 FROM dual" />
+				<property name="validationQuery" value="select 1+1" />
+				<!-- property name="validationQuery" value="select 1+1 FROM dual" /-->
 			</dataSource>
 		</environment>
 	</environments>

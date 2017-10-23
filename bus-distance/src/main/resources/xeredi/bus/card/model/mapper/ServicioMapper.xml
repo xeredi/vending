@@ -70,7 +70,9 @@
 		            WHERE
 		                1 = 1
 		                AND lgps_vhcl_pk = srvc_vhcl_pk
-		                AND srvc_fecha_desde BETWEEN (lgps_fecha - #{distanciaMaximaDias}) AND (lgps_fecha + #{distanciaMaximaDias})
+		                AND lgps_fecha BETWEEN
+		                	(srvc_fecha_desde - interval '${distanciaMaximaDias} minutes')
+		                	AND (srvc_fecha_desde + interval '${distanciaMaximaDias} minutes')
 		                AND distanciaKm(lgps_latitude, lgps_longitude, ruta_orig_lat, ruta_orig_lon) < #{distanciaMaximaKm}
 		            ORDER BY distanciaKm(lgps_latitude, lgps_longitude, ruta_orig_lat, ruta_orig_lon)
 		            FETCH NEXT 1 ROWS ONLY
@@ -81,7 +83,9 @@
 		            WHERE
 		                1 = 1
 		                AND lgps_vhcl_pk = srvc_vhcl_pk
-		                AND srvc_fecha_hasta BETWEEN (lgps_fecha - #{distanciaMaximaDias}) AND (lgps_fecha + #{distanciaMaximaDias})
+		                AND lgps_fecha BETWEEN
+		                	(srvc_fecha_hasta - interval '${distanciaMaximaDias} minutes')
+		                	AND (srvc_fecha_hasta + interval '${distanciaMaximaDias} minutes')
 		                AND distanciaKm(lgps_latitude, lgps_longitude, ruta_dest_lat, ruta_dest_lon) < #{distanciaMaximaKm}
 		            ORDER BY distanciaKm(lgps_latitude, lgps_longitude, ruta_dest_lat, ruta_dest_lon)
 		            FETCH NEXT 1 ROWS ONLY
@@ -94,7 +98,7 @@
 		        AND srvc_ruta_pk IS NOT NULL
 		        AND srvc_vhcl_pk IS NOT NULL
 		        AND srvc_fecha_desde >= (
-		            SELECT MIN(lgps_fecha) - 1
+		            SELECT MIN(lgps_fecha) - interval '1 days'
 		            FROM tbl_lectura_gps_lgps
 		        )
 		)

@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="xeredi.bus.card.model.mapper.ServicioXuntaErpMapper">
+	<resultMap type="ServicioXunta" id="ResultMap">
+		<id column="codParte" />
+
+		<association property="servicio" javaType="Servicio">
+			<result column="codParte" property="codigoParte" />
+			<result column="codServicio" property="codigoServicio" />
+			<result column="fechaDesde" property="fechaDesde" />
+			<result column="fechaHasta" property="fechaHasta" />
+			<result column="kilometros" property="utilErpKm" />
+			<result column="kilometrosExentos" property="vacioErpKm" />
+			<result column="pasajeros" property="pasajeros" />
+			<result column="importe" property="importe" />
+
+			<association property="ruta" javaType="Ruta">
+				<result column="codRuta" property="codigo" />
+				<result column="descripcionRuta" property="nombre" />
+
+				<result column="horaInicio" property="horaInicio" />
+				<result column="horaFin" property="horaFin" />
+				<result column="lugarInicio" property="lugarInicio" />
+				<result column="lugarFin" property="lugarFin" />
+			</association>
+			<association property="conductor1" javaType="Conductor">
+				<result column="codConductor1" property="codigo" />
+			</association>
+			<association property="conductor2" javaType="Conductor">
+				<result column="codConductor2" property="codigo" />
+			</association>
+			<association property="vehiculo" javaType="Vehiculo">
+				<result column="codAutocar" property="codigo" />
+			</association>
+		</association>
+	</resultMap>
+
+	<select id="selectList" parameterType="ServicioXuntaCriteria"
+		resultMap="ResultMap">
+    <![CDATA[
+		SELECT p.codServicio, p.codParte, p.idParte
+			, CONVERT(DATETIME, CONVERT(CHAR(20), inc.DesdeFecha, 112) + ' ' + CONVERT(CHAR(20), inc.DesdeHora,108)) AS fechaDesde
+			, CONVERT(DATETIME, CONVERT(CHAR(20), inc.HastaFecha, 112) + ' ' + CONVERT(CHAR(20), inc.HastaHora,108)) AS fechaHasta
+			, aut.codruta AS codRuta
+			, rut.descripcion AS descripcionRuta
+			, rut.horaInicio AS horaInicio
+			, rut.horaFin AS horaFin
+			, rut.lugarInicio AS lugarInicio
+			, rut.lugarFin AS lugarFin
+			, (SELECT codEnlace FROM IncidenciasMovimientosLin lin
+				WHERE lin.IdMovimiento = p.IdMovimiento
+					AND AUTOCARCONDUCTOR = 'A') AS codAutocar
+			, (SELECT codEnlace FROM IncidenciasMovimientosLin lin
+				WHERE lin.IdMovimiento = p.IdMovimiento and AUTOCARCONDUCTOR = 'C'
+					AND conductor1o2 = 1) AS codConductor1
+			, (SELECT codEnlace FROM IncidenciasMovimientosLin lin
+				WHERE lin.IdMovimiento = p.IdMovimiento and AUTOCARCONDUCTOR = 'C'
+					AND conductor1o2 = 2) AS codConductor2
+			, p.kilometros
+			, p.kilometrosExentos
+			, p.numPersonas AS pasajeros
+			, (SELECT importeFacturado FROM PartesTrabajo_Cierre cie
+				WHERE cie.codParte = p.codParte) AS importe
+		FROM PartesTrabajo p
+			LEFT JOIN IncidenciasMovimientos inc ON
+				inc.IdMovimiento = p.IdMovimiento
+			LEFT JOIN SerAutocares aut ON
+				aut.codservicio = p.codServicio
+				AND aut.NumAutocar = p.NumAutocar
+			LEFT JOIN Rutas rut ON
+				rut.codruta = aut.codruta
+		WHERE
+			len(inc.desdefecha) = 8
+			AND len(inc.desdehora) = 5
+			AND len(inc.hastafecha) = 8
+			AND len(inc.hastahora) = 5
+			AND CONVERT(DATETIME, CONVERT(CHAR(20), inc.DesdeFecha, 112) + ' ' + CONVERT(CHAR(20), inc.DesdeHora,108)) >= #{fechaInicio}
+			AND CONVERT(DATETIME, CONVERT(CHAR(20), inc.DesdeFecha, 112) + ' ' + CONVERT(CHAR(20), inc.DesdeHora,108)) < #{fechaFin}
+
+			AND EXISTS (
+				SELECT 1 FROM SerAutocares aut
+				WHERE aut.codservicio = p.codServicio
+					AND aut.NumAutocar = p.NumAutocar
+					AND aut.codruta IS NOT NULL
+					AND aut.codruta <> ''
+			)
+		ORDER BY fechaDesde
+    ]]>
+	</select>
+</mapper>

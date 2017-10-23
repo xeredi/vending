@@ -1,0 +1,8 @@
+- Servidor Jose
+	$ ssh 91.117.32.160 -p 10022 -l root
+		91.117.32.160:10022
+		root/Tele8
+
+		SQLServer: tsql -H 192.168.0.14 -p 58871 -U sa -P Ofisql1$ -D Ofibus009
+
+servidor galisur: 192.168.1.250

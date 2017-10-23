@@ -48,6 +48,10 @@ public class Servicio {
 	/** The vacio km. */
 	private Double vacioKm;
 
+	private Integer pasajeros;
+
+	private Double importe;
+
 	/** The util erp km. */
 	private Double utilErpKm;
 
