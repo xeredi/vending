@@ -131,7 +131,6 @@ public final class DistanceProcess {
 			int servicioCount = 0;
 
 			final ServicioCriteria servicioCriteria = new ServicioCriteria();
-			final Calendar fechaInicio = Calendar.getInstance();
 
 			final DateFormat dateFormat = new SimpleDateFormat(
 					ConfigurationUtil.getString(ConfigurationKey.procesoDistancia_fechaInicioFormat));
@@ -164,7 +163,7 @@ public final class DistanceProcess {
 	/**
 	 * Load sqlite changes.
 	 */
-	private void loadSqliteChanges() throws SQLException {
+	private void loadSqliteChanges() {
 		LOG.info("Load SQLITE");
 
 		try (final SqlSession session = SqlMapperLocator.getSqlSession()) {
@@ -190,7 +189,8 @@ public final class DistanceProcess {
 				LOG.info("\nNames, case sensitive ascending order (NAME_COMPARATOR)");
 
 				for (final File file : files) {
-					if (file.getName().startsWith("regs_" + placa.getCodigo() + "__")) {
+					if (file.getName().startsWith("regs_" + placa.getCodigo() + "__")
+							&& file.getName().endsWith(".db")) {
 						final ArchivoGps archivoGps = new ArchivoGps();
 
 						archivoGps.setId(sequenceMapper.nextVal());
@@ -259,6 +259,8 @@ public final class DistanceProcess {
 										LOG.error(ex.getMessage());
 									}
 								}
+							} catch (final SQLException ex) {
+								LOG.error(ex.getMessage(), ex);
 							}
 
 							LOG.info("Lecturas Archivo: " + lecturasFileCount);

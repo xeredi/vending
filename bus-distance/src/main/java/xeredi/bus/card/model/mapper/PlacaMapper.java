@@ -31,6 +31,24 @@ public interface PlacaMapper {
 	void insert(final Placa placa);
 
 	/**
+	 * Update.
+	 *
+	 * @param placa
+	 *            the placa
+	 * @return the int
+	 */
+	int update(final Placa placa);
+
+	/**
+	 * Delete.
+	 *
+	 * @param placa
+	 *            the placa
+	 * @return the int
+	 */
+	int delete(final Placa placa);
+
+	/**
 	 * Select list.
 	 *
 	 * @param placaCriteria
@@ -49,6 +67,15 @@ public interface PlacaMapper {
 	 * @return the list
 	 */
 	List<Placa> selectList(final PlacaCriteria placaCriteria, final RowBounds bounds);
+
+	/**
+	 * Select.
+	 *
+	 * @param id
+	 *            the id
+	 * @return the placa
+	 */
+	Placa select(final Long id);
 
 	/**
 	 * Count.
