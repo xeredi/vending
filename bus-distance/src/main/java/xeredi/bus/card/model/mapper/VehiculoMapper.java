@@ -1,5 +1,7 @@
 package xeredi.bus.card.model.mapper;
 
+import java.util.List;
+
 import xeredi.bus.card.model.Vehiculo;
 import xeredi.bus.card.model.VehiculoCriteria;
 
@@ -34,4 +36,13 @@ public interface VehiculoMapper {
 	 * @return the int
 	 */
 	int updateErpData(final Vehiculo vehiculo);
+
+	/**
+	 * Select list.
+	 *
+	 * @param criteria
+	 *            the criteria
+	 * @return the list
+	 */
+	List<Vehiculo> selectList(final VehiculoCriteria criteria);
 }

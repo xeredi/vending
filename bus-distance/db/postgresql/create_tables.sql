@@ -3,32 +3,32 @@ DROP TABLE IF EXISTS tbl_lectura_gps_lgps;
 DROP TABLE IF EXISTS tbl_archivo_gps_agps;
 DROP TABLE IF EXISTS tbl_ruta_ruta;
 DROP TABLE IF EXISTS tbl_conductor_cdtr;
-DROP TABLE IF EXISTS tbl_vehiculo_vhcl;
 DROP TABLE IF EXISTS tbl_placa_plca;
+DROP TABLE IF EXISTS tbl_vehiculo_vhcl;
 
 CREATE SEQUENCE IF NOT EXISTS seq_bus;
 
-CREATE TABLE tbl_placa_plca (
-	plca_pk BIGINT NOT NULL
-	, plca_codigo VARCHAR(20) NOT NULL
-
-	, CONSTRAINT pk_plca PRIMARY KEY (plca_pk)
-	, CONSTRAINT uk_plca_codigo UNIQUE (plca_codigo)
-);
-
-INSERT INTO tbl_placa_plca (plca_pk, plca_codigo) VALUES (1000, '28022');
-
 CREATE TABLE tbl_vehiculo_vhcl (
 	vhcl_pk BIGINT NOT NULL
-	, vhcl_plca_pk BIGINT
 	, vhcl_codigo VARCHAR(20) NOT NULL
 
 	, CONSTRAINT pk_vhcl PRIMARY KEY (vhcl_pk)
 	, CONSTRAINT uk_vhcl_codigo UNIQUE (vhcl_codigo)
-	, CONSTRAINT fk_vhcl_plca_pk FOREIGN KEY (vhcl_plca_pk) REFERENCES tbl_placa_plca (plca_pk)
 );
 
-INSERT INTO tbl_vehiculo_vhcl (vhcl_pk, vhcl_plca_pk, vhcl_codigo) VALUES (2000, 1000, '0125');
+INSERT INTO tbl_vehiculo_vhcl (vhcl_pk, vhcl_codigo) VALUES (2000, '0125');
+
+CREATE TABLE tbl_placa_plca (
+	plca_pk BIGINT NOT NULL
+	, plca_vhcl_pk BIGINT
+	, plca_codigo VARCHAR(20) NOT NULL
+
+	, CONSTRAINT pk_plca PRIMARY KEY (plca_pk)
+	, CONSTRAINT uk_plca_codigo UNIQUE (plca_codigo)
+	, CONSTRAINT fk_plca_vhcl_pk FOREIGN KEY (plca_vhcl_pk) REFERENCES tbl_vehiculo_vhcl (vhcl_pk)
+);
+
+INSERT INTO tbl_placa_plca (plca_pk, plca_vhcl_pk, plca_codigo) VALUES (1000, 2000, '28022');
 
 CREATE TABLE tbl_conductor_cdtr (
 	cdtr_pk BIGINT NOT NULL

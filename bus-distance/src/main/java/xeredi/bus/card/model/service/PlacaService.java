@@ -1,7 +1,16 @@
 package xeredi.bus.card.model.service;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import org.apache.ibatis.session.RowBounds;
+import org.apache.ibatis.session.SqlSession;
+
 import xeredi.bus.card.model.Placa;
 import xeredi.bus.card.model.PlacaCriteria;
+import xeredi.bus.card.model.mapper.PlacaMapper;
+import xeredi.bus.card.model.mapper.SequenceMapper;
+import xeredi.bus.card.model.util.mybatis.SqlMapperLocator;
 import xeredi.bus.card.util.PaginatedList;
 
 // TODO: Auto-generated Javadoc
@@ -21,8 +30,16 @@ public final class PlacaService {
 	 *            the count
 	 * @return the paginated list
 	 */
-	public PaginatedList<Placa> selectList(final PlacaCriteria criteria, final int offset, final int count) {
-		throw new Error("No implementado");
+	public PaginatedList<Placa> selectList(final PlacaCriteria criteria, final int offset, final int limit) {
+		try (final SqlSession session = SqlMapperLocator.getSqlSession()) {
+			final PlacaMapper placaMapper = session.getMapper(PlacaMapper.class);
+
+			final int count = placaMapper.count(criteria);
+			final List<Placa> list = count >= offset ? placaMapper.selectList(criteria, new RowBounds(offset, limit))
+					: new ArrayList<>();
+
+			return new PaginatedList<>(list, offset, limit, count);
+		}
 	}
 
 	/**
@@ -33,7 +50,11 @@ public final class PlacaService {
 	 * @return the placa
 	 */
 	public Placa select(final Long id) {
-		throw new Error("No implementado");
+		try (final SqlSession session = SqlMapperLocator.getSqlSession()) {
+			final PlacaMapper placaMapper = session.getMapper(PlacaMapper.class);
+
+			return placaMapper.select(id);
+		}
 	}
 
 	/**
@@ -43,7 +64,17 @@ public final class PlacaService {
 	 *            the placa
 	 */
 	public void insert(final Placa placa) {
-		throw new Error("No implementado");
+		try (final SqlSession session = SqlMapperLocator.getSqlSession()) {
+			final PlacaMapper placaMapper = session.getMapper(PlacaMapper.class);
+
+			if (!placaMapper.exists(placa)) {
+				final SequenceMapper sequenceMapper = session.getMapper(SequenceMapper.class);
+
+				placa.setId(sequenceMapper.nextVal());
+
+				placaMapper.insert(placa);
+			}
+		}
 	}
 
 	/**
@@ -54,7 +85,11 @@ public final class PlacaService {
 	 * @return the int
 	 */
 	public int update(final Placa placa) {
-		throw new Error("No implementado");
+		try (final SqlSession session = SqlMapperLocator.getSqlSession()) {
+			final PlacaMapper placaMapper = session.getMapper(PlacaMapper.class);
+
+			return placaMapper.update(placa);
+		}
 	}
 
 	/**
@@ -65,6 +100,10 @@ public final class PlacaService {
 	 * @return the int
 	 */
 	public int delete(final Placa placa) {
-		throw new Error("No implementado");
+		try (final SqlSession session = SqlMapperLocator.getSqlSession()) {
+			final PlacaMapper placaMapper = session.getMapper(PlacaMapper.class);
+
+			return placaMapper.delete(placa);
+		}
 	}
 }

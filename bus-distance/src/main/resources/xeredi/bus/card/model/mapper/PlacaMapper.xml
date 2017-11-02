@@ -10,17 +10,17 @@
 		<result column="plca_codigo" property="codigo" />
 
 		<association property="vehiculo" javaType="Vehiculo">
-			<result column="vhcl_pk" property="id" />
+			<result column="plca_vhcl_pk" property="id" />
 			<result column="vhcl_codigo" property="codigo" />
 		</association>
 	</resultMap>
 
 	<sql id="SelectPrefix">
     <![CDATA[
-		SELECT plca_pk, plca_codigo
-			, vhcl_pk, vhcl_codigo
+		SELECT plca_pk, plca_codigo, plca_vhcl_pk
+			, vhcl_codigo
 		FROM tbl_placa_plca
-			LEFT JOIN tbl_vehiculo_vhcl ON vhcl_plca_pk = plca_pk
+			LEFT JOIN tbl_vehiculo_vhcl ON vhcl_pk = plca_vhcl_pk
     ]]>
 	</sql>
 
@@ -57,8 +57,8 @@
 
 	<insert id="insert" parameterType="Placa">
     <![CDATA[
-        INSERT INTO tbl_placa_plca (plca_pk, plca_codigo)
-        VALUES (#{id}, #{codigo})
+        INSERT INTO tbl_placa_plca (plca_pk, plca_vhcl, plca_codigo)
+        VALUES (#{id}, #{vehiculo.id}, #{codigo})
     ]]>
 	</insert>
 
