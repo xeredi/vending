@@ -1,4 +1,4 @@
-package xeredi.bus.card.http.controller.action;
+package xeredi.bus.card.http.controller.action.maestro;
 
 import lombok.Data;
 import xeredi.bus.card.model.Placa;

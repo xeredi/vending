@@ -1,15 +1,16 @@
-package xeredi.bus.card.http.controller.action;
+package xeredi.bus.card.http.controller.action.maestro;
 
 import com.google.common.base.Preconditions;
 
+import xeredi.bus.card.http.controller.action.ActionCode;
 import xeredi.bus.card.model.Ruta;
 import xeredi.bus.card.model.service.RutaService;
 
 // TODO: Auto-generated Javadoc
 /**
- * The Class RutaEditAction.
+ * The Class RutaSaveAction.
  */
-public final class RutaEditAction {
+public final class RutaSaveAction {
 
 	/** The action code. */
 	private ActionCode actionCode;
@@ -27,7 +28,7 @@ public final class RutaEditAction {
 		case edit:
 			Preconditions.checkNotNull(model.getId());
 
-			model = modelService.select(model.getId());
+			modelService.update(model);
 
 			break;
 		default:

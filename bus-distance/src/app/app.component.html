@@ -1,0 +1,21 @@
+<!-- main app container -->
+<div class="jumbotron">
+    <nav class="navbar navbar-toggleable-md navbar-inverse bg-inverse fixed-top">
+        <button class="navbar-toggler navbar-toggler-right" type="button" data-toggle="collapse"
+            data-target="#navbarsExampleDefault" aria-controls="navbarsExampleDefault" aria-expanded="false"
+            aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <span class="navbar-brand">TELEMETRIA</span>
+
+        <div class="collapse navbar-collapse" id="navbarsExampleDefault">
+            <ul class="navbar-nav mr-auto">
+                <li class="nav-item active"><a class="nav-link" [routerLink]="['/']">Inicio</a></li>
+                <li class="nav-item"><a class="nav-link" [routerLink]="['/maestro/ruta/grid']">Rutas</a></li>
+                <li class="nav-item"><a class="nav-link" [routerLink]="['/maestro/placa/grid']">Placas</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <router-outlet></router-outlet>
+</div>

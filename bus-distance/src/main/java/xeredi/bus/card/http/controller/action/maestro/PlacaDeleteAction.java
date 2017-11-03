@@ -1,4 +1,4 @@
-package xeredi.bus.card.http.controller.action;
+package xeredi.bus.card.http.controller.action.maestro;
 
 import com.google.common.base.Preconditions;
 
