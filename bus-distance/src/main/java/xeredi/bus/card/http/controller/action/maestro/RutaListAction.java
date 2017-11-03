@@ -1,6 +1,7 @@
 package xeredi.bus.card.http.controller.action.maestro;
 
 import lombok.Data;
+import xeredi.bus.card.http.controller.action.BaseAction;
 import xeredi.bus.card.model.Ruta;
 import xeredi.bus.card.model.RutaCriteria;
 import xeredi.bus.card.model.service.RutaService;
@@ -11,7 +12,7 @@ import xeredi.bus.card.util.PaginatedList;
  * Instantiates a new ruta list action.
  */
 @Data
-public final class RutaListAction {
+public final class RutaListAction extends BaseAction {
 	/** The rows per page default. */
 	public static final int ROWS_PER_PAGE_DEFAULT = 20;
 
@@ -28,9 +29,10 @@ public final class RutaListAction {
 	protected PaginatedList<Ruta> resultList;
 
 	/**
-	 * Execute.
+	 * {@inheritDoc}
 	 */
-	public final void execute() {
+	@Override
+	public final void doExecute() {
 		final RutaService rutaService = new RutaService();
 
 		resultList = rutaService.selectList(model, getOffset(), limit);

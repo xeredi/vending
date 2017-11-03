@@ -4,6 +4,7 @@ import com.google.common.base.Preconditions;
 
 import lombok.Data;
 import xeredi.bus.card.http.controller.action.ActionCode;
+import xeredi.bus.card.http.controller.action.BaseAction;
 import xeredi.bus.card.model.Placa;
 import xeredi.bus.card.model.service.PlacaService;
 
@@ -12,7 +13,7 @@ import xeredi.bus.card.model.service.PlacaService;
  * Instantiates a new placa save action.
  */
 @Data
-public final class PlacaSaveAction {
+public final class PlacaSaveAction extends BaseAction {
 
 	/** The action code. */
 	private ActionCode actionCode;
@@ -21,9 +22,10 @@ public final class PlacaSaveAction {
 	private Placa model;
 
 	/**
-	 * Execute.
+	 * {@inheritDoc}
 	 */
-	public void execute() {
+	@Override
+	public final void doExecute() {
 		final PlacaService modelService = new PlacaService();
 
 		switch (actionCode) {

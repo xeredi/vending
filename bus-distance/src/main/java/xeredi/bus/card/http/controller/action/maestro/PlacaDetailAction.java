@@ -3,6 +3,7 @@ package xeredi.bus.card.http.controller.action.maestro;
 import com.google.common.base.Preconditions;
 
 import lombok.Data;
+import xeredi.bus.card.http.controller.action.BaseAction;
 import xeredi.bus.card.model.Placa;
 import xeredi.bus.card.model.service.PlacaService;
 
@@ -11,14 +12,15 @@ import xeredi.bus.card.model.service.PlacaService;
  * The Class EstadisticaDetailAction.
  */
 @Data
-public final class PlacaDetailAction {
+public final class PlacaDetailAction extends BaseAction {
 	/** The model. */
 	private Placa model;
 
 	/**
-	 * Execute.
+	 * {@inheritDoc}
 	 */
-	public void execute() {
+	@Override
+	public final void doExecute() {
 		Preconditions.checkNotNull(model.getId());
 
 		final PlacaService placaService = new PlacaService();

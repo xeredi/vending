@@ -3,6 +3,7 @@ package xeredi.bus.card.http.controller.action.maestro;
 import com.google.common.base.Preconditions;
 
 import xeredi.bus.card.http.controller.action.ActionCode;
+import xeredi.bus.card.http.controller.action.BaseAction;
 import xeredi.bus.card.model.Ruta;
 import xeredi.bus.card.model.service.RutaService;
 
@@ -10,7 +11,7 @@ import xeredi.bus.card.model.service.RutaService;
 /**
  * The Class RutaSaveAction.
  */
-public final class RutaSaveAction {
+public final class RutaSaveAction extends BaseAction {
 
 	/** The action code. */
 	private ActionCode actionCode;
@@ -19,9 +20,10 @@ public final class RutaSaveAction {
 	private Ruta model;
 
 	/**
-	 * Execute.
+	 * {@inheritDoc}
 	 */
-	public void execute() {
+	@Override
+	public final void doExecute() {
 		final RutaService modelService = new RutaService();
 
 		switch (actionCode) {

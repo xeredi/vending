@@ -3,6 +3,7 @@ package xeredi.bus.card.http.controller.action.maestro;
 import com.google.common.base.Preconditions;
 
 import lombok.Data;
+import xeredi.bus.card.http.controller.action.BaseAction;
 import xeredi.bus.card.model.Ruta;
 import xeredi.bus.card.model.service.RutaService;
 
@@ -11,14 +12,15 @@ import xeredi.bus.card.model.service.RutaService;
  * Instantiates a new ruta detail action.
  */
 @Data
-public final class RutaDetailAction {
+public final class RutaDetailAction extends BaseAction {
 	/** The model. */
 	private Ruta model;
 
 	/**
-	 * Execute.
+	 * {@inheritDoc}
 	 */
-	public void execute() {
+	@Override
+	public final void doExecute() {
 		Preconditions.checkNotNull(model.getId());
 
 		final RutaService rutaService = new RutaService();

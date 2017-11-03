@@ -18,12 +18,14 @@
                 <tr>
                     <th></th>
                     <th>Código</th>
+                    <th>Vehículo</th>
                 </tr>
             </thead>
             <tbody>
                 <tr *ngFor="let item of resultList.list; trackBy:trackByFn">
                     <td><a [routerLink]="['/maestro/placa/detail', item.id]"><i class="fa fa-search"></i></a></td>
                     <td nowrap="nowrap" [innerHTML]="item.codigo"></td>
+                    <td nowrap="nowrap" [innerHTML]="item.vehiculo.codigo"></td>
                 </tr>
             </tbody>
         </table>

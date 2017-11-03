@@ -6,6 +6,7 @@ import com.google.common.base.Preconditions;
 
 import lombok.Data;
 import xeredi.bus.card.http.controller.action.ActionCode;
+import xeredi.bus.card.http.controller.action.BaseAction;
 import xeredi.bus.card.model.Placa;
 import xeredi.bus.card.model.Vehiculo;
 import xeredi.bus.card.model.VehiculoCriteria;
@@ -17,7 +18,7 @@ import xeredi.bus.card.model.service.VehiculoService;
  * Instantiates a new placa edit action.
  */
 @Data
-public final class PlacaEditAction {
+public final class PlacaEditAction extends BaseAction {
 
 	/** The action code. */
 	private ActionCode actionCode;
@@ -29,9 +30,10 @@ public final class PlacaEditAction {
 	private List<Vehiculo> vhclList;
 
 	/**
-	 * Execute.
+	 * {@inheritDoc}
 	 */
-	public void execute() {
+	@Override
+	public final void doExecute() {
 		final PlacaService modelService = new PlacaService();
 
 		switch (actionCode) {

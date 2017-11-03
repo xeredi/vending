@@ -42,6 +42,14 @@
 		ORDER BY plca_codigo
 	</select>
 
+	<select id="count" parameterType="PlacaCriteria" resultType="Integer">
+	    <![CDATA[
+	        SELECT COUNT(1)
+	        FROM tbl_placa_plca
+	    ]]>
+		<include refid="SelectWhere" />
+	</select>
+
 	<select id="selectObject" parameterType="PlacaCriteria" resultMap="ResultMap">
 		<include refid="SelectPrefix" />
 		<include refid="SelectWhere" />

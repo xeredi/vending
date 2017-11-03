@@ -1,6 +1,7 @@
 package xeredi.bus.card.http.controller.action.maestro;
 
 import lombok.Data;
+import xeredi.bus.card.http.controller.action.BaseAction;
 import xeredi.bus.card.model.Placa;
 import xeredi.bus.card.model.PlacaCriteria;
 import xeredi.bus.card.model.service.PlacaService;
@@ -11,7 +12,7 @@ import xeredi.bus.card.util.PaginatedList;
  * The Class PeriodoProcesoListAction.
  */
 @Data
-public final class PlacaListAction {
+public final class PlacaListAction extends BaseAction {
 	/** The rows per page default. */
 	public static final int ROWS_PER_PAGE_DEFAULT = 20;
 
@@ -28,9 +29,10 @@ public final class PlacaListAction {
 	protected PaginatedList<Placa> resultList;
 
 	/**
-	 * Execute.
+	 * {@inheritDoc}
 	 */
-	public final void execute() {
+	@Override
+	public final void doExecute() {
 		final PlacaService placaService = new PlacaService();
 
 		resultList = placaService.selectList(model, getOffset(), limit);
