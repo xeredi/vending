@@ -3,11 +3,52 @@
 "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
 <mapper namespace="xeredi.bus.card.model.mapper.RutaMapper">
+	<resultMap type="Ruta" id="ResultMap">
+		<id column="ruta_pk" />
+
+		<result column="ruta_pk" property="id" />
+		<result column="ruta_codigo" property="codigo" />
+		<result column="ruta_nombre" property="nombre" />
+		<result column="ruta_orig_lat" property="origLat" />
+		<result column="ruta_orig_lon" property="origLon" />
+		<result column="ruta_dest_lat" property="destLat" />
+		<result column="ruta_dest_lon" property="destLon" />
+	</resultMap>
+
+	<sql id="SelectPrefix">
+    <![CDATA[
+		SELECT ruta_pk, ruta_codigo, ruta_nombre
+			, ruta_orig_lat, ruta_orig_lon, ruta_dest_lat, ruta_dest_lon
+		FROM tbl_ruta_ruta
+    ]]>
+	</sql>
+
 	<select id="exists" parameterType="Ruta" resultType="Boolean">
     <![CDATA[
         SELECT COUNT(1)
         FROM tbl_ruta_ruta
         WHERE ruta_codigo = #{codigo}
+    ]]>
+	</select>
+
+	<select id="count" parameterType="RutaCriteria" resultType="Integer">
+    <![CDATA[
+        SELECT COUNT(1)
+        FROM tbl_ruta_ruta
+    ]]>
+	</select>
+
+	<select id="selectList" parameterType="RutaCriteria" resultMap="ResultMap">
+		<include refid="SelectPrefix"></include>
+    <![CDATA[
+        ORDER BY ruta_codigo
+    ]]>
+	</select>
+
+	<select id="select" parameterType="Long" resultMap="ResultMap">
+		<include refid="SelectPrefix"></include>
+    <![CDATA[
+        WHERE ruta_pk = #{value}
     ]]>
 	</select>
 

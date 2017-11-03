@@ -1,3 +1,28 @@
-<p>
-  placa-detail works!
-</p>
+<div *ngIf="model">
+    <ngb-tabset #t="ngbTabset" type="pills"> <ngb-tab id="mainTab"> <ng-template ngbTabTitle>
+    <span>Placa</span> </ng-template> <ng-template ngbTabContent>
+    <div class="btn-toolbar" role="toolbar">
+        <div class="btn-group">
+            <a class="btn btn-primary" [routerLink]="['/maestro/ruta/edit', 'edit', model.id]"><i class="fa fa-edit"></i>
+                Edit</a>
+            <button class="btn btn-secondary" (click)="remove()">
+                <i class="fa fa-remove"></i> Remove
+            </button>
+        </div>
+    </div>
+    <form>
+        <fieldset class="form-group">
+            <div class="row">
+                <div class="col-lg-3 col-xl-2 form-group-sm">
+                    <label>Código</label>
+                    <p class="form-control-static form-control-sm" [innerHTML]="model.codigo"></p>
+                </div>
+                <div class="col-lg-3 col-xl-2 form-group-sm">
+                    <label>Vehículo</label>
+                    <p class="form-control-static form-control-sm" [innerHTML]="model.vehiculo.codigo"></p>
+                </div>
+            </div>
+        </fieldset>
+    </form>
+    </ng-template> </ngb-tab> </ngb-tabset>
+</div>
