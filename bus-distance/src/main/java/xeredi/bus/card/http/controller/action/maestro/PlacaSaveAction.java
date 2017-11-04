@@ -16,7 +16,7 @@ import xeredi.bus.card.model.service.PlacaService;
 public final class PlacaSaveAction extends BaseAction {
 
 	/** The action code. */
-	private ActionCode actionCode;
+	private ActionCode accion;
 
 	/** The model. */
 	private Placa model;
@@ -28,7 +28,7 @@ public final class PlacaSaveAction extends BaseAction {
 	public final void doExecute() {
 		final PlacaService modelService = new PlacaService();
 
-		switch (actionCode) {
+		switch (accion) {
 		case create:
 			modelService.insert(model);
 
@@ -40,7 +40,7 @@ public final class PlacaSaveAction extends BaseAction {
 
 			break;
 		default:
-			throw new Error("Invalid action: " + actionCode.name());
+			throw new Error("Invalid action: " + accion.name());
 		}
 	}
 

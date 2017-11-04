@@ -66,4 +66,15 @@
         WHERE ruta_codigo = #{codigo}
     ]]>
 	</update>
+
+	<update id="update" parameterType="Ruta">
+    <![CDATA[
+        UPDATE tbl_ruta_ruta SET
+        	ruta_orig_lat = #{origLat}
+        	, ruta_orig_lon = #{origLon}
+        	, ruta_dest_lat = #{destLat}
+        	, ruta_dest_lon = #{destLon}
+        WHERE ruta_pk = #{id}
+    ]]>
+	</update>
 </mapper>

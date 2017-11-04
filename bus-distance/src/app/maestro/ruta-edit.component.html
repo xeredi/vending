@@ -1,3 +1,45 @@
-<p>
-  ruta-edit works!
-</p>
+<div *ngIf="model">
+    <form role="form" (ngSubmit)="save()">
+        <fieldset class="form-group">
+            <div class="row">
+                <div class="col-lg-3 col-xl-2 form-group-sm">
+                    <label>Código</label>
+                    <p class="form-control-static form-control-sm">{{model.codigo}}</p>
+                </div>
+                <div class="col-lg-3 col-xl-2 form-group-sm">
+                    <label>Nombre</label>
+                    <p class="form-control-static form-control-sm">{{model.nombre}}</p>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-lg-3 col-xl-2 form-group-sm">
+                    <label>Lat. Origen</label> <input type="text" [(ngModel)]="model.origLat"
+                        name="model.origLat" class="form-control form-control-sm" />
+                </div>
+                <div class="col-lg-3 col-xl-2 form-group-sm">
+                    <label>Lon. Origen</label> <input type="text" [(ngModel)]="model.origLon"
+                        name="model.origLon" class="form-control form-control-sm" />
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-lg-3 col-xl-2 form-group-sm">
+                    <label>Lat. Destino</label> <input type="text" [(ngModel)]="model.destLat"
+                        name="model.destLat" class="form-control form-control-sm" />
+                </div>
+                <div class="col-lg-3 col-xl-2 form-group-sm">
+                    <label>Lon. Destino</label> <input type="text" [(ngModel)]="model.destLon"
+                        name="model.destLon" class="form-control form-control-sm" />
+                </div>
+            </div>
+        </fieldset>
+
+        <div class="btn-group">
+            <button type="submit" class="btn btn-primary">
+                <i class="fa fa-check"></i> Save
+            </button>
+            <button type="button" (click)="cancel()" class="btn btn-secondary">
+                <i class="fa fa-close"></i> Cancel
+            </button>
+        </div>
+    </form>
+</div>

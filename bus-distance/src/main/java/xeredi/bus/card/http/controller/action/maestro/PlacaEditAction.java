@@ -21,7 +21,7 @@ import xeredi.bus.card.model.service.VehiculoService;
 public final class PlacaEditAction extends BaseAction {
 
 	/** The action code. */
-	private ActionCode actionCode;
+	private ActionCode accion;
 
 	/** The model. */
 	private Placa model;
@@ -36,7 +36,7 @@ public final class PlacaEditAction extends BaseAction {
 	public final void doExecute() {
 		final PlacaService modelService = new PlacaService();
 
-		switch (actionCode) {
+		switch (accion) {
 		case create:
 			model = new Placa();
 
@@ -48,7 +48,7 @@ public final class PlacaEditAction extends BaseAction {
 
 			break;
 		default:
-			throw new Error("Invalid action: " + actionCode.name());
+			throw new Error("Invalid action: " + accion.name());
 		}
 
 		// Dependencies
