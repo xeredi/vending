@@ -14,8 +14,18 @@ public interface ServicioErpMapper {
 	/**
 	 * Select list.
 	 *
-	 * @param criteria the criteria
+	 * @param criteria
+	 *            the criteria
 	 * @return the list
 	 */
 	List<Servicio> selectList(final ServicioCriteria criteria);
+
+	/**
+	 * Update.
+	 *
+	 * @param servicio
+	 *            the servicio
+	 * @return the int
+	 */
+	int update(final Servicio servicio);
 }

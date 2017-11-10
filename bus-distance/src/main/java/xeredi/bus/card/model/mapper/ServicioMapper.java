@@ -12,6 +12,14 @@ import xeredi.bus.card.model.ServicioCriteria;
 public interface ServicioMapper {
 
 	/**
+	 * Select.
+	 *
+	 * @param id the id
+	 * @return the servicio
+	 */
+	Servicio select(final Long id);
+
+	/**
 	 * Select calculo.
 	 *
 	 * @param criteria
@@ -55,5 +63,11 @@ public interface ServicioMapper {
 	 */
 	int update(final Servicio servicio);
 
+	/**
+	 * Update km vacio.
+	 *
+	 * @param servicio the servicio
+	 * @return the int
+	 */
 	int updateKmVacio(final Servicio servicio);
 }

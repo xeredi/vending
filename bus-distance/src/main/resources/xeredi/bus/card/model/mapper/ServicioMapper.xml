@@ -56,7 +56,15 @@
     ]]>
 	</sql>
 
-	<select id="selectCalculo" parameterType="ServicioCriteria" resultMap="ResultMap">
+	<select id="select" parameterType="Long" resultMap="ResultMap">
+		<include refid="SelectPrefix"></include>
+    <![CDATA[
+    	WHERE srvc_pk = #{value}
+    ]]>
+	</select>
+
+	<select id="selectCalculo" parameterType="ServicioCriteria"
+		resultMap="ResultMap">
     <![CDATA[
 		WITH sql AS (
 		    SELECT
@@ -71,8 +79,8 @@
 		                1 = 1
 		                AND lgps_vhcl_pk = srvc_vhcl_pk
 		                AND lgps_fecha BETWEEN
-		                	(srvc_fecha_desde - interval '${distanciaMaximaDias} minutes')
-		                	AND (srvc_fecha_desde + interval '${distanciaMaximaDias} minutes')
+		                	(srvc_fecha_desde - interval '${distanciaMaximaMinutos} minutes')
+		                	AND (srvc_fecha_desde + interval '${distanciaMaximaMinutos} minutes')
 		                AND distanciaKm(lgps_latitude, lgps_longitude, ruta_orig_lat, ruta_orig_lon) < #{distanciaMaximaKm}
 		            ORDER BY distanciaKm(lgps_latitude, lgps_longitude, ruta_orig_lat, ruta_orig_lon)
 		            FETCH NEXT 1 ROWS ONLY
@@ -84,8 +92,8 @@
 		                1 = 1
 		                AND lgps_vhcl_pk = srvc_vhcl_pk
 		                AND lgps_fecha BETWEEN
-		                	(srvc_fecha_hasta - interval '${distanciaMaximaDias} minutes')
-		                	AND (srvc_fecha_hasta + interval '${distanciaMaximaDias} minutes')
+		                	(srvc_fecha_hasta - interval '${distanciaMaximaMinutos} minutes')
+		                	AND (srvc_fecha_hasta + interval '${distanciaMaximaMinutos} minutes')
 		                AND distanciaKm(lgps_latitude, lgps_longitude, ruta_dest_lat, ruta_dest_lon) < #{distanciaMaximaKm}
 		            ORDER BY distanciaKm(lgps_latitude, lgps_longitude, ruta_dest_lat, ruta_dest_lon)
 		            FETCH NEXT 1 ROWS ONLY
@@ -117,11 +125,7 @@
 		ORDER BY srvc_vhcl_pk, srvc_fecha_desde
     ]]>
 	</select>
-<!--
-FIXME
-		    AND srvc_util_km <= 0
-		    AND srvc_vacio_km <= 0
- -->
+	<!-- FIXME AND srvc_util_km <= 0 AND srvc_vacio_km <= 0 -->
 
 	<select id="exists" parameterType="Servicio" resultType="Boolean">
     <![CDATA[

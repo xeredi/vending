@@ -74,6 +74,8 @@ public final class PlacaService {
 
 				placaMapper.insert(placa);
 			}
+
+			session.commit();
 		}
 	}
 
@@ -88,7 +90,11 @@ public final class PlacaService {
 		try (final SqlSession session = SqlMapperLocator.getSqlSession()) {
 			final PlacaMapper placaMapper = session.getMapper(PlacaMapper.class);
 
-			return placaMapper.update(placa);
+			final int updatedRows = placaMapper.update(placa);
+
+			session.commit();
+
+			return updatedRows;
 		}
 	}
 
@@ -103,7 +109,11 @@ public final class PlacaService {
 		try (final SqlSession session = SqlMapperLocator.getSqlSession()) {
 			final PlacaMapper placaMapper = session.getMapper(PlacaMapper.class);
 
-			return placaMapper.delete(placa);
+			final int updatedRows = placaMapper.delete(placa);
+
+			session.commit();
+
+			return updatedRows;
 		}
 	}
 }

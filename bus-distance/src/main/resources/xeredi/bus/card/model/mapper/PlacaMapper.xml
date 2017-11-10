@@ -72,10 +72,18 @@
 
 	<insert id="insert" parameterType="Placa">
     <![CDATA[
-        INSERT INTO tbl_placa_plca (plca_pk, plca_vhcl, plca_codigo)
+        INSERT INTO tbl_placa_plca (plca_pk, plca_vhcl_pk, plca_codigo)
         VALUES (#{id}, #{vehiculo.id}, #{codigo})
     ]]>
 	</insert>
+
+	<update id="update" parameterType="Placa">
+    <![CDATA[
+        UPDATE tbl_placa_plca SET
+        	plca_vhcl_pk = #{vehiculo.id}
+        WHERE plca_pk = #{id}
+    ]]>
+	</update>
 
 	<delete id="delete" parameterType="Placa">
     <![CDATA[

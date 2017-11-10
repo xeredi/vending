@@ -185,92 +185,96 @@ public final class DistanceProcess {
 				final File directory = new File(dbPlacaFolder);
 				final File[] files = directory.listFiles((FileFilter) FileFileFilter.FILE);
 
-				Arrays.sort(files, NameFileComparator.NAME_COMPARATOR);
-				LOG.info("\nNames, case sensitive ascending order (NAME_COMPARATOR)");
+				if (files == null) {
+					LOG.warn("No hay archivos para la placa: " + placa.getCodigo());
+				} else {
+					Arrays.sort(files, NameFileComparator.NAME_COMPARATOR);
+					LOG.info("\nNames, case sensitive ascending order (NAME_COMPARATOR)");
 
-				for (final File file : files) {
-					if (file.getName().startsWith("regs_" + placa.getCodigo() + "__")
-							&& file.getName().endsWith(".db")) {
-						final ArchivoGps archivoGps = new ArchivoGps();
+					for (final File file : files) {
+						if (file.getName().startsWith("regs_" + placa.getCodigo() + "__")
+								&& file.getName().endsWith(".db")) {
+							final ArchivoGps archivoGps = new ArchivoGps();
 
-						archivoGps.setId(sequenceMapper.nextVal());
-						archivoGps.setNombre(file.getName());
-						archivoGps.setFecha(Calendar.getInstance().getTime());
-						archivoGps.setPlaca(placa);
-						archivoGps.setVehiculo(placa.getVehiculo());
+							archivoGps.setId(sequenceMapper.nextVal());
+							archivoGps.setNombre(file.getName());
+							archivoGps.setFecha(Calendar.getInstance().getTime());
+							archivoGps.setPlaca(placa);
+							archivoGps.setVehiculo(placa.getVehiculo());
 
-						if (!archivoGpsMapper.exists(archivoGps)) {
-							LOG.info("New File: " + file.getName());
+							if (!archivoGpsMapper.exists(archivoGps)) {
+								LOG.info("New File: " + file.getName());
 
-							int lecturasFileCount = 0;
+								int lecturasFileCount = 0;
 
-							try {
-								final StringTokenizer tokenizer = new StringTokenizer(file.getName(), "_");
+								try {
+									final StringTokenizer tokenizer = new StringTokenizer(file.getName(), "_");
 
-								tokenizer.nextToken();
-								tokenizer.nextToken();
+									tokenizer.nextToken();
+									tokenizer.nextToken();
 
-								final SimpleDateFormat dateFormat = new SimpleDateFormat("yyyyMMdd");
+									final SimpleDateFormat dateFormat = new SimpleDateFormat("yyyyMMdd");
 
-								archivoGps.setFecha(dateFormat.parse(tokenizer.nextToken()));
-							} catch (final ParseException ex) {
-								ex.printStackTrace(System.err);
-							}
-
-							archivoGpsMapper.insert(archivoGps);
-
-							final String dbUrl = "jdbc:sqlite:" + file.getAbsolutePath();
-							final DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
-
-							// create a connection to the database
-							try (final Connection con = DriverManager.getConnection(dbUrl);
-									final PreparedStatement stmt = con
-											.prepareStatement("SELECT * FROM gps_id" + placa.getCodigo());
-									final ResultSet rs = stmt.executeQuery();) {
-								while (rs.next()) {
-									try {
-										final LecturaGps lecturaGps = new LecturaGps();
-
-										lecturaGps.setArchivoGps(archivoGps);
-										lecturaGps.setVehiculo(archivoGps.getVehiculo());
-										lecturaGps.setId(sequenceMapper.nextVal());
-										lecturaGps.setAltitude(rs.getDouble("altitude"));
-										lecturaGps.setClimb(rs.getDouble("climb"));
-										lecturaGps.setDistance(rs.getDouble("distance"));
-										lecturaGps.setEps(rs.getDouble("eps"));
-										lecturaGps.setEpt(rs.getDouble("ept"));
-										lecturaGps.setEpv(rs.getDouble("epv"));
-										lecturaGps.setEpx(rs.getDouble("epx"));
-										lecturaGps.setLatitude(rs.getDouble("latitude"));
-										lecturaGps.setLongitude(rs.getDouble("longitude"));
-										lecturaGps.setMode(rs.getLong("mode"));
-										lecturaGps.setNumberSats(rs.getLong("number_sats"));
-										lecturaGps.setSpeed(rs.getDouble("speed"));
-										lecturaGps.setTrack(rs.getDouble("track"));
-										// lecturaGps.setFecha(rs.getDate("timestamp_lectura_p"));
-										lecturaGps.setFecha(dateFormat.parse(rs.getString("timestamp_lectura_p")));
-
-										if (lecturaGps.getLatitude() != 0 && lecturaGps.getLongitude() != 0) {
-											lecturaGpsMapper.insert(lecturaGps);
-										}
-
-										lecturasFileCount++;
-									} catch (final ParseException ex) {
-										LOG.error(ex.getMessage());
-									}
+									archivoGps.setFecha(dateFormat.parse(tokenizer.nextToken()));
+								} catch (final ParseException ex) {
+									ex.printStackTrace(System.err);
 								}
-							} catch (final SQLException ex) {
-								LOG.error(ex.getMessage(), ex);
+
+								archivoGpsMapper.insert(archivoGps);
+
+								final String dbUrl = "jdbc:sqlite:" + file.getAbsolutePath();
+								final DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
+
+								// create a connection to the database
+								try (final Connection con = DriverManager.getConnection(dbUrl);
+										final PreparedStatement stmt = con
+												.prepareStatement("SELECT * FROM gps_id" + placa.getCodigo());
+										final ResultSet rs = stmt.executeQuery();) {
+									while (rs.next()) {
+										try {
+											final LecturaGps lecturaGps = new LecturaGps();
+
+											lecturaGps.setArchivoGps(archivoGps);
+											lecturaGps.setVehiculo(archivoGps.getVehiculo());
+											lecturaGps.setId(sequenceMapper.nextVal());
+											lecturaGps.setAltitude(rs.getDouble("altitude"));
+											lecturaGps.setClimb(rs.getDouble("climb"));
+											lecturaGps.setDistance(rs.getDouble("distance"));
+											lecturaGps.setEps(rs.getDouble("eps"));
+											lecturaGps.setEpt(rs.getDouble("ept"));
+											lecturaGps.setEpv(rs.getDouble("epv"));
+											lecturaGps.setEpx(rs.getDouble("epx"));
+											lecturaGps.setLatitude(rs.getDouble("latitude"));
+											lecturaGps.setLongitude(rs.getDouble("longitude"));
+											lecturaGps.setMode(rs.getLong("mode"));
+											lecturaGps.setNumberSats(rs.getLong("number_sats"));
+											lecturaGps.setSpeed(rs.getDouble("speed"));
+											lecturaGps.setTrack(rs.getDouble("track"));
+											// lecturaGps.setFecha(rs.getDate("timestamp_lectura_p"));
+											lecturaGps.setFecha(dateFormat.parse(rs.getString("timestamp_lectura_p")));
+
+											if (lecturaGps.getLatitude() != 0 && lecturaGps.getLongitude() != 0) {
+												lecturaGpsMapper.insert(lecturaGps);
+											}
+
+											lecturasFileCount++;
+										} catch (final ParseException ex) {
+											LOG.error(ex.getMessage());
+										}
+									}
+								} catch (final SQLException ex) {
+									LOG.error(ex.getMessage(), ex);
+								}
+
+								LOG.info("Lecturas Archivo: " + lecturasFileCount);
+
+								lecturasCount += lecturasFileCount;
 							}
-
-							LOG.info("Lecturas Archivo: " + lecturasFileCount);
-
-							lecturasCount += lecturasFileCount;
 						}
 					}
-				}
 
-				LOG.info("Lecturas Placa: " + lecturasCount);
+					LOG.info("Lecturas Placa: " + lecturasCount);
+				}
 			}
 
 			session.commit();
@@ -283,34 +287,34 @@ public final class DistanceProcess {
 	private void calculateDistance() throws SQLException {
 		LOG.info("Calculate Distance");
 
-		try (final SqlSession session = SqlMapperLocator.getSqlSession()) {
+		try (final SqlSession session = SqlMapperLocator.getSqlSession();
+				final SqlSession erpSession = SqlMapperLocator.getErpSqlSession();) {
 			final ServicioMapper servicioMapper = session.getMapper(ServicioMapper.class);
+			final ServicioErpMapper servicioErpMapper = erpSession.getMapper(ServicioErpMapper.class);
 
 			final ServicioCriteria servicioCriteria = new ServicioCriteria();
 
-			servicioCriteria.setDistanciaMaximaDias(
-					ConfigurationUtil.getString(ConfigurationKey.procesoDistancia_distanciaMaximaDias));
+			servicioCriteria.setDistanciaMaximaMinutos(
+					ConfigurationUtil.getString(ConfigurationKey.procesoDistancia_distanciaMaximaMinutos));
 			servicioCriteria.setDistanciaMaximaKm(
 					ConfigurationUtil.getDouble(ConfigurationKey.procesoDistancia_distanciaMaximaKm));
 
 			for (final Servicio servicio : servicioMapper.selectCalculo(servicioCriteria)) {
 				if (servicio.getLecturaGpsOrigen() != null && servicio.getLecturaGpsDestino() != null) {
-					LOG.info("servicio: " + servicio);
-
 					servicioMapper.update(servicio);
 					servicioMapper.updateKmVacio(servicio);
+
+					final Servicio updatedServicio = servicioMapper.select(servicio.getId());
+
+					LOG.info("servicio: " + updatedServicio);
+
+					servicioErpMapper.update(updatedServicio);
 				}
 			}
 
 			session.commit();
+			erpSession.commit();
 		}
-	}
-
-	/**
-	 * Save erp changes.
-	 */
-	private void saveErpChanges() {
-
 	}
 
 	/**
@@ -321,7 +325,6 @@ public final class DistanceProcess {
 			loadSqliteChanges();
 			loadErpChanges();
 			calculateDistance();
-			saveErpChanges();
 		} catch (final SQLException ex) {
 			LOG.error(ex.getMessage(), ex);
 		}

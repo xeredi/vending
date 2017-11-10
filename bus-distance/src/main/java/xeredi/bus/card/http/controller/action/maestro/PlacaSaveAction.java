@@ -5,6 +5,7 @@ import com.google.common.base.Preconditions;
 import lombok.Data;
 import xeredi.bus.card.http.controller.action.ActionCode;
 import xeredi.bus.card.http.controller.action.BaseAction;
+import xeredi.bus.card.http.controller.action.FieldValidator;
 import xeredi.bus.card.model.Placa;
 import xeredi.bus.card.model.service.PlacaService;
 
@@ -26,21 +27,30 @@ public final class PlacaSaveAction extends BaseAction {
 	 */
 	@Override
 	public final void doExecute() {
-		final PlacaService modelService = new PlacaService();
+		FieldValidator.validateRequired(this, "Codigo", model.getCodigo());
+		FieldValidator.validateRequired(this, "Vehiculo", model.getVehiculo());
 
-		switch (accion) {
-		case create:
-			modelService.insert(model);
+		if (!hasErrors()) {
+			FieldValidator.validateRequired(this, "Vehiculo", model.getVehiculo().getId());
+		}
 
-			break;
-		case edit:
-			Preconditions.checkNotNull(model.getId());
+		if (!hasErrors()) {
+			final PlacaService modelService = new PlacaService();
 
-			modelService.update(model);
+			switch (accion) {
+			case create:
+				modelService.insert(model);
 
-			break;
-		default:
-			throw new Error("Invalid action: " + accion.name());
+				break;
+			case edit:
+				Preconditions.checkNotNull(model.getId());
+
+				modelService.update(model);
+
+				break;
+			default:
+				throw new Error("Invalid action: " + accion.name());
+			}
 		}
 	}
 

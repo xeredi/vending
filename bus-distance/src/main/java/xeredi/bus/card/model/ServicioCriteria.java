@@ -15,7 +15,7 @@ public class ServicioCriteria {
 	private Double distanciaMaximaKm;
 
 	/** The distancia maxima dias. */
-	private String distanciaMaximaDias;
+	private String distanciaMaximaMinutos;
 
 	/** The fecha inicio. */
 	private Date fechaInicio;

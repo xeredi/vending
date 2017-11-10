@@ -1,4 +1,6 @@
 <div *ngIf="resultList">
+    <ngb-tabset #t="ngbTabset" type="pills"> <ngb-tab id="mainTab"> <ng-template ngbTabTitle>
+    <span>Placas</span> </ng-template> <ng-template ngbTabContent>
     <div class="btn-toolbar" role="toolbar">
         <div class="btn-group mr-2" role="group">
             <ngb-pagination [collectionSize]="resultList.count" [(page)]="page" [pageSize]="pageSize" [maxSize]="1"
@@ -6,7 +8,7 @@
         </div>
         <div class="btn-group mr-2" role="group">
             <a class="btn btn-secondary" [routerLink]="['/maestro/placa/edit', 'create']"><i class="fa fa-file-o"></i>
-                New</a>
+                Nuevo</a>
         </div>
     </div>
 
@@ -30,4 +32,5 @@
             </tbody>
         </table>
     </div>
+    </ng-template> </ngb-tab> </ngb-tabset>
 </div>

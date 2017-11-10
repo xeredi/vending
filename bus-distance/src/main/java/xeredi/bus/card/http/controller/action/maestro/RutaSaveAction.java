@@ -5,6 +5,7 @@ import com.google.common.base.Preconditions;
 import lombok.Data;
 import xeredi.bus.card.http.controller.action.ActionCode;
 import xeredi.bus.card.http.controller.action.BaseAction;
+import xeredi.bus.card.http.controller.action.FieldValidator;
 import xeredi.bus.card.model.Ruta;
 import xeredi.bus.card.model.service.RutaService;
 
@@ -26,17 +27,21 @@ public final class RutaSaveAction extends BaseAction {
 	 */
 	@Override
 	public final void doExecute() {
-		final RutaService modelService = new RutaService();
+		FieldValidator.validateRequired(this, "Codigo", model.getCodigo());
 
-		switch (accion) {
-		case edit:
-			Preconditions.checkNotNull(model.getId());
+		if (!hasErrors()) {
+			final RutaService modelService = new RutaService();
 
-			modelService.update(model);
+			switch (accion) {
+			case edit:
+				Preconditions.checkNotNull(model.getId());
 
-			break;
-		default:
-			throw new Error("Invalid action: " + accion.name());
+				modelService.update(model);
+
+				break;
+			default:
+				throw new Error("Invalid action: " + accion.name());
+			}
 		}
 	}
 

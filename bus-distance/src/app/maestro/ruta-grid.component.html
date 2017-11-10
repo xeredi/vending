@@ -1,11 +1,12 @@
 <div *ngIf="resultList">
+    <ngb-tabset #t="ngbTabset" type="pills"> <ngb-tab id="mainTab"> <ng-template ngbTabTitle>
+    <span>Rutas</span> </ng-template> <ng-template ngbTabContent>
     <div class="btn-toolbar" role="toolbar">
         <div class="btn-group mr-2" role="group">
             <ngb-pagination [collectionSize]="resultList.count" [(page)]="page" [pageSize]="pageSize" [maxSize]="1"
                 [size]="sm" [boundaryLinks]="false" [ellipses]="false" (pageChange)="pageChange()"></ngb-pagination>
         </div>
-        <div class="btn-group mr-2" role="group">
-        </div>
+        <div class="btn-group mr-2" role="group"></div>
     </div>
 
     <span>{{resultList.count}} fila(s)</span>
@@ -36,4 +37,5 @@
             </tbody>
         </table>
     </div>
+    </ng-template> </ngb-tab> </ngb-tabset>
 </div>

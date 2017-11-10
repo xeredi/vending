@@ -3,11 +3,33 @@
 "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
 <mapper namespace="xeredi.bus.card.model.mapper.VehiculoMapper">
+	<resultMap type="Vehiculo" id="ResultMap">
+		<id column="vhcl_pk" />
+
+		<result column="vhcl_pk" property="id" />
+		<result column="vhcl_codigo" property="codigo" />
+	</resultMap>
+
+	<sql id="SelectPrefix">
+    <![CDATA[
+		SELECT vhcl_pk, vhcl_codigo
+		FROM tbl_vehiculo_vhcl
+    ]]>
+	</sql>
+
 	<select id="exists" parameterType="Vehiculo" resultType="Boolean">
     <![CDATA[
         SELECT COUNT(1)
         FROM tbl_vehiculo_vhcl
         WHERE vhcl_codigo = #{codigo}
+    ]]>
+	</select>
+
+	<select id="selectList" parameterType="VehiculoCriteria"
+		resultMap="ResultMap">
+		<include refid="SelectPrefix"></include>
+    <![CDATA[
+        ORDER BY vhcl_codigo
     ]]>
 	</select>
 
