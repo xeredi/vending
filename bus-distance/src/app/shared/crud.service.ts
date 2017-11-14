@@ -12,7 +12,7 @@ export class CrudService {
     }
 
     setParams( urlBase: string ) {
-        this._urlBase = urlBase;
+        this._urlBase = '' + urlBase;
     }
 
     index() {

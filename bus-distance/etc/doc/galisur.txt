@@ -1,0 +1,6 @@
+	/home/xeredi/proyectos/deploy/log
+	/home/xeredi/git/vending/bus-distance/sqlite/rsync_placas_tvehiculos/28022/datos/
+	/var/lib/tomcat8/logs
+	/var/lib/tomcat8/webapps
+
+	PartesTrabajo_Cierre

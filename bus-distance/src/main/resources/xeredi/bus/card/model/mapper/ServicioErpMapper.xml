@@ -67,12 +67,21 @@ FIXME
 		<include refid="SelectPrefix" />
 	</select>
 
-	<update id="update" parameterType="Servicio">
+    <update id="update" parameterType="Servicio">
     <![CDATA[
-    	UPDATE PartesTrabajo SET
-    		kilometros = COALESCE(#{utilKm}, 0)
-    		, kilometrosExentos = COALESCE(#{vacioKm}, 0)
-    	WHERE codParte = #{codigoParte}
+        UPDATE PartesTrabajo SET
+            kilometros = COALESCE(#{utilKm}, 0)
+            , kilometrosExentos = COALESCE(#{vacioKm}, 0)
+        WHERE codParte = #{codigoParte}
     ]]>
-	</update>
+    </update>
+
+    <update id="updateCierre" parameterType="Servicio">
+    <![CDATA[
+        UPDATE PartesTrabajo_Cierre SET
+            kilometros = COALESCE(#{utilKm}, 0)
+            , kilometrosExentos = COALESCE(#{vacioKm}, 0)
+        WHERE codParte = #{codigoParte}
+    ]]>
+    </update>
 </mapper>

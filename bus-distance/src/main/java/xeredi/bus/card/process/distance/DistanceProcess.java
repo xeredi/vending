@@ -167,6 +167,8 @@ public final class DistanceProcess {
 		LOG.info("Load SQLITE");
 
 		try (final SqlSession session = SqlMapperLocator.getSqlSession()) {
+			Class.forName("org.sqlite.JDBC");
+
 			final SequenceMapper sequenceMapper = session.getMapper(SequenceMapper.class);
 			final PlacaMapper placaMapper = session.getMapper(PlacaMapper.class);
 			final ArchivoGpsMapper archivoGpsMapper = session.getMapper(ArchivoGpsMapper.class);
@@ -278,6 +280,8 @@ public final class DistanceProcess {
 			}
 
 			session.commit();
+		} catch (final ClassNotFoundException ex) {
+			LOG.fatal(ex.getMessage(), ex);
 		}
 	}
 
@@ -309,6 +313,7 @@ public final class DistanceProcess {
 					LOG.info("servicio: " + updatedServicio);
 
 					servicioErpMapper.update(updatedServicio);
+					servicioErpMapper.updateCierre(updatedServicio);
 				}
 			}
 

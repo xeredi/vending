@@ -16,17 +16,100 @@
         <schemaspy.user>busdistance</schemaspy.user>
         <schemaspy.password>bus</schemaspy.password>
         <schemaspy.schema>BUSDISTANCE</schemaspy.schema>
-
-        <schemaspy-ss.databaseType>mssql-jtds</schemaspy-ss.databaseType>
-        <schemaspy-ss.database>Ofibus009</schemaspy-ss.database>
-        <schemaspy-ss.host>10.0.0.100</schemaspy-ss.host>
-        <schemaspy-ss.port>58871</schemaspy-ss.port>
-        <schemaspy-ss.user>sa</schemaspy-ss.user>
-        <schemaspy-ss.password>Ofisql1$</schemaspy-ss.password>
-        <schemaspy-ss.schema>dbo</schemaspy-ss.schema>
     </properties>
 
+    <profiles>
+        <profile>
+            <id>local</id>
+            <activation>
+                <activeByDefault>true</activeByDefault>
+            </activation>
+            <properties>
+                <profile.id>local</profile.id>
+                <schemaspy-ss.databaseType>mssql-jtds</schemaspy-ss.databaseType>
+                <schemaspy-ss.database>Ofibus009</schemaspy-ss.database>
+                <schemaspy-ss.host>10.0.0.100</schemaspy-ss.host>
+                <schemaspy-ss.port>58871</schemaspy-ss.port>
+                <schemaspy-ss.user>sa</schemaspy-ss.user>
+                <schemaspy-ss.password>Ofisql1$</schemaspy-ss.password>
+                <schemaspy-ss.schema>dbo</schemaspy-ss.schema>
+            </properties>
+        </profile>
+        <profile>
+            <id>raspberry</id>
+            <properties>
+                <profile.id>raspberry</profile.id>
+                <schemaspy-ss.databaseType>mssql-jtds</schemaspy-ss.databaseType>
+                <schemaspy-ss.database>Ofibus009</schemaspy-ss.database>
+                <schemaspy-ss.host>10.0.0.100</schemaspy-ss.host>
+                <schemaspy-ss.port>58871</schemaspy-ss.port>
+                <schemaspy-ss.user>sa</schemaspy-ss.user>
+                <schemaspy-ss.password>Ofisql1$</schemaspy-ss.password>
+                <schemaspy-ss.schema>dbo</schemaspy-ss.schema>
+            </properties>
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-antrun-plugin</artifactId>
+                        <version>1.8</version>
+                        <executions>
+                            <execution>
+                                <id>scp-to-remote</id>
+                                <phase>package</phase>
+                                <goals>
+                                    <goal>run</goal>
+                                </goals>
+                                <configuration>
+                                    <target>
+                                        <scp localFile="${project.basedir}/target/bus-distance-0.0.1-SNAPSHOT.war"
+                                            remoteToFile="jetty@192.168.1.102:/usr/share/jetty9/webapps/bus.war"
+                                            verbose="true" password="jetty" trust="true">
+                                        </scp>
+                                    </target>
+                                </configuration>
+                            </execution>
+                        </executions>
+                        <dependencies>
+                            <dependency>
+                                <groupId>com.jcraft</groupId>
+                                <artifactId>jsch</artifactId>
+                                <version>0.1.54</version>
+                            </dependency>
+                            <dependency>
+                                <groupId>org.apache.ant</groupId>
+                                <artifactId>ant-jsch</artifactId>
+                                <version>1.10.1</version>
+                            </dependency>
+                        </dependencies>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+        <profile>
+            <id>galisur</id>
+            <properties>
+                <profile.id>galisur</profile.id>
+                <schemaspy-ss.databaseType>mssql-jtds</schemaspy-ss.databaseType>
+                <schemaspy-ss.database>Ofibus009</schemaspy-ss.database>
+                <schemaspy-ss.host>10.0.0.100</schemaspy-ss.host>
+                <schemaspy-ss.port>58871</schemaspy-ss.port>
+                <schemaspy-ss.user>sa</schemaspy-ss.user>
+                <schemaspy-ss.password>Ofisql1$</schemaspy-ss.password>
+                <schemaspy-ss.schema>dbo</schemaspy-ss.schema>
+            </properties>
+        </profile>
+    </profiles>
+
     <build>
+        <resources>
+            <resource>
+                <directory>src/main/resources</directory>
+            </resource>
+            <resource>
+                <directory>resources/${profile.id}</directory>
+            </resource>
+        </resources>
         <plugins>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>

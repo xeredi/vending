@@ -28,4 +28,6 @@ public interface ServicioErpMapper {
 	 * @return the int
 	 */
 	int update(final Servicio servicio);
+
+	int updateCierre(final Servicio servicio);
 }
