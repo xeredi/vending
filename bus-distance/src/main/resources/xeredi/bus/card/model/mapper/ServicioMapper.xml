@@ -3,45 +3,45 @@
 "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
 <mapper namespace="xeredi.bus.card.model.mapper.ServicioMapper">
-	<resultMap type="Servicio" id="ResultMap">
-		<id column="srvc_pk" />
+    <resultMap type="Servicio" id="ResultMap">
+        <id column="srvc_pk" />
 
-		<result column="srvc_pk" property="id" />
-		<result column="srvc_codigo_servicio" property="codigoServicio" />
-		<result column="srvc_codigo_parte" property="codigoParte" />
-		<result column="srvc_fecha_desde" property="fechaDesde" />
-		<result column="srvc_fecha_hasta" property="fechaHasta" />
-		<result column="srvc_util_km" property="utilKm" />
-		<result column="srvc_vacio_km" property="vacioKm" />
-		<result column="srvc_util_erp_km" property="utilErpKm" />
-		<result column="srvc_vacio_erp_km" property="vacioErpKm" />
+        <result column="srvc_pk" property="id" />
+        <result column="srvc_codigo_servicio" property="codigoServicio" />
+        <result column="srvc_codigo_parte" property="codigoParte" />
+        <result column="srvc_fecha_desde" property="fechaDesde" />
+        <result column="srvc_fecha_hasta" property="fechaHasta" />
+        <result column="srvc_util_km" property="utilKm" />
+        <result column="srvc_vacio_km" property="vacioKm" />
+        <result column="srvc_util_erp_km" property="utilErpKm" />
+        <result column="srvc_vacio_erp_km" property="vacioErpKm" />
 
-		<association property="ruta" javaType="Ruta">
-			<result column="srvc_ruta_pk" property="id" />
-		</association>
+        <association property="ruta" javaType="Ruta">
+            <result column="srvc_ruta_pk" property="id" />
+        </association>
 
-		<association property="conductor1" javaType="Conductor">
-			<result column="srvc_cdtr1_pk" property="id" />
-		</association>
+        <association property="conductor1" javaType="Conductor">
+            <result column="srvc_cdtr1_pk" property="id" />
+        </association>
 
-		<association property="conductor2" javaType="Conductor">
-			<result column="srvc_cdtr2_pk" property="id" />
-		</association>
+        <association property="conductor2" javaType="Conductor">
+            <result column="srvc_cdtr2_pk" property="id" />
+        </association>
 
-		<association property="vehiculo" javaType="Vehiculo">
-			<result column="srvc_vhcl_pk" property="id" />
-		</association>
+        <association property="vehiculo" javaType="Vehiculo">
+            <result column="srvc_vhcl_pk" property="id" />
+        </association>
 
-		<association property="lecturaGpsOrigen" javaType="LecturaGps">
-			<result column="srvc_lgps_orig_pk" property="id" />
-		</association>
+        <association property="lecturaGpsOrigen" javaType="LecturaGps">
+            <result column="srvc_lgps_orig_pk" property="id" />
+        </association>
 
-		<association property="lecturaGpsDestino" javaType="LecturaGps">
-			<result column="srvc_lgps_dest_pk" property="id" />
-		</association>
-	</resultMap>
+        <association property="lecturaGpsDestino" javaType="LecturaGps">
+            <result column="srvc_lgps_dest_pk" property="id" />
+        </association>
+    </resultMap>
 
-	<sql id="SelectPrefix">
+    <sql id="SelectPrefix">
     <![CDATA[
 		SELECT srvc_pk, srvc_codigo_servicio, srvc_codigo_parte, srvc_fecha_desde, srvc_fecha_hasta
 			, srvc_util_km, srvc_vacio_km, srvc_util_erp_km, srvc_vacio_erp_km
@@ -54,17 +54,16 @@
 		FROM
 		    tbl_servicio_srvc
     ]]>
-	</sql>
+    </sql>
 
-	<select id="select" parameterType="Long" resultMap="ResultMap">
-		<include refid="SelectPrefix"></include>
+    <select id="select" parameterType="Long" resultMap="ResultMap">
+        <include refid="SelectPrefix"></include>
     <![CDATA[
     	WHERE srvc_pk = #{value}
     ]]>
-	</select>
+    </select>
 
-	<select id="selectCalculo" parameterType="ServicioCriteria"
-		resultMap="ResultMap">
+    <select id="selectCalculo" parameterType="ServicioCriteria" resultMap="ResultMap">
     <![CDATA[
 		WITH sql AS (
 		    SELECT
@@ -124,18 +123,18 @@
 		FROM sql
 		ORDER BY srvc_vhcl_pk, srvc_fecha_desde
     ]]>
-	</select>
-	<!-- FIXME AND srvc_util_km <= 0 AND srvc_vacio_km <= 0 -->
+    </select>
+    <!-- FIXME AND srvc_util_km <= 0 AND srvc_vacio_km <= 0 -->
 
-	<select id="exists" parameterType="Servicio" resultType="Boolean">
+    <select id="exists" parameterType="Servicio" resultType="Boolean">
     <![CDATA[
         SELECT COUNT(1)
         FROM tbl_servicio_srvc
         WHERE srvc_codigo_parte = #{codigoParte}
     ]]>
-	</select>
+    </select>
 
-	<insert id="insertErpData" parameterType="Servicio">
+    <insert id="insertErpData" parameterType="Servicio">
     <![CDATA[
         INSERT INTO tbl_servicio_srvc (srvc_pk, srvc_codigo_servicio, srvc_codigo_parte, srvc_ruta_pk
         	, srvc_cdtr1_pk, srvc_cdtr2_pk, srvc_vhcl_pk, srvc_fecha_desde, srvc_fecha_hasta, srvc_util_erp_km, srvc_vacio_erp_km)
@@ -147,9 +146,9 @@
         	, #{fechaDesde}, #{fechaHasta}, #{utilErpKm}, #{vacioErpKm}
        	)
     ]]>
-	</insert>
+    </insert>
 
-	<update id="updateErpData" parameterType="Servicio">
+    <update id="updateErpData" parameterType="Servicio">
     <![CDATA[
         UPDATE tbl_servicio_srvc SET
         	srvc_codigo_servicio = #{codigoServicio}
@@ -163,19 +162,36 @@
         	, srvc_vacio_erp_km = #{vacioErpKm}
        	WHERE srvc_codigo_parte = #{codigoParte}
     ]]>
-	</update>
+    </update>
 
-	<update id="update" parameterType="Servicio">
+    <update id="update" parameterType="Servicio">
     <![CDATA[
 		UPDATE tbl_servicio_srvc srvc SET
 		    srvc_lgps_orig_pk = #{lecturaGpsOrigen.id}
 		    , srvc_lgps_dest_pk = #{lecturaGpsDestino.id}
 		    , srvc_util_km = #{utilKm}
+    ]]>
+        <if test="utilKm != null">
+        <![CDATA[
+            , srvc_duracion = (
+                (
+                    SELECT extract(epoch from lgps_fecha)
+                    FROM tbl_lectura_gps_lgps
+                    WHERE lgps_pk = #{lecturaGpsDestino.id}
+                ) - (
+                    SELECT extract(epoch from lgps_fecha)
+                    FROM tbl_lectura_gps_lgps
+                    WHERE lgps_pk = #{lecturaGpsOrigen.id}
+                )
+            )
+        ]]>
+        </if>
+    <![CDATA[
 		WHERE srvc_pk = #{id}
     ]]>
-	</update>
+    </update>
 
-	<update id="updateKmVacio" parameterType="Servicio">
+    <update id="updateKmVacio" parameterType="Servicio">
     <![CDATA[
 		UPDATE tbl_servicio_srvc srvc SET
 		    srvc_vacio_km = (
@@ -196,5 +212,5 @@
 		    )
 		WHERE srvc_pk = #{id}
     ]]>
-	</update>
+    </update>
 </mapper>

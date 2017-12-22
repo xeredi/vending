@@ -1,0 +1,114 @@
+****************************************************************************************************************
+
+DBLINK: SQLITE
+	https://github.com/gleu/sqlite_fdw
+
+	Instalar:
+		Como root
+
+		Instalar repositorio epel
+		$ yum install epel-release
+
+		Ver paquetes disponibles (tienen que estar instalados postgresql96, postgresql96-contrib, postgresql96-devel
+			, postgresql96-libs, postgresql96-server):
+		$ yum list postgresql96*
+		$ yum install postgresql96 postgresql96-contrib postgresql96-devel postgresql96-libs postgresql96-server
+
+		Ver paquetes disponibles (tienen que estar instalados sqlite y sqlite-devel):
+		$ yum list sqlite*
+		$ yum install sqlite sqlite-devel
+
+		Compilación e instalación del dblink
+		$ mkdir temp
+		$ cd temp
+		$ git clone https://github.com/gleu/sqlite_fdw.git
+		$ cd sqlite_fdw
+		$ PATH=$PATH:/usr/pgsql-9.6/bin/
+		$ make
+		$ make install
+		$ cd ..
+		$ rm -Rf sqlite_fdw
+
+	Utilizar:
+		Desde pgadmin como administrador de la BD:
+			CREATE EXTENSION sqlite_fdw;
+			GRANT USAGE ON FOREIGN DATA WRAPPER sqlite_fdw TO busdistance;
+
+		Desde pgadmin como propietario de la bd:
+			CREATE SERVER sqlite_server
+				FOREIGN DATA WRAPPER sqlite_fdw
+				OPTIONS (database '/opt/pgdata/rsync_placas_tvehiculos/28022/datos/regs_28022__20170605_184156_585.db');
+
+			IMPORT FOREIGN SCHEMA public FROM SERVER sqlite_server INTO public;
+
+			SELECT * FROM gps_id28022;
+
+			DROP FOREIGN TABLE gps_id28022;
+
+			DROP SERVER sqlite_server;
+
+
+****************************************************************************************************************
+
+DBLINK: SQLSERVER
+	https://github.com/tds-fdw/tds_fdw
+
+	Instalar:
+		Como root
+
+		Instalar repositorio epel
+		$ yum install epel-release
+
+		Ver paquetes disponibles (tienen que estar instalados postgresql96, postgresql96-contrib, postgresql96-devel
+			, postgresql96-libs, postgresql96-server):
+		$ yum list postgresql96*
+		$ yum install postgresql96 postgresql96-contrib postgresql96-devel postgresql96-libs postgresql96-server
+
+		Ver paquetes disponibles (tienen que estar instalados freetds y freetds-devel):
+		$ yum list freetds*
+		$ yum install freetds freetds-devel
+
+		Compilación e instalación del dblink
+		$ mkdir temp
+		$ cd temp
+		$ git clone https://github.com/tds-fdw/tds_fdw.git
+		$ cd tds_fdw
+		$ PATH=$PATH:/usr/pgsql-9.6/bin/
+		$ make
+		$ make install
+		$ cd ..
+		$ rm -Rf tds_fdw
+
+	Utilizar:
+		Desde pgadmin como administrador de la BD:
+			CREATE EXTENSION tds_fdw;
+			GRANT USAGE ON FOREIGN DATA WRAPPER tds_fdw TO busdistance;
+
+		Desde pgadmin como propietario de la bd:
+			CREATE SERVER mssql_svr
+				FOREIGN DATA WRAPPER tds_fdw
+				OPTIONS (servername '127.0.0.1', port '1433', database 'Ofibus009', tds_version '7.1');
+			CREATE USER MAPPING FOR busdistance
+				SERVER mssql_svr
+				OPTIONS (username 'sa', password 'Licor43licor43');
+			IMPORT FOREIGN SCHEMA dbo
+				FROM SERVER mssql_svr
+				INTO public;
+			CREATE FOREIGN TABLE mssql_rutas (
+				codRuta varchar,
+				descripcion varchar)
+				SERVER mssql_svr
+				OPTIONS (table_name 'dbo.rutas');
+			CREATE FOREIGN TABLE mssql_autocares (
+				codAutocar varchar)
+				SERVER mssql_svr
+				OPTIONS (table_name 'dbo.autocares');
+
+****************************************************************************************************************
+
+PERMISOS  CentOS
+
+	https://www.cyberciti.biz/faq/howto-linux-add-user-to-group/
+
+****************************************************************************************************************
+

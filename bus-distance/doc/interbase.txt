@@ -1,0 +1,30 @@
+alvic tcp3 software
+
+
+Colonia fin de semana
+C/Noviembre 11-17, 28022 Madrid
+Empresa Zona Viva
+
+
+
+
+
+[root@localhost bin]# ./isql
+./isql: error while loading shared libraries: libgds.so: cannot open shared object file: No such file or directory
+[root@localhost bin]# echo $LD_LIBRARY_PATH
+
+[root@localhost bin]# find . | grep libgds.so
+[root@localhost bin]# find /. | grep libgds.so
+/./opt/interbase/lib/libgds.so
+/./opt/interbase/lib/libgds.so.0
+/./usr/lib64/libgds.so.0
+find: ‘/./run/user/1000/gvfs’: Permission denied
+[root@localhost bin]# LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/opt/interbase/lib/
+[root@localhost bin]# export LD_LIBRARY_PATH
+[root@localhost bin]# ./isql
+Use CONNECT or CREATE DATABASE to specify a database
+SQL> CONNECT "localhost:3051/opt/interbase/examples/employee.gdb"
+
+
+
+CONNECT "/opt/interbase/examples/employee.gdb"

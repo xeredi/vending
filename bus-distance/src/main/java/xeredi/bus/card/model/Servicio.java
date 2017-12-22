@@ -1,5 +1,7 @@
 package xeredi.bus.card.model;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 
 import lombok.Data;
@@ -14,6 +16,7 @@ import lombok.Data;
  */
 @Data
 public class Servicio {
+	public static DateFormat TIME_FORMAT = new SimpleDateFormat("HH:mm");
 
 	/** The id. */
 	private Long id;
@@ -63,4 +66,12 @@ public class Servicio {
 
 	/** The lectura gps destino. */
 	private LecturaGps lecturaGpsDestino;
+
+	public String getHoraDesdeString() {
+		return fechaDesde == null ? null : TIME_FORMAT.format(fechaDesde);
+	}
+
+	public String getHoraHastaString() {
+		return fechaHasta == null ? null : TIME_FORMAT.format(fechaHasta);
+	}
 }

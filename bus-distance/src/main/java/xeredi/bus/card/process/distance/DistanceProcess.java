@@ -1,3 +1,6 @@
+/*
+ *
+ */
 package xeredi.bus.card.process.distance;
 
 import java.io.File;
@@ -54,10 +57,15 @@ import xeredi.bus.card.util.ConfigurationUtil;
  * The Class DistanceProcess.
  */
 public final class DistanceProcess {
+
+	/** The Constant LOG. */
 	private static final Log LOG = LogFactory.getLog(DistanceProcess.class);
 
 	/**
 	 * Load erp changes.
+	 *
+	 * @throws SQLException
+	 *             the SQL exception
 	 */
 	private void loadErpChanges() throws SQLException {
 		LOG.info("Load ERP");
@@ -287,6 +295,9 @@ public final class DistanceProcess {
 
 	/**
 	 * Calculate distance.
+	 *
+	 * @throws SQLException
+	 *             the SQL exception
 	 */
 	private void calculateDistance() throws SQLException {
 		LOG.info("Calculate Distance");
@@ -311,6 +322,13 @@ public final class DistanceProcess {
 					final Servicio updatedServicio = servicioMapper.select(servicio.getId());
 
 					LOG.info("servicio: " + updatedServicio);
+
+					if (updatedServicio.getUtilKm() != null) {
+						updatedServicio.setUtilKm((double) Math.round(updatedServicio.getUtilKm()));
+					}
+					if (updatedServicio.getVacioKm() != null) {
+						updatedServicio.setVacioKm((double) Math.round(updatedServicio.getVacioKm()));
+					}
 
 					servicioErpMapper.update(updatedServicio);
 					servicioErpMapper.updateCierre(updatedServicio);

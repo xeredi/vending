@@ -1,0 +1,1 @@
+ALTER TABLE tbl_servicio_srvc ADD COLUMN srvc_duracion BIGINT;
