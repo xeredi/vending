@@ -1,26 +1,16 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
     xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
-    <groupId>bus-erp</groupId>
     <artifactId>db</artifactId>
-    <version>0.0.1-SNAPSHOT</version>
+    <parent>
+        <groupId>bus-erp</groupId>
+        <artifactId>pom</artifactId>
+        <version>0.0.1</version>
+        <relativePath>../pom</relativePath>
+    </parent>
+    <name>Bus DB</name>
 
     <properties>
-        <postgresql.version>42.1.4</postgresql.version>
-
-        <maven-site-plugin.version>3.6</maven-site-plugin.version>
-        <maven-schemaspy-plugin.version>1.0.4</maven-schemaspy-plugin.version>
-        <migrations-maven-plugin.version>1.1.3</migrations-maven-plugin.version>
-        <maven-resources-plugin.version>3.0.2</maven-resources-plugin.version>
-
-        <schemaspy.databaseType>pgsql</schemaspy.databaseType>
-        <schemaspy.database>transport</schemaspy.database>
-        <schemaspy.host>localhost</schemaspy.host>
-        <schemaspy.port>5432</schemaspy.port>
-        <schemaspy.schema>public</schemaspy.schema>
-        <schemaspy.user>transportadm</schemaspy.user>
-        <schemaspy.password>transport</schemaspy.password>
-
         <migrations.environment>local</migrations.environment>
     </properties>
 
@@ -85,27 +75,6 @@
                     </dependency>
                 </dependencies>
             </plugin>
-            <plugin>
-                <groupId>com.wakaleo.schemaspy</groupId>
-                <artifactId>maven-schemaspy-plugin</artifactId>
-                <version>${maven-schemaspy-plugin.version}</version>
-                <configuration>
-                    <databaseType>${schemaspy.databaseType}</databaseType>
-                    <database>${schemaspy.database}</database>
-                    <host>${schemaspy.host}</host>
-                    <port>${schemaspy.port}</port>
-                    <schema>${schemaspy.schema}</schema>
-                    <user>${schemaspy.user}</user>
-                    <password>${schemaspy.password}</password>
-                </configuration>
-                <dependencies>
-                    <dependency>
-                        <groupId>org.postgresql</groupId>
-                        <artifactId>postgresql</artifactId>
-                        <version>${postgresql.version}</version>
-                    </dependency>
-                </dependencies>
-            </plugin>
         </plugins>
 
         <pluginManagement>
@@ -143,11 +112,4 @@
             <version>${postgresql.version}</version>
         </dependency>
     </dependencies>
-
-    <pluginRepositories>
-        <pluginRepository>
-            <id>Wakaleo Repository</id>
-            <url>http://www.wakaleo.com/maven/repos</url>
-        </pluginRepository>
-    </pluginRepositories>
 </project>

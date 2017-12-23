@@ -110,8 +110,8 @@ CREATE TABLE tbl_lectura_gps_lgps (
 
 	, CONSTRAINT pk_lgps PRIMARY KEY (lgps_pk)
 
-	, CONSTRAINT fk_lgps_plca_pk FOREIGN KEY (lgps_plca_pk) REFERENCES tbl_placa_plca (plca_pk)
-	, CONSTRAINT fk_lgps_vhcl_pk FOREIGN KEY (lgps_vhcl_pk) REFERENCES tbl_vehiculo_vhcl (vhcl_pk)
+--	, CONSTRAINT fk_lgps_plca_pk FOREIGN KEY (lgps_plca_pk) REFERENCES tbl_placa_plca (plca_pk)
+--	, CONSTRAINT fk_lgps_vhcl_pk FOREIGN KEY (lgps_vhcl_pk) REFERENCES tbl_vehiculo_vhcl (vhcl_pk)
 )\
 
 CREATE INDEX ix_lgps_vhcl_pk ON tbl_lectura_gps_lgps(lgps_vhcl_pk, lgps_fecha)\

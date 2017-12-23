@@ -34,27 +34,34 @@ public final class ClientConnectionTest {
 	private static final int CLIENTS_NUMBER = 500;
 
 	/** The Constant ITERATIONS_MESSAGE. */
-	private static final int MESSAGES_NUMBER = 800;
+	private static final int MESSAGES_NUMBER = 1600;
 
 	/**
 	 * Test connection.
 	 *
 	 * @throws MqttException
 	 *             the mqtt exception
+	 * @throws JsonProcessingException
+	 *             the json processing exception
 	 */
-	@Test
-	public void testFull() throws MqttException {
+	public void testFull() throws MqttException, JsonProcessingException {
+		final ObjectMapper mapper = new ObjectMapper();
+
+		mapper.setDateFormat(JSON_DATE_FORMAT);
+
 		for (int i = 0; i < CLIENTS_NUMBER; i++) {
-			final MqttClient mqttClient = new MqttClient(MQTT_URL, MqttClient.generateClientId());
+			final MqttClient client = new MqttClient(MQTT_URL, MqttClient.generateClientId());
 
-			mqttClient.connect();
+			client.connect();
 
-			final MqttMessage message = new MqttMessage(("Test Message: " + i).getBytes());
+			final MqttMessage message = new MqttMessage();
 
 			message.setQos(0);
-			mqttClient.publish(MQTT_QUEUE, message);
-			mqttClient.disconnect();
-			mqttClient.close();
+			message.setPayload(mapper.writeValueAsBytes(generateMessageData(client)));
+
+			client.publish(MQTT_QUEUE, message);
+			client.disconnect();
+			client.close();
 		}
 	}
 
@@ -63,22 +70,29 @@ public final class ClientConnectionTest {
 	 *
 	 * @throws MqttException
 	 *             the mqtt exception
+	 * @throws JsonProcessingException
+	 *             the json processing exception
 	 */
-	@Test
-	public void testMessage() throws MqttException {
-		final MqttClient mqttClient = new MqttClient(MQTT_URL, MqttClient.generateClientId());
+	public void testMessage() throws MqttException, JsonProcessingException {
+		final ObjectMapper mapper = new ObjectMapper();
 
-		mqttClient.connect();
+		mapper.setDateFormat(JSON_DATE_FORMAT);
+
+		final MqttClient client = new MqttClient(MQTT_URL, MqttClient.generateClientId());
+
+		client.connect();
 
 		for (int i = 0; i < MESSAGES_NUMBER; i++) {
-			final MqttMessage message = new MqttMessage(("Test Message: " + i).getBytes());
+			final MqttMessage message = new MqttMessage();
 
 			message.setQos(0);
-			mqttClient.publish(MQTT_QUEUE, message);
+			message.setPayload(mapper.writeValueAsBytes(generateMessageData(client)));
+
+			client.publish(MQTT_QUEUE, message);
 		}
 
-		mqttClient.disconnect();
-		mqttClient.close();
+		client.disconnect();
+		client.close();
 	}
 
 	/**
@@ -89,7 +103,11 @@ public final class ClientConnectionTest {
 	 */
 	@Test
 	public void testMultipleClient() throws JsonProcessingException {
+		System.out.println(JSON_DATE_FORMAT.format(Calendar.getInstance().getTime()) + " Start");
+
 		final ObjectMapper mapper = new ObjectMapper();
+
+		mapper.setDateFormat(JSON_DATE_FORMAT);
 
 		final long start = Calendar.getInstance().getTimeInMillis();
 
@@ -102,7 +120,7 @@ public final class ClientConnectionTest {
 		int disconnectClientErrors = 0;
 		int messageErrors = 0;
 
-		mapper.setDateFormat(JSON_DATE_FORMAT);
+		System.out.println(JSON_DATE_FORMAT.format(Calendar.getInstance().getTime()) + " Create clients");
 
 		final List<MqttClient> clients = new ArrayList<>();
 
@@ -114,6 +132,8 @@ public final class ClientConnectionTest {
 				// System.err.println("Error creando cliente");
 			}
 		}
+
+		System.out.println(JSON_DATE_FORMAT.format(Calendar.getInstance().getTime()) + " Send Messages");
 
 		for (int i = 0; i < MESSAGES_NUMBER; i++) {
 			for (final MqttClient client : clients) {
@@ -144,6 +164,8 @@ public final class ClientConnectionTest {
 				}
 			}
 		}
+
+		System.out.println(JSON_DATE_FORMAT.format(Calendar.getInstance().getTime()) + " Close Clients");
 
 		for (final MqttClient client : clients) {
 			try {
@@ -179,6 +201,8 @@ public final class ClientConnectionTest {
 		System.out.println("connectClientErrors:    " + connectClientErrors);
 		System.out.println("disconnectClientErrors: " + disconnectClientErrors);
 		System.out.println("messageErrors:          " + messageErrors);
+
+		System.out.println(JSON_DATE_FORMAT.format(Calendar.getInstance().getTime()) + " Finish");
 	}
 
 	/**

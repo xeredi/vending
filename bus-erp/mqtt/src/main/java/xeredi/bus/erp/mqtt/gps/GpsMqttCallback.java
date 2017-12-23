@@ -2,6 +2,7 @@ package xeredi.bus.erp.mqtt.gps;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.util.Calendar;
 
 import org.eclipse.paho.client.mqttv3.IMqttDeliveryToken;
 import org.eclipse.paho.client.mqttv3.MqttCallback;
@@ -19,6 +20,8 @@ public final class GpsMqttCallback implements MqttCallback {
 	/** The Constant JSON_DATE_FORMAT. */
 	private static final DateFormat JSON_DATE_FORMAT = new SimpleDateFormat("yyyyMMddHHmmss");
 
+	private int count = 0;
+
 	/**
 	 * {@inheritDoc}
 	 */
@@ -31,18 +34,24 @@ public final class GpsMqttCallback implements MqttCallback {
 	 * {@inheritDoc}
 	 */
 	public void messageArrived(final String topic, final MqttMessage message) throws Exception {
-		System.out.println("Message Arrived. Topic: " + topic);
+		// System.out.println("Message Arrived. Topic: " + topic);
 
-		// Example: $ mosquitto_pub -h 127.0.0.1 -t gps_data -m "{\"placa\":\"test\", \"lat\": 6.6, \"lon\": 5.5, \"alt\": 4.4, \"spd\": 1.1, \"fecha\": \"20171220092256\"}"
+		// Example: $ mosquitto_pub -h 127.0.0.1 -t gps_data -m "{\"placa\":\"test\",
+		// \"lat\": 6.6, \"lon\": 5.5, \"alt\": 4.4, \"spd\": 1.1, \"fecha\":
+		// \"20171220092256\"}"
 
 		final ObjectMapper mapper = new ObjectMapper();
 
 		mapper.setDateFormat(JSON_DATE_FORMAT);
 
 		try {
-			final GpsData gpsData = mapper.readValue(message.getPayload(), GpsData.class);
+			final GpsData[] gpsDataArray = mapper.readValue(message.getPayload(), GpsData[].class);
 
-			System.out.println("gpsData: " + gpsData);
+			count++;
+
+			if ((count % 5000) == 0) {
+				System.out.println(JSON_DATE_FORMAT.format(Calendar.getInstance().getTime()) + ": " + count);
+			}
 		} catch (final JsonParseException ex) {
 			System.err.println("Error parsing json");
 
