@@ -47,6 +47,12 @@
         <commons-io.version>2.6</commons-io.version>
         <postgresql.version>42.1.4</postgresql.version>
         <mybatis.version>3.4.5</mybatis.version>
+        <commons-logging.version>1.2</commons-logging.version>
+        <commons-dbcp2.version>2.2.0</commons-dbcp2.version>
+        <commons-configuration.version>1.10</commons-configuration.version>
+        <commons-lang3.version>3.7</commons-lang3.version>
+        <cglib.version>3.2.5</cglib.version>
+        <postgresql.version>42.1.4</postgresql.version>
 
         <junit.version>4.12</junit.version>
     </properties>

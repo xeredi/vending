@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="xeredi.bus.erp.model.mapper.PlacaMapper">
+    <resultMap type="Placa" id="ResultMap">
+        <id column="plca_pk" />
+
+        <result column="plca_pk" property="id" />
+        <result column="plca_codigo" property="codigo" />
+        <result column="plca_fecha_fin" property="ffin" />
+
+        <association property="clte" javaType="Cliente">
+            <result column="plca_clte_pk" property="id" />
+        </association>
+
+        <association property="lgps" javaType="LecturaGps">
+            <result column="plca_ultimo_lgps_pk" property="id" />
+        </association>
+    </resultMap>
+
+    <sql id="SelectPrefix">
+    <![CDATA[
+        SELECT plca_pk, plca_codigo, plca_fecha_fin
+            , plca_clte_pk
+            , plca_ultimo_lgps_pk
+        FROM tbl_placa_plca
+    ]]>
+    </sql>
+
+    <sql id="SelectWhere">
+        <where>
+            <if test="id != null">
+                AND plca_pk = #{id}
+            </if>
+
+            <if test="codigo != null">
+                AND plca_codigo LIKE #{codigo}
+            </if>
+        </where>
+    </sql>
+
+    <select id="selectList" parameterType="PlacaCriteria" resultMap="ResultMap">
+        <include refid="SelectPrefix" />
+        <include refid="SelectWhere" />
+        ORDER BY plca_codigo
+    </select>
+
+    <select id="select" parameterType="Long" resultMap="ResultMap">
+        <include refid="SelectPrefix"></include>
+    <![CDATA[
+        WHERE plca_pk = #{value}
+    ]]>
+    </select>
+
+    <select id="count" parameterType="PlacaCriteria" resultType="Integer">
+        <![CDATA[
+            SELECT COUNT(1)
+            FROM tbl_placa_plca
+        ]]>
+        <include refid="SelectWhere" />
+    </select>
+
+    <select id="selectObject" parameterType="PlacaCriteria" resultMap="ResultMap">
+        <include refid="SelectPrefix" />
+        <include refid="SelectWhere" />
+    </select>
+</mapper>

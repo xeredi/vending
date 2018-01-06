@@ -4,20 +4,20 @@ import lombok.Data;
 
 // TODO: Auto-generated Javadoc
 /**
- * Instantiates a new vehiculo.
+ * Instantiates a new vehiculo criteria.
  */
 @Data
-public class Vehiculo {
+public class VehiculoCriteria {
 
 	/** The id. */
 	private Long id;
-
-	/** The clte. */
-	private Cliente clte;
 
 	/** The matricula. */
 	private String matricula;
 
 	/** The plca. */
-	private Placa plca;
+	private PlacaCriteria plca;
+
+	/** The clte. */
+	private ClienteCriteria clte;
 }

@@ -31,10 +31,10 @@ public final class ClientConnectionTest {
 	private static final DateFormat JSON_DATE_FORMAT = new SimpleDateFormat("yyyyMMddHHmmss");
 
 	/** The Constant ITERATIONS_NUMBER. */
-	private static final int CLIENTS_NUMBER = 500;
+	private static final int CLIENTS_NUMBER = 1;
 
 	/** The Constant ITERATIONS_MESSAGE. */
-	private static final int MESSAGES_NUMBER = 1600;
+	private static final int MESSAGES_NUMBER = 200000;
 
 	/**
 	 * Test connection.
