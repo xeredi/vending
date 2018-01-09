@@ -1,5 +1,7 @@
 package xeredi.bus.erp.model;
 
+import java.util.Date;
+
 import lombok.Data;
 
 // TODO: Auto-generated Javadoc
@@ -17,6 +19,8 @@ public class LecturaGps {
 
 	/** The vhcl. */
 	private Vehiculo vhcl;
+
+	private Date fecha;
 
 	/** The lat. */
 	private Double lat;

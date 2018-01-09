@@ -1,0 +1,33 @@
+Ver parámetros
+	SELECT * FROM pg_settings;
+
+Fichero de configuracion
+	/var/lib/pgsql/9.6/data/postgresql.conf
+
+Reinicio servicio
+	service postgresql-9.6 stop
+	service postgresql-9.6 start
+	service postgresql-9.6 status
+
+Tuning online tool
+	http://pgtune.leopard.in.ua/
+
+Trazar tiempos de funciones pl:
+	http://www.pateldenish.com/2010/11/postgresql-track-functions-to-tune.html
+
+pgbench
+	$ cd /usr/pgsql-9.6/bin/
+	$ ./pgbench -i -U postgres pgbench
+	$ ./pgbench -t 100000 -j 4 -c 4 -U postgres pgbench
+
+Test Disk
+	https://www.unixmen.com/how-to-measure-disk-performance-with-fio-and-ioping/
+
+	$ fdisk -l
+
+	$ hdparm -t /dev/sda
+
+	$ yum install fio
+	$ yum install ioping
+
+	$ ioping -c 10 /dev/sda

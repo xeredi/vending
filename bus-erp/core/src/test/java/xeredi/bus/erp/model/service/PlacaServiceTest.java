@@ -13,6 +13,7 @@ import xeredi.bus.erp.model.PlacaCriteria;
  */
 public final class PlacaServiceTest {
 
+	/** The Constant LOG. */
 	private static final Log LOG = LogFactory.getLog(PlacaServiceTest.class);
 
 	/**

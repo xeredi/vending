@@ -3,6 +3,7 @@ package xeredi.bus.erp.model.service;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.apache.ibatis.session.ExecutorType;
 import org.apache.ibatis.session.RowBounds;
 import org.apache.ibatis.session.SqlSession;
 
@@ -30,7 +31,7 @@ public final class PlacaService {
 	 * @return the paginated list
 	 */
 	public PaginatedList<Placa> selectList(final PlacaCriteria criteria, final int offset, final int limit) {
-		try (final SqlSession session = SqlMapperLocator.getSqlSession()) {
+		try (final SqlSession session = SqlMapperLocator.getSqlSession(ExecutorType.REUSE)) {
 			final PlacaMapper placaMapper = session.getMapper(PlacaMapper.class);
 
 			final int count = placaMapper.count(criteria);

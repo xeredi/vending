@@ -4,7 +4,7 @@ GRANT USAGE, SELECT ON seq_app TO transport\
 
 
 CREATE TABLE tbl_pais_pais (
-	pais_pk NUMERIC(20,0) NOT NULL
+	pais_pk BIGINT NOT NULL
 	, pais_codigo VARCHAR(2) NOT NULL
 	, pais_nombre VARCHAR(80) NOT NULL
 
@@ -15,8 +15,8 @@ CREATE TABLE tbl_pais_pais (
 
 
 CREATE TABLE tbl_region_rgon (
-	rgon_pk NUMERIC(20,0) NOT NULL
-	, rgon_pais_pk NUMERIC(20,0) NOT NULL
+	rgon_pk BIGINT NOT NULL
+	, rgon_pais_pk BIGINT NOT NULL
 	, rgon_nombre VARCHAR(80) NOT NULL
 
 	, CONSTRAINT pk_rgon PRIMARY KEY (rgon_pk)
@@ -28,7 +28,7 @@ CREATE TABLE tbl_region_rgon (
 
 
 CREATE TABLE tbl_cliente_clte (
-	clte_pk NUMERIC(20,0) NOT NULL
+	clte_pk BIGINT NOT NULL
 	, clte_email VARCHAR(50) NOT NULL
 	, clte_nombre VARCHAR(50) NOT NULL
 
@@ -41,8 +41,8 @@ GRANT SELECT ON tbl_cliente_clte TO transport\
 
 
 CREATE TABLE tbl_usuario_usro (
-	usro_pk NUMERIC(20,0) NOT NULL
-	, usro_clte_pk NUMERIC(20,0)
+	usro_pk BIGINT NOT NULL
+	, usro_clte_pk BIGINT
 	, usro_rol CHAR(1) NOT NULL
 	, usro_email VARCHAR(50) NOT NULL
 	, usro_contrasenia VARCHAR(50) NOT NULL
@@ -62,11 +62,11 @@ CREATE INDEX ix_usro_clte_pk ON tbl_usuario_usro(usro_clte_pk)\
 
 
 CREATE TABLE tbl_placa_plca (
-	plca_pk NUMERIC(20,0) NOT NULL
-	, plca_clte_pk NUMERIC(20,0) NOT NULL
+	plca_pk BIGINT NOT NULL
+	, plca_clte_pk BIGINT NOT NULL
 	, plca_codigo VARCHAR(30) NOT NULL
 	, plca_fecha_fin TIMESTAMP NOT NULL
-	, plca_ultimo_lgps_pk NUMERIC(20,0)
+	, plca_ultimo_lgps_pk BIGINT
 
 	, CONSTRAINT pk_plca PRIMARY KEY (plca_pk)
 
@@ -80,10 +80,10 @@ GRANT SELECT, INSERT, UPDATE, DELETE ON tbl_placa_plca TO transport\
 
 
 CREATE TABLE tbl_vehiculo_vhcl (
-	vhcl_pk NUMERIC(20,0) NOT NULL
-	, vhcl_clte_pk NUMERIC(20,0) NOT NULL
+	vhcl_pk BIGINT NOT NULL
+	, vhcl_clte_pk BIGINT NOT NULL
 	, vhcl_matricula VARCHAR(30) NOT NULL
-	, vhcl_plca_pk NUMERIC(20,0)
+	, vhcl_plca_pk BIGINT
 
 	, CONSTRAINT pk_vhcl PRIMARY KEY (vhcl_pk)
 
@@ -100,14 +100,14 @@ GRANT SELECT, INSERT, UPDATE, DELETE ON tbl_vehiculo_vhcl TO transport\
 
 
 CREATE TABLE tbl_lectura_gps_lgps (
-	lgps_pk NUMERIC(20,0) NOT NULL
-	, lgps_plca_pk NUMERIC(20,0) NOT NULL
-	, lgps_vhcl_pk NUMERIC(20,0) NOT NULL
+	lgps_pk BIGINT NOT NULL
+	, lgps_plca_pk BIGINT NOT NULL
+	, lgps_vhcl_pk BIGINT NOT NULL
 	, lgps_fecha TIMESTAMP NOT NULL
-	, lgps_lat NUMERIC(12,8) NOT NULL
-	, lgps_lon NUMERIC(12,8) NOT NULL
-	, lgps_alt NUMERIC(12,8) NOT NULL
-	, lgps_spd NUMERIC(12,8) NOT NULL
+	, lgps_lat NUMERIC(9,6) NOT NULL
+	, lgps_lon NUMERIC(9,6) NOT NULL
+	, lgps_alt NUMERIC(12,6) NOT NULL
+	, lgps_spd NUMERIC(9,5) NOT NULL
 	, lgps_dst NUMERIC(12,4) NOT NULL
 	, lgps_elt NUMERIC(12,4) NOT NULL
 
@@ -131,11 +131,21 @@ INSERT INTO tbl_usuario_usro (usro_pk, usro_clte_pk, usro_rol, usro_email, usro_
 INSERT INTO tbl_usuario_usro (usro_pk, usro_clte_pk, usro_rol, usro_email, usro_contrasenia, usro_nombre) VALUES (1001, 2000, 'C', 'cliente@gmail.com', 'changeme', 'Cliente')\
 
 INSERT INTO tbl_placa_plca (plca_pk, plca_clte_pk, plca_codigo, plca_fecha_fin, plca_ultimo_lgps_pk) VALUES (3000, 2000, '00000000ecec8745', '2050-01-01 00:00:00', NULL)\
-
 INSERT INTO tbl_vehiculo_vhcl (vhcl_pk, vhcl_clte_pk, vhcl_matricula, vhcl_plca_pk) VALUES (4000, 2000, 'PO-5378-Y', 3000)\
+INSERT INTO tbl_placa_plca (plca_pk, plca_clte_pk, plca_codigo, plca_fecha_fin, plca_ultimo_lgps_pk) VALUES (3001, 2000, '00000000ecec8746', '2050-01-01 00:00:00', NULL)\
+INSERT INTO tbl_vehiculo_vhcl (vhcl_pk, vhcl_clte_pk, vhcl_matricula, vhcl_plca_pk) VALUES (4001, 2000, 'PO-5378-Z', 3001)\
+INSERT INTO tbl_placa_plca (plca_pk, plca_clte_pk, plca_codigo, plca_fecha_fin, plca_ultimo_lgps_pk) VALUES (3002, 2000, '00000000ecec8747', '2050-01-01 00:00:00', NULL)\
+INSERT INTO tbl_vehiculo_vhcl (vhcl_pk, vhcl_clte_pk, vhcl_matricula, vhcl_plca_pk) VALUES (4002, 2000, 'PO-5378-A', 3002)\
+INSERT INTO tbl_placa_plca (plca_pk, plca_clte_pk, plca_codigo, plca_fecha_fin, plca_ultimo_lgps_pk) VALUES (3003, 2000, '00000000ecec8748', '2050-01-01 00:00:00', NULL)\
+INSERT INTO tbl_vehiculo_vhcl (vhcl_pk, vhcl_clte_pk, vhcl_matricula, vhcl_plca_pk) VALUES (4003, 2000, 'PO-5378-B', 3003)\
+INSERT INTO tbl_placa_plca (plca_pk, plca_clte_pk, plca_codigo, plca_fecha_fin, plca_ultimo_lgps_pk) VALUES (3004, 2000, '00000000ecec8749', '2050-01-01 00:00:00', NULL)\
+INSERT INTO tbl_vehiculo_vhcl (vhcl_pk, vhcl_clte_pk, vhcl_matricula, vhcl_plca_pk) VALUES (4004, 2000, 'PO-5378-C', 3004)\
 
 
 -- //@UNDO
+
+
+TRUNCATE TABLE tbl_lectura_gps_lgps\
 
 DROP TABLE tbl_lectura_gps_lgps\
 DROP TABLE tbl_vehiculo_vhcl\

@@ -6,6 +6,7 @@ import java.io.Reader;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.apache.ibatis.io.Resources;
+import org.apache.ibatis.session.ExecutorType;
 import org.apache.ibatis.session.SqlSession;
 import org.apache.ibatis.session.SqlSessionFactory;
 import org.apache.ibatis.session.SqlSessionFactoryBuilder;
@@ -68,5 +69,9 @@ public final class SqlMapperLocator {
 	 */
 	public static SqlSession getSqlSession() {
 		return FACTORY.openSession();
+	}
+
+	public static SqlSession getSqlSession(final ExecutorType executorType) {
+		return FACTORY.openSession(executorType);
 	}
 }
