@@ -12,6 +12,7 @@
 
         <module>../core</module>
         <module>../mqtt</module>
+        <module>../http</module>
     </modules>
 
     <properties>
@@ -20,6 +21,7 @@
         <bus-erp.db.version>0.0.1</bus-erp.db.version>
         <bus-erp.core.version>0.0.1</bus-erp.core.version>
         <bus-erp.mqtt.version>0.0.1</bus-erp.mqtt.version>
+        <bus-erp.http.version>0.0.1</bus-erp.http.version>
 
         <schemaspy.databaseType>pgsql</schemaspy.databaseType>
         <schemaspy.database>transport</schemaspy.database>
@@ -54,6 +56,7 @@
         <cglib.version>3.2.5</cglib.version>
         <postgresql.version>42.1.4</postgresql.version>
         <log4j.version>1.2.17</log4j.version>
+        <struts2.version>2.5.14.1</struts2.version>
 
         <junit.version>4.12</junit.version>
     </properties>

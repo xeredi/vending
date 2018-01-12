@@ -32,10 +32,8 @@
 				<property name="password" value="${dbErp.dataSource.password}" />
 				<property name="defaultAutoCommit" value="false" />
 				<property name="rollbackOnReturn" value="false" />
-				<property name="initialSize" value="4" />
-				<property name="maxTotal" value="8" />
-				<property name="minIdle" value="4" />
-				<property name="maxIdle" value="4" />
+				<property name="initialSize" value="1" />
+				<property name="maxTotal" value="1" />
 				<property name="validationQuery" value="select 1+1" />
 			</dataSource>
 		</environment>

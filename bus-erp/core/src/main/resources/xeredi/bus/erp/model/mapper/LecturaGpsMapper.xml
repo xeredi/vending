@@ -6,7 +6,7 @@
     <insert id="insert" parameterType="LecturaGps" statementType="CALLABLE">
     <![CDATA[
         {
-            CALL guardar_lectura_gps3(
+            CALL guardar_lectura_gps(
                 #{plca.codigo, mode=IN, jdbcType=VARCHAR}
                 , #{fecha, mode=IN, jdbcType=TIMESTAMP}
                 , #{lat, mode=IN, jdbcType=DOUBLE}

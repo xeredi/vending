@@ -3,46 +3,40 @@ CREATE SEQUENCE seq_app\
 GRANT USAGE, SELECT ON seq_app TO transport\
 
 
-CREATE TABLE tbl_pais_pais (
-	pais_pk BIGINT NOT NULL
-	, pais_codigo VARCHAR(2) NOT NULL
-	, pais_nombre VARCHAR(80) NOT NULL
+CREATE TABLE tbl_asociado_ascd (
+	ascd_pk BIGINT NOT NULL
+	, ascd_email VARCHAR(50) NOT NULL
+	, ascd_nombre VARCHAR(50) NOT NULL
 
-	, CONSTRAINT pk_pais PRIMARY KEY (pais_pk)
+	, CONSTRAINT pk_ascd PRIMARY KEY (ascd_pk)
 
-	, CONSTRAINT uk_pais UNIQUE (pais_codigo)
+	, CONSTRAINT uk_ascd UNIQUE (ascd_email)
 )\
 
+GRANT SELECT ON tbl_asociado_ascd TO transport\
 
-CREATE TABLE tbl_region_rgon (
-	rgon_pk BIGINT NOT NULL
-	, rgon_pais_pk BIGINT NOT NULL
-	, rgon_nombre VARCHAR(80) NOT NULL
 
-	, CONSTRAINT pk_rgon PRIMARY KEY (rgon_pk)
-
-	, CONSTRAINT uk_rgon UNIQUE (rgon_pais_pk, rgon_nombre)
-
-	, CONSTRAINT fk_rgon_pais_pk FOREIGN KEY (rgon_pais_pk) REFERENCES tbl_pais_pais (pais_pk)
-)\
 
 
 CREATE TABLE tbl_cliente_clte (
 	clte_pk BIGINT NOT NULL
+	, clte_ascd_pk BIGINT NOT NULL
 	, clte_email VARCHAR(50) NOT NULL
 	, clte_nombre VARCHAR(50) NOT NULL
 
 	, CONSTRAINT pk_clte PRIMARY KEY (clte_pk)
 
-	, CONSTRAINT uk_clte UNIQUE (clte_email)
+	, CONSTRAINT uk_clte UNIQUE (clte_ascd_pk, clte_email)
+
+	, CONSTRAINT fk_clte_ascd_pk FOREIGN KEY (clte_ascd_pk) REFERENCES tbl_asociado_ascd (ascd_pk)
 )\
 
-GRANT SELECT ON tbl_cliente_clte TO transport\
+GRANT SELECT, INSERT, UPDATE, DELETE ON tbl_cliente_clte TO transport\
 
 
 CREATE TABLE tbl_usuario_usro (
 	usro_pk BIGINT NOT NULL
-	, usro_clte_pk BIGINT
+	, usro_ascd_pk BIGINT
 	, usro_rol CHAR(1) NOT NULL
 	, usro_email VARCHAR(50) NOT NULL
 	, usro_contrasenia VARCHAR(50) NOT NULL
@@ -52,49 +46,47 @@ CREATE TABLE tbl_usuario_usro (
 
 	, CONSTRAINT uk_usro UNIQUE (usro_email)
 
-	, CONSTRAINT fk_usro_clte_pk FOREIGN KEY (usro_clte_pk) REFERENCES tbl_cliente_clte (clte_pk)
+	, CONSTRAINT fk_usro_ascd_pk FOREIGN KEY (usro_ascd_pk) REFERENCES tbl_asociado_ascd (ascd_pk)
 )\
 
 GRANT SELECT, INSERT, UPDATE, DELETE ON tbl_usuario_usro TO transport\
 
-CREATE INDEX ix_usro_clte_pk ON tbl_usuario_usro(usro_clte_pk)\
+CREATE INDEX ix_usro_ascd_pk ON tbl_usuario_usro(usro_ascd_pk)\
 
 
 
 CREATE TABLE tbl_placa_plca (
 	plca_pk BIGINT NOT NULL
-	, plca_clte_pk BIGINT NOT NULL
+	, plca_ascd_pk BIGINT NOT NULL
 	, plca_codigo VARCHAR(30) NOT NULL
 	, plca_fecha_fin TIMESTAMP NOT NULL
-	, plca_ultimo_lgps_pk BIGINT
 
 	, CONSTRAINT pk_plca PRIMARY KEY (plca_pk)
 
 	, CONSTRAINT uk_plca UNIQUE (plca_codigo)
 
-	, CONSTRAINT fk_plca_clte_pk FOREIGN KEY (plca_clte_pk) REFERENCES tbl_cliente_clte (clte_pk)
---	, CONSTRAINT fk_plca_ultimo_lgps_pk FOREIGN KEY (plca_ultimo_lgps_pk) REFERENCES tbl_lectura_gps_lgps (lgps_pk)
+	, CONSTRAINT fk_plca_ascd_pk FOREIGN KEY (plca_ascd_pk) REFERENCES tbl_asociado_ascd (ascd_pk)
 )\
 
 GRANT SELECT, INSERT, UPDATE, DELETE ON tbl_placa_plca TO transport\
 
+CREATE INDEX ix_plca_ascd_pk ON tbl_placa_plca(plca_ascd_pk)\
+
 
 CREATE TABLE tbl_vehiculo_vhcl (
 	vhcl_pk BIGINT NOT NULL
-	, vhcl_clte_pk BIGINT NOT NULL
+	, vhcl_ascd_pk BIGINT NOT NULL
 	, vhcl_matricula VARCHAR(30) NOT NULL
 	, vhcl_plca_pk BIGINT
 
 	, CONSTRAINT pk_vhcl PRIMARY KEY (vhcl_pk)
 
-	, CONSTRAINT uk_vhcl UNIQUE (vhcl_clte_pk, vhcl_matricula)
+	, CONSTRAINT uk_vhcl UNIQUE (vhcl_ascd_pk, vhcl_matricula)
+	, CONSTRAINT uk_vhcl_plca_pk UNIQUE (vhcl_plca_pk)
 
-	, CONSTRAINT fk_vhcl_clte_pk FOREIGN KEY (vhcl_clte_pk) REFERENCES tbl_cliente_clte (clte_pk)
+	, CONSTRAINT fk_vhcl_ascd_pk FOREIGN KEY (vhcl_ascd_pk) REFERENCES tbl_asociado_ascd (ascd_pk)
 	, CONSTRAINT fk_vhcl_plca_pk FOREIGN KEY (vhcl_plca_pk) REFERENCES tbl_placa_plca (plca_pk)
 )\
-
-CREATE INDEX ix_vhcl_clte_pk ON tbl_vehiculo_vhcl(vhcl_clte_pk)\
-CREATE INDEX ix_vhcl_plca_pk ON tbl_vehiculo_vhcl(vhcl_plca_pk)\
 
 GRANT SELECT, INSERT, UPDATE, DELETE ON tbl_vehiculo_vhcl TO transport\
 
@@ -117,33 +109,101 @@ CREATE TABLE tbl_lectura_gps_lgps (
 --	, CONSTRAINT fk_lgps_vhcl_pk FOREIGN KEY (lgps_vhcl_pk) REFERENCES tbl_vehiculo_vhcl (vhcl_pk)
 )\
 
-CREATE INDEX ix_lgps_vhcl_pk ON tbl_lectura_gps_lgps(lgps_vhcl_pk, lgps_fecha)\
+CREATE INDEX ix_lgps_vhcl_pk ON tbl_lectura_gps_lgps(lgps_vhcl_pk, lgps_fecha DESC)\
 
 GRANT SELECT, INSERT ON tbl_lectura_gps_lgps TO transport\
 
 
 
+CREATE TABLE tbl_lugar_lgar (
+	lgar_pk BIGINT NOT NULL
+	, lgar_ascd_pk BIGINT NOT NULL
+	, lgar_nombre VARCHAR(50) NOT NULL
+	, lgar_direcc VARCHAR(200) NOT NULL
+	, lgar_lat NUMERIC(9,6) NOT NULL
+	, lgar_lon NUMERIC(9,6) NOT NULL
+
+	, CONSTRAINT pk_lgar PRIMARY KEY (lgar_pk)
+	, CONSTRAINT uk_lgar UNIQUE (lgar_ascd_pk, lgar_nombre)
+
+	, CONSTRAINT fk_lgar_ascd_pk FOREIGN KEY (lgar_ascd_pk) REFERENCES tbl_asociado_ascd (ascd_pk)
+)\
 
 
-INSERT INTO tbl_cliente_clte (clte_pk, clte_email, clte_nombre) VALUES (2000, 'cliente@gmail.com', 'Cliente')\
 
-INSERT INTO tbl_usuario_usro (usro_pk, usro_clte_pk, usro_rol, usro_email, usro_contrasenia, usro_nombre) VALUES (1000, NULL, 'M', 'xeredi@gmail.com', 'changeme', 'Xesus')\
-INSERT INTO tbl_usuario_usro (usro_pk, usro_clte_pk, usro_rol, usro_email, usro_contrasenia, usro_nombre) VALUES (1001, 2000, 'C', 'cliente@gmail.com', 'changeme', 'Cliente')\
+CREATE TABLE tbl_ruta_ruta (
+	ruta_pk BIGINT NOT NULL
+	, ruta_ascd_pk BIGINT NOT NULL
+	, ruta_nombre VARCHAR(50) NOT NULL
+	, ruta_orig_lgar_pk BIGINT NOT NULL
+	, ruta_dest_lgar_pk BIGINT NOT NULL
 
-INSERT INTO tbl_placa_plca (plca_pk, plca_clte_pk, plca_codigo, plca_fecha_fin, plca_ultimo_lgps_pk) VALUES (3000, 2000, '00000000ecec8745', '2050-01-01 00:00:00', NULL)\
-INSERT INTO tbl_vehiculo_vhcl (vhcl_pk, vhcl_clte_pk, vhcl_matricula, vhcl_plca_pk) VALUES (4000, 2000, 'PO-5378-Y', 3000)\
-INSERT INTO tbl_placa_plca (plca_pk, plca_clte_pk, plca_codigo, plca_fecha_fin, plca_ultimo_lgps_pk) VALUES (3001, 2000, '00000000ecec8746', '2050-01-01 00:00:00', NULL)\
-INSERT INTO tbl_vehiculo_vhcl (vhcl_pk, vhcl_clte_pk, vhcl_matricula, vhcl_plca_pk) VALUES (4001, 2000, 'PO-5378-Z', 3001)\
-INSERT INTO tbl_placa_plca (plca_pk, plca_clte_pk, plca_codigo, plca_fecha_fin, plca_ultimo_lgps_pk) VALUES (3002, 2000, '00000000ecec8747', '2050-01-01 00:00:00', NULL)\
-INSERT INTO tbl_vehiculo_vhcl (vhcl_pk, vhcl_clte_pk, vhcl_matricula, vhcl_plca_pk) VALUES (4002, 2000, 'PO-5378-A', 3002)\
-INSERT INTO tbl_placa_plca (plca_pk, plca_clte_pk, plca_codigo, plca_fecha_fin, plca_ultimo_lgps_pk) VALUES (3003, 2000, '00000000ecec8748', '2050-01-01 00:00:00', NULL)\
-INSERT INTO tbl_vehiculo_vhcl (vhcl_pk, vhcl_clte_pk, vhcl_matricula, vhcl_plca_pk) VALUES (4003, 2000, 'PO-5378-B', 3003)\
-INSERT INTO tbl_placa_plca (plca_pk, plca_clte_pk, plca_codigo, plca_fecha_fin, plca_ultimo_lgps_pk) VALUES (3004, 2000, '00000000ecec8749', '2050-01-01 00:00:00', NULL)\
-INSERT INTO tbl_vehiculo_vhcl (vhcl_pk, vhcl_clte_pk, vhcl_matricula, vhcl_plca_pk) VALUES (4004, 2000, 'PO-5378-C', 3004)\
+	, CONSTRAINT pk_ruta PRIMARY KEY (ruta_pk)
+	, CONSTRAINT uk_ruta UNIQUE (ruta_ascd_pk, ruta_nombre)
+
+	, CONSTRAINT fk_ruta_clte_pk FOREIGN KEY (ruta_ascd_pk) REFERENCES tbl_asociado_ascd (ascd_pk)
+	, CONSTRAINT fk_ruta_orig_lgar_pk FOREIGN KEY (ruta_orig_lgar_pk) REFERENCES tbl_lugar_lgar (lgar_pk)
+	, CONSTRAINT fk_ruta_dest_lgar_pk FOREIGN KEY (ruta_dest_lgar_pk) REFERENCES tbl_lugar_lgar (lgar_pk)
+)\
+
+
+
+CREATE TABLE tbl_servicio_srvc (
+	srvc_pk BIGINT NOT NULL
+	, srvc_ascd_pk BIGINT NOT NULL
+	, srvc_vhcl_pk BIGINT NOT NULL
+	, srvc_usro_pk BIGINT NOT NULL
+	, srvc_estimado_fini TIMESTAMP NOT NULL
+	, srvc_estimado_ffin TIMESTAMP NOT NULL
+	, srvc_real_fini TIMESTAMP
+	, srvc_real_ffin TIMESTAMP
+	, srvc_inic_lgps_pk BIGINT
+	, srvc_orig_lugar VARCHAR(50)
+	, srvc_orig_direcc VARCHAR(200) NOT NULL
+	, srvc_orig_lat NUMERIC(9,6) NOT NULL
+	, srvc_orig_lon NUMERIC(9,6) NOT NULL
+	, srvc_orig_lgps_pk BIGINT
+	, srvc_dest_lugar VARCHAR(50)
+	, srvc_dest_direcc VARCHAR(200) NOT NULL
+	, srvc_dest_lat NUMERIC(9,6) NOT NULL
+	, srvc_dest_lon NUMERIC(9,6) NOT NULL
+	, srvc_dest_lgps_pk BIGINT
+	, srvc_vacio_km NUMERIC(9,4)
+	, srvc_lleno_km NUMERIC(9,4)
+	, srvc_importe NUMERIC(9,2)
+	, srvc_observaciones VARCHAR(500)
+
+	, CONSTRAINT pk_srvc PRIMARY KEY (srvc_pk)
+
+	, CONSTRAINT fk_srvc_ascd_pk FOREIGN KEY (srvc_ascd_pk) REFERENCES tbl_asociado_ascd (ascd_pk)
+--	, CONSTRAINT fk_srvc_vhcl_pk FOREIGN KEY (srvc_vhcl_pk) REFERENCES tbl_vehiculo_vhcl (vhcl_pk)
+--	, CONSTRAINT fk_srvc_usro_pk FOREIGN KEY (srvc_usro_pk) REFERENCES tbl_usuario_usro (usro_pk)
+)\
+
+CREATE INDEX ix_srvc_ascd_pk ON tbl_servicio_srvc(srvc_ascd_pk, srvc_estimado_fini DESC)\
+
+GRANT SELECT, INSERT ON tbl_servicio_srvc TO transport\
+
+
+
+
+
+
+
+INSERT INTO tbl_asociado_ascd (ascd_pk, ascd_email, ascd_nombre)
+SELECT nextval('seq_app'), CONCAT('plca_', serie.id, '@gmail.com'), CONCAT('Nombre ', serie.id)
+FROM generate_series(1, 100)  AS serie(id)\
+
+
+
+
 
 
 -- //@UNDO
 
+DROP TABLE tbl_servicio_srvc\
+DROP TABLE tbl_ruta_ruta\
+DROP TABLE tbl_lugar_lgar\
 
 TRUNCATE TABLE tbl_lectura_gps_lgps\
 
@@ -152,8 +212,7 @@ DROP TABLE tbl_vehiculo_vhcl\
 DROP TABLE tbl_placa_plca\
 DROP TABLE tbl_usuario_usro\
 DROP TABLE tbl_cliente_clte\
-DROP TABLE tbl_region_rgon\
-DROP TABLE tbl_pais_pais\
+DROP TABLE tbl_asociado_ascd\
 
 DROP SEQUENCE seq_app\
 

@@ -30,15 +30,15 @@ public final class LecturaGpsTest {
 		final LecturaGpsService lgpsService = new LecturaGpsService();
 		final PlacaService plcaService = new PlacaService();
 
-		final List<Placa> placas = plcaService.selectList(new PlacaCriteria(), 0, 20).getList();
+		final List<Placa> placas = plcaService.selectList(new PlacaCriteria(), 0, 500).getList();
 
 		final Calendar calendar = Calendar.getInstance();
 
 		// calendar.add(Calendar.DAY_OF_MONTH, -2);
 
-		for (int i = 0; i < 1000000; i++) {
-			if ((i % 10000) == 0) {
-				LOG.info(i);
+		for (int i = 0; i < 10000; i++) {
+			if ((i % 100) == 0) {
+				LOG.info(i * placas.size());
 			}
 
 			calendar.add(Calendar.MILLISECOND, 1);
