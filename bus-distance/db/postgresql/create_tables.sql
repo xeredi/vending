@@ -101,6 +101,7 @@ CREATE TABLE tbl_archivo_gps_agps (
 	, agps_fecha_proceso TIMESTAMP
 
 	, CONSTRAINT pk_agps PRIMARY KEY (agps_pk)
+	, CONSTRAINT uk_agps UNIQUE (agps_nombre)
 	, CONSTRAINT fk_agps_vhcl_pk FOREIGN KEY (agps_vhcl_pk) REFERENCES tbl_vehiculo_vhcl (vhcl_pk)
 	, CONSTRAINT fk_agps_plca_pk FOREIGN KEY (agps_plca_pk) REFERENCES tbl_placa_plca (plca_pk)
 );

@@ -10,15 +10,20 @@
         <result column="plca_codigo" property="codigo" />
         <result column="plca_fecha_fin" property="ffin" />
 
-        <association property="clte" javaType="Cliente">
-            <result column="plca_clte_pk" property="id" />
+        <association property="ascd" javaType="Asociado">
+            <result column="plca_ascd_pk" property="id" />
+            <result column="ascd_nombre" property="nombre" />
         </association>
     </resultMap>
 
     <sql id="SelectPrefix">
     <![CDATA[
         SELECT plca_pk, plca_codigo, plca_fecha_fin
-            , plca_clte_pk
+            , plca_ascd_pk
+            , (
+                SELECT ascd_nombre FROM tbl_asociado_ascd
+                WHERE ascd_pk = plca_ascd_pk
+            ) AS ascd_nombre
         FROM tbl_placa_plca
     ]]>
     </sql>
@@ -31,6 +36,10 @@
 
             <if test="codigo != null">
                 AND plca_codigo LIKE #{codigo}
+            </if>
+
+            <if test="ascdId != null">
+                AND plca_ascd_pk = #{ascdId}
             </if>
         </where>
     </sql>

@@ -7,9 +7,13 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.junit.Test;
 
+import com.google.inject.Guice;
+import com.google.inject.Injector;
+
 import xeredi.bus.erp.model.LecturaGps;
 import xeredi.bus.erp.model.Placa;
 import xeredi.bus.erp.model.PlacaCriteria;
+import xeredi.bus.erp.model.util.mybatis.TransportGuiceModule;
 
 // TODO: Auto-generated Javadoc
 /**
@@ -27,8 +31,10 @@ public final class LecturaGpsTest {
 	public void test() {
 		LOG.info("Alta de lecturas de GPS");
 
-		final LecturaGpsService lgpsService = new LecturaGpsService();
-		final PlacaService plcaService = new PlacaService();
+		final Injector injector = Guice.createInjector(new TransportGuiceModule());
+
+		final LecturaGpsService lgpsService = injector.getInstance(LecturaGpsService.class);
+		final PlacaService plcaService = injector.getInstance(PlacaService.class);
 
 		final List<Placa> placas = plcaService.selectList(new PlacaCriteria(), 0, 500).getList();
 

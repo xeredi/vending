@@ -57,6 +57,9 @@
         <postgresql.version>42.1.4</postgresql.version>
         <log4j.version>1.2.17</log4j.version>
         <struts2.version>2.5.14.1</struts2.version>
+        <mybatis-guice.version>3.10</mybatis-guice.version>
+        <guice.version>4.1.0</guice.version>
+        <javassist.version>3.22.0-GA</javassist.version>
 
         <junit.version>4.12</junit.version>
     </properties>

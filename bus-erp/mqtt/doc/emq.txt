@@ -24,6 +24,9 @@ Start/Stop the broker:
 	$ systemctl restart emqttd.service
 	$ systemctl status emqttd.service
 
+Panel de control (Dashboard)
+	http://localhost:18083
+
 ***********************************************************************************************
 TUNING
 	http://emqttd-docs.readthedocs.io/en/latest/tune.html

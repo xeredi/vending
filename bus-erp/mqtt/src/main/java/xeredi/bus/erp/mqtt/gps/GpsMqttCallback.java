@@ -45,11 +45,11 @@ public final class GpsMqttCallback implements MqttCallback {
 		mapper.setDateFormat(JSON_DATE_FORMAT);
 
 		try {
-			final GpsData[] gpsDataArray = mapper.readValue(message.getPayload(), GpsData[].class);
+			final MqttData mqttData = mapper.readValue(message.getPayload(), MqttData.class);
 
 			count++;
 
-			if ((count % 5000) == 0) {
+			if ((count % 10) == 0) {
 				System.out.println(JSON_DATE_FORMAT.format(Calendar.getInstance().getTime()) + ": " + count);
 			}
 		} catch (final JsonParseException ex) {

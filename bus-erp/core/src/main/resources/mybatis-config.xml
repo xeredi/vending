@@ -8,7 +8,7 @@
 
 	<settings>
 		<setting name="logImpl" value="NO_LOGGING" />
-		<setting name="proxyFactory" value="CGLIB" />
+		<setting name="proxyFactory" value="JAVASSIST" /><!-- CGLIB JAVASSIST -->
 		<setting name="jdbcTypeForNull" value="NULL" />
 	</settings>
 

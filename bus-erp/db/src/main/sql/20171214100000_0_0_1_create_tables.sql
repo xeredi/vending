@@ -189,13 +189,43 @@ GRANT SELECT, INSERT ON tbl_servicio_srvc TO transport\
 
 
 
-
+-- Asociados
 INSERT INTO tbl_asociado_ascd (ascd_pk, ascd_email, ascd_nombre)
 SELECT nextval('seq_app'), CONCAT('plca_', serie.id, '@gmail.com'), CONCAT('Nombre ', serie.id)
 FROM generate_series(1, 100)  AS serie(id)\
 
+-- Usuarios Administradores
+INSERT INTO tbl_usuario_usro (usro_pk, usro_ascd_pk, usro_rol, usro_email, usro_contrasenia, usro_nombre)
+VALUES (1000, NULL, 'M', 'xeredi@gmail.com', 'changeme', 'Xesus')\
+-- Usuarios Asociados
+INSERT INTO tbl_usuario_usro (usro_pk, usro_ascd_pk, usro_rol, usro_email, usro_contrasenia, usro_nombre)
+SELECT nextval('seq_app'), ascd_pk, 'A', ascd_email, 'changeMe', CONCAT('Nombre ', currval('seq_app'))
+FROM tbl_asociado_ascd\
+-- Usuarios Conductores
+INSERT INTO tbl_usuario_usro (usro_pk, usro_ascd_pk, usro_rol, usro_email, usro_contrasenia, usro_nombre)
+SELECT nextval('seq_app'), ascd_pk, 'D', CONCAT(currval('seq_app'), '@gmail.com'), 'changeMe', CONCAT('Nombre ', currval('seq_app'))
+FROM tbl_asociado_ascd, generate_series(1, 5)  AS serie(id)\
 
+-- Placas
+INSERT INTO tbl_placa_plca (plca_pk, plca_ascd_pk, plca_codigo, plca_fecha_fin)
+SELECT nextval('seq_app'), ascd_pk, CONCAT('plca_', currval('seq_app')), '2050-01-01 00:00:00'
+FROM tbl_asociado_ascd, generate_series(1, 5)  AS serie(id)
+\
+UPDATE tbl_placa_plca SET plca_codigo = '00000000ecec8745'
+WHERE plca_pk = currval('seq_app')
+\
 
+-- Vehiculos
+INSERT INTO tbl_vehiculo_vhcl (vhcl_pk, vhcl_ascd_pk, vhcl_matricula, vhcl_plca_pk)
+SELECT nextval('seq_app'), plca_ascd_pk, CONCAT('mat_', currval('seq_app')), plca_pk
+FROM tbl_placa_plca
+\
+
+-- Clientes
+INSERT INTO tbl_cliente_clte (clte_pk, clte_ascd_pk, clte_email, clte_nombre)
+SELECT nextval('seq_app'), ascd_pk, CONCAT('clte_', serie.id, '@gmail.com'), CONCAT('Nombre ', serie.id)
+FROM tbl_asociado_ascd, generate_series(1, 8)  AS serie(id)
+\
 
 
 
@@ -205,7 +235,7 @@ DROP TABLE tbl_servicio_srvc\
 DROP TABLE tbl_ruta_ruta\
 DROP TABLE tbl_lugar_lgar\
 
-TRUNCATE TABLE tbl_lectura_gps_lgps\
+TRUNCATE TABLE tbl_lectura_gps_lgps CASCADE\
 
 DROP TABLE tbl_lectura_gps_lgps\
 DROP TABLE tbl_vehiculo_vhcl\

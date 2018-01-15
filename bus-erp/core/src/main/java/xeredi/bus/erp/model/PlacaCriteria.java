@@ -14,4 +14,7 @@ public class PlacaCriteria {
 
 	/** The codigo. */
 	private String codigo;
+
+	/** The ascd id. */
+	private Long ascdId;
 }

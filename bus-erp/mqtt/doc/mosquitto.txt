@@ -11,3 +11,16 @@ PUBLICAR MENSAJE EN UNA COLA
 	$ mosquitto_pub -h 127.0.0.1 -t gps_data -m "Hello world"
 
 ***********************************************************************************************
+CLIENTE EN RASPBERRY
+	https://blog.wouterspaans.nl/2017/02/17/install-mqtt-client-on-a-raspberry-pi/
+	$ sudo apt-get install mosquitto-clients
+	$ mosquitto_pub -h 192.168.1.101 -t gps_data -m "Hello world"
+
+***********************************************************************************************
+ABRIR PUERTOS EN EL SERVIDOR
+	https://www.cyberciti.biz/tips/no-route-to-host-error-and-solution.html
+	http://ask.xmodulo.com/open-port-firewall-centos-rhel.html
+
+	Hacer publico el puerto 1883
+	$ sudo firewall-cmd --zone=public --add-port=1883/tcp --permanent
+	$ sudo firewall-cmd --reload

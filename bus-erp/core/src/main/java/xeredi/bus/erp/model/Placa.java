@@ -8,7 +8,7 @@ import lombok.Data;
 public class Placa {
 	private Long id;
 
-	private Cliente clte;
+	private Asociado ascd;
 
 	private String codigo;
 

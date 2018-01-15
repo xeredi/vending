@@ -103,29 +103,8 @@ DROP FUNCTION distanciaKm(DOUBLE PRECISION, DOUBLE PRECISION, DOUBLE PRECISION, 
 
 
 
-INSERT INTO tbl_cliente_clte (clte_pk, clte_email, clte_nombre)
-SELECT nextval('seq_app'), CONCAT('plca_', serie.id, '@gmail.com'), CONCAT('Nombre ', serie.id)
-FROM generate_series(1, 100)  AS serie(id)\
-
-INSERT INTO tbl_usuario_usro (usro_pk, usro_clte_pk, usro_rol, usro_email, usro_contrasenia, usro_nombre) VALUES (1000, NULL, 'M', 'xeredi@gmail.com', 'changeme', 'Xesus')\
 
 
-INSERT INTO tbl_usuario_usro (usro_pk, usro_clte_pk, usro_rol, usro_email, usro_contrasenia, usro_nombre)
-SELECT nextval('seq_app'), clte_pk, 'C', clte_email, 'changeMe', CONCAT('Nombre ', currval('seq_app'))
-FROM tbl_cliente_clte\
-INSERT INTO tbl_usuario_usro (usro_pk, usro_clte_pk, usro_rol, usro_email, usro_contrasenia, usro_nombre)
-SELECT nextval('seq_app'), clte_pk, 'D', CONCAT(currval('seq_app'), '@gmail.com'), 'changeMe', CONCAT('Nombre ', currval('seq_app'))
-FROM tbl_cliente_clte, generate_series(1, 5)  AS serie(id)\
 
-INSERT INTO tbl_placa_plca (plca_pk, plca_clte_pk, plca_codigo, plca_fecha_fin)
-SELECT nextval('seq_app'), clte_pk, CONCAT('plca_', currval('seq_app')), '2050-01-01 00:00:00'
-FROM tbl_cliente_clte, generate_series(1, 5)  AS serie(id)
-\
-UPDATE tbl_placa_plca SET plca_codigo = '00000000ecec8745'
-WHERE plca_pk = currval('seq_app')
-\
 
-INSERT INTO tbl_vehiculo_vhcl (vhcl_pk, vhcl_clte_pk, vhcl_matricula, vhcl_plca_pk)
-SELECT nextval('seq_app'), plca_clte_pk, CONCAT('mat_', currval('seq_app')), plca_pk
-FROM tbl_placa_plca
-\
+
