@@ -16,6 +16,11 @@
         <result column="srvc_util_erp_km" property="utilErpKm" />
         <result column="srvc_vacio_erp_km" property="vacioErpKm" />
 
+        <result column="srvc_orig_lat" property="origLat" />
+        <result column="srvc_orig_lon" property="origLon" />
+        <result column="srvc_dest_lat" property="destLat" />
+        <result column="srvc_dest_lon" property="destLon" />
+
         <association property="ruta" javaType="Ruta">
             <result column="srvc_ruta_pk" property="id" />
         </association>
@@ -50,7 +55,12 @@
 			, srvc_cdtr2_pk
 			, srvc_vhcl_pk
 			, srvc_lgps_orig_pk
-			, srvc_lgps_dest_pk
+            , srvc_lgps_dest_pk
+
+            , srvc_orig_lat
+            , srvc_orig_lon
+            , srvc_dest_lat
+            , srvc_dest_lon
 		FROM
 		    tbl_servicio_srvc
     ]]>
@@ -80,8 +90,8 @@
 		                AND lgps_fecha BETWEEN
 		                	(srvc_fecha_desde - interval '${distanciaMaximaMinutos} minutes')
 		                	AND (srvc_fecha_desde + interval '${distanciaMaximaMinutos} minutes')
-		                AND distanciaKm(lgps_latitude, lgps_longitude, ruta_orig_lat, ruta_orig_lon) < #{distanciaMaximaKm}
-		            ORDER BY distanciaKm(lgps_latitude, lgps_longitude, ruta_orig_lat, ruta_orig_lon)
+		                AND distanciaKm(lgps_latitude, lgps_longitude, COALESCE(ruta_orig_lat, srvc_orig_lat), COALESCE(ruta_orig_lon, srvc_orig_lon)) < #{distanciaMaximaKm}
+		            ORDER BY distanciaKm(lgps_latitude, lgps_longitude, COALESCE(ruta_orig_lat, srvc_orig_lat), COALESCE(ruta_orig_lon, srvc_orig_lon))
 		            FETCH NEXT 1 ROWS ONLY
 		        ) AS srvc_lgps_orig_pk
 		        , (
@@ -93,16 +103,24 @@
 		                AND lgps_fecha BETWEEN
 		                	(srvc_fecha_hasta - interval '${distanciaMaximaMinutos} minutes')
 		                	AND (srvc_fecha_hasta + interval '${distanciaMaximaMinutos} minutes')
-		                AND distanciaKm(lgps_latitude, lgps_longitude, ruta_dest_lat, ruta_dest_lon) < #{distanciaMaximaKm}
-		            ORDER BY distanciaKm(lgps_latitude, lgps_longitude, ruta_dest_lat, ruta_dest_lon)
+		                AND distanciaKm(lgps_latitude, lgps_longitude, COALESCE(ruta_dest_lat, srvc_dest_lat), COALESCE(ruta_dest_lon, srvc_dest_lon)) < #{distanciaMaximaKm}
+		            ORDER BY distanciaKm(lgps_latitude, lgps_longitude, COALESCE(ruta_dest_lat, srvc_dest_lat), COALESCE(ruta_dest_lon, srvc_dest_lon))
 		            FETCH NEXT 1 ROWS ONLY
 		        ) AS srvc_lgps_dest_pk
 		    FROM tbl_servicio_srvc s
-		        INNER JOIN tbl_ruta_ruta r ON
+		        LEFT JOIN tbl_ruta_ruta r ON
 		            ruta_pk = srvc_ruta_pk
 		    WHERE
 		        1 = 1
-		        AND srvc_ruta_pk IS NOT NULL
+		        AND (
+                    srvc_ruta_pk IS NOT NULL
+                    OR (
+                        srvc_orig_lat IS NOT NULL
+                        AND srvc_orig_lon IS NOT NULL
+                        AND srvc_dest_lat IS NOT NULL
+                        AND srvc_dest_lon IS NOT NULL
+                    )
+                )
 		        AND srvc_vhcl_pk IS NOT NULL
 		        AND srvc_fecha_desde >= (
 		            SELECT MIN(lgps_fecha) - interval '1 days'
@@ -137,13 +155,16 @@
     <insert id="insertErpData" parameterType="Servicio">
     <![CDATA[
         INSERT INTO tbl_servicio_srvc (srvc_pk, srvc_codigo_servicio, srvc_codigo_parte, srvc_ruta_pk
-        	, srvc_cdtr1_pk, srvc_cdtr2_pk, srvc_vhcl_pk, srvc_fecha_desde, srvc_fecha_hasta, srvc_util_erp_km, srvc_vacio_erp_km)
+        	, srvc_cdtr1_pk, srvc_cdtr2_pk, srvc_vhcl_pk, srvc_fecha_desde, srvc_fecha_hasta, srvc_util_erp_km, srvc_vacio_erp_km
+            , srvc_orig_lat, srvc_orig_lon, srvc_dest_lat, srvc_dest_lon
+        )
         VALUES (#{id}, #{codigoServicio}, #{codigoParte}
         	, (SELECT ruta_pk FROM tbl_ruta_ruta WHERE ruta_codigo = #{ruta.codigo})
         	, (SELECT cdtr_pk FROM tbl_conductor_cdtr WHERE cdtr_codigo = #{conductor1.codigo})
         	, (SELECT cdtr_pk FROM tbl_conductor_cdtr WHERE cdtr_codigo = #{conductor2.codigo})
         	, (SELECT vhcl_pk FROM tbl_vehiculo_vhcl WHERE vhcl_codigo = #{vehiculo.codigo})
         	, #{fechaDesde}, #{fechaHasta}, #{utilErpKm}, #{vacioErpKm}
+            , #{origLat}, #{origLon}, #{destLat}, #{destLon}
        	)
     ]]>
     </insert>
@@ -160,6 +181,10 @@
         	, srvc_fecha_hasta = #{fechaHasta}
         	, srvc_util_erp_km = #{utilErpKm}
         	, srvc_vacio_erp_km = #{vacioErpKm}
+            , srvc_orig_lat = #{origLat}
+            , srvc_orig_lon = #{origLon}
+            , srvc_dest_lat = #{destLat}
+            , srvc_dest_lon = #{destLon}
        	WHERE srvc_codigo_parte = #{codigoParte}
     ]]>
     </update>

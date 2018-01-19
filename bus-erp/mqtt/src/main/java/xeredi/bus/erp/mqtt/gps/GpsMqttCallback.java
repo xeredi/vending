@@ -2,14 +2,19 @@ package xeredi.bus.erp.mqtt.gps;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
-import java.util.Calendar;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.eclipse.paho.client.mqttv3.IMqttDeliveryToken;
 import org.eclipse.paho.client.mqttv3.MqttCallback;
 import org.eclipse.paho.client.mqttv3.MqttMessage;
 
 import com.fasterxml.jackson.core.JsonParseException;
+import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+
+import lombok.NonNull;
+import xeredi.bus.erp.model.service.LecturaGpsService;
 
 // TODO: Auto-generated Javadoc
 /**
@@ -17,45 +22,65 @@ import com.fasterxml.jackson.databind.ObjectMapper;
  */
 public final class GpsMqttCallback implements MqttCallback {
 
+	/** The Constant LOG. */
+	private static final Log LOG = LogFactory.getLog(GpsMqttCallback.class);
+
 	/** The Constant JSON_DATE_FORMAT. */
 	private static final DateFormat JSON_DATE_FORMAT = new SimpleDateFormat("yyyyMMddHHmmss");
 
+	/** The count. */
 	private int count = 0;
+
+	/** The lgps service. */
+	private final LecturaGpsService lgpsService;
+
+	/** The mapper. */
+	private final ObjectMapper mapper;
+
+	/**
+	 * Instantiates a new gps mqtt callback.
+	 *
+	 * @param algpsService
+	 *            the algps service
+	 */
+	public GpsMqttCallback(final @NonNull LecturaGpsService algpsService) {
+		super();
+
+		this.lgpsService = algpsService;
+		this.mapper = new ObjectMapper();
+
+		this.mapper.setDateFormat(JSON_DATE_FORMAT);
+	}
 
 	/**
 	 * {@inheritDoc}
 	 */
 	public void connectionLost(final Throwable cause) {
-		System.err.println("Connection Lost!!!");
-		cause.printStackTrace(System.err);
+		LOG.fatal("GpsMqttCallback Connection Lost!", cause);
 	}
 
 	/**
 	 * {@inheritDoc}
 	 */
 	public void messageArrived(final String topic, final MqttMessage message) throws Exception {
-		// System.out.println("Message Arrived. Topic: " + topic);
-
-		// Example: $ mosquitto_pub -h 127.0.0.1 -t gps_data -m "{\"placa\":\"test\",
-		// \"lat\": 6.6, \"lon\": 5.5, \"alt\": 4.4, \"spd\": 1.1, \"fecha\":
-		// \"20171220092256\"}"
-
-		final ObjectMapper mapper = new ObjectMapper();
-
-		mapper.setDateFormat(JSON_DATE_FORMAT);
-
 		try {
 			final MqttData mqttData = mapper.readValue(message.getPayload(), MqttData.class);
 
+			lgpsService.insert(mqttData.getSenderId(), mqttData.getMessageList());
+
 			count++;
 
-			if ((count % 10) == 0) {
-				System.out.println(JSON_DATE_FORMAT.format(Calendar.getInstance().getTime()) + ": " + count);
+			if ((count % 100) == 0) {
+				if (LOG.isInfoEnabled()) {
+					LOG.info(count);
+				}
 			}
 		} catch (final JsonParseException ex) {
-			System.err.println("Error parsing json");
-
-			ex.printStackTrace(System.err);
+			LOG.error(ex, ex);
+		} catch (final JsonMappingException ex) {
+			LOG.error(ex, ex);
+		} catch (final Throwable ex) {
+			LOG.fatal(ex, ex);
 		}
 	}
 
@@ -63,7 +88,9 @@ public final class GpsMqttCallback implements MqttCallback {
 	 * {@inheritDoc}
 	 */
 	public void deliveryComplete(final IMqttDeliveryToken token) {
-		System.out.println("Delivery complete");
+		if (LOG.isInfoEnabled()) {
+			LOG.info("Delivery complete");
+		}
 	}
 
 }

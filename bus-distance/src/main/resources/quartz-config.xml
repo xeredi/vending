@@ -20,7 +20,7 @@
 				<job-name>DistanceJob</job-name>
 
 				<job-group>BusJobGroup</job-group>
-				<cron-expression>0 0/10 * * * ?</cron-expression>
+				<cron-expression>0 0/5 * * * ?</cron-expression>
                 <!-- cron-expression>0 0 0 * * ?</cron-expression-->
 
 				<!--

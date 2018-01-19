@@ -11,7 +11,9 @@
 		<result column="fechaDesde" property="fechaDesde" />
 		<result column="fechaHasta" property="fechaHasta" />
 		<result column="kilometros" property="utilErpKm" />
-		<result column="kilometrosExentos" property="vacioErpKm" />
+        <result column="kilometrosExentos" property="vacioErpKm" />
+        <result column="orig" property="orig" />
+        <result column="dest" property="dest" />
 
 		<association property="ruta" javaType="Ruta">
 			<result column="codRuta" property="codigo" />
@@ -46,6 +48,8 @@
 					AND conductor1o2 = 2) AS codConductor2
 			, p.kilometros
 			, p.kilometrosExentos
+            , SUBSTRING(p.lugarinicio, charindex('[', p.lugarinicio, 0), charindex(']', p.lugarinicio, charindex('[', p.lugarinicio, 0))) AS orig
+            , SUBSTRING(p.lugarfin, charindex('[', p.lugarfin, 0), charindex(']', p.lugarfin, charindex('[', p.lugarfin, 0))) AS dest
 		FROM PartesTrabajo p
 			LEFT JOIN IncidenciasMovimientos inc ON
 				inc.IdMovimiento = p.IdMovimiento

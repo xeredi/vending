@@ -56,8 +56,8 @@ public final class LecturaGpsTest {
 				lgps.setFecha(calendar.getTime());
 				lgps.setLat(Math.random());
 				lgps.setLon(Math.random());
-				lgps.setAlt(Math.random());
 				lgps.setSpd(Math.random());
+				lgps.setMargen(0.005);
 
 				lgpsService.insert(lgps);
 			}

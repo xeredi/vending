@@ -10,12 +10,10 @@ import lombok.Data;
 /**
  * Instantiates a new servicio.
  */
-
-/**
- * Instantiates a new servicio.
- */
 @Data
 public class Servicio {
+
+	/** The time format. */
 	public static DateFormat TIME_FORMAT = new SimpleDateFormat("HH:mm");
 
 	/** The id. */
@@ -51,8 +49,10 @@ public class Servicio {
 	/** The vacio km. */
 	private Double vacioKm;
 
+	/** The pasajeros. */
 	private Integer pasajeros;
 
+	/** The importe. */
 	private Double importe;
 
 	/** The util erp km. */
@@ -67,10 +67,38 @@ public class Servicio {
 	/** The lectura gps destino. */
 	private LecturaGps lecturaGpsDestino;
 
+	/** The orig. */
+	private String orig;
+
+	/** The dest. */
+	private String dest;
+
+	/** The orig lat. */
+	private Double origLat;
+
+	/** The orig lon. */
+	private Double origLon;
+
+	/** The dest lat. */
+	private Double destLat;
+
+	/** The dest lon. */
+	private Double destLon;
+
+	/**
+	 * Gets the hora desde string.
+	 *
+	 * @return the hora desde string
+	 */
 	public String getHoraDesdeString() {
 		return fechaDesde == null ? null : TIME_FORMAT.format(fechaDesde);
 	}
 
+	/**
+	 * Gets the hora hasta string.
+	 *
+	 * @return the hora hasta string
+	 */
 	public String getHoraHastaString() {
 		return fechaHasta == null ? null : TIME_FORMAT.format(fechaHasta);
 	}

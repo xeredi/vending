@@ -98,7 +98,6 @@ CREATE TABLE tbl_lectura_gps_lgps (
 	, lgps_fecha TIMESTAMP NOT NULL
 	, lgps_lat NUMERIC(9,6) NOT NULL
 	, lgps_lon NUMERIC(9,6) NOT NULL
-	, lgps_alt NUMERIC(12,6) NOT NULL
 	, lgps_spd NUMERIC(9,5) NOT NULL
 	, lgps_dst NUMERIC(12,4) NOT NULL
 	, lgps_elt NUMERIC(12,4) NOT NULL

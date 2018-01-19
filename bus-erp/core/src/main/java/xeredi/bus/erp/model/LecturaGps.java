@@ -29,7 +29,7 @@ public class LecturaGps {
 	private Double lon;
 
 	/** The alt. */
-	private Double alt;
+	private Double margen;
 
 	/** The spd. */
 	private Double spd;

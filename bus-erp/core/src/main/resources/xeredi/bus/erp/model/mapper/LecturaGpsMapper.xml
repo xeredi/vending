@@ -11,8 +11,8 @@
                 , #{fecha, mode=IN, jdbcType=TIMESTAMP}
                 , #{lat, mode=IN, jdbcType=DOUBLE}
                 , #{lon, mode=IN, jdbcType=DOUBLE}
-                , #{alt, mode=IN, jdbcType=DOUBLE}
                 , #{spd, mode=IN, jdbcType=DOUBLE}
+                , #{margen, mode=IN, jdbcType=DOUBLE}
             )
         }
     ]]>

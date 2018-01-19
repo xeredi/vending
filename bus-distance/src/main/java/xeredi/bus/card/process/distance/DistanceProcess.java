@@ -150,6 +150,28 @@ public final class DistanceProcess {
 				for (final Servicio servicio : servicioErpMapper.selectList(servicioCriteria)) {
 					servicioCount++;
 
+					try {
+						if (servicio.getOrig() != null && servicio.getOrig().startsWith("[")
+								&& servicio.getOrig().endsWith("]") && servicio.getOrig().indexOf(",") > 0) {
+							servicio.setOrigLat(Double.valueOf(servicio.getOrig()
+									.substring(servicio.getOrig().indexOf("[") + 1, servicio.getOrig().indexOf(","))));
+							servicio.setOrigLon(Double.valueOf(servicio.getOrig()
+									.substring(servicio.getOrig().indexOf(",") + 1, servicio.getOrig().indexOf("]"))));
+						}
+
+						if (servicio.getDest() != null && servicio.getDest().startsWith("[")
+								&& servicio.getDest().endsWith("]") && servicio.getDest().indexOf(",") > 0) {
+							servicio.setDestLat(Double.valueOf(servicio.getDest()
+									.substring(servicio.getDest().indexOf("[") + 1, servicio.getDest().indexOf(","))));
+							servicio.setDestLon(Double.valueOf(servicio.getDest()
+									.substring(servicio.getDest().indexOf(",") + 1, servicio.getDest().indexOf("]"))));
+						}
+					} catch (final NumberFormatException ex) {
+						LOG.error("Error leyendo coordenadas de parte", ex);
+					} catch (final StringIndexOutOfBoundsException ex) {
+						LOG.error("Error leyendo coordenadas de parte", ex);
+					}
+
 					if (servicioMapper.exists(servicio)) {
 						servicioMapper.updateErpData(servicio);
 					} else {
