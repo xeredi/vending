@@ -22,7 +22,7 @@ import xeredi.bus.erp.model.mapper.LecturaGpsMapper;
 /**
  * The Class LecturaGpsService.
  */
-@Transactional(executorType = ExecutorType.REUSE)
+@Transactional(executorType = ExecutorType.BATCH)
 public class LecturaGpsService {
 
 	/** The Constant LOG. */

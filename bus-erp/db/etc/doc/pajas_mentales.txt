@@ -1,9 +1,12 @@
 Resumen de un viaje:
 
 SELECT
-    round(extract('epoch' from lgps_fecha) / 300) * 300 as timestamp
+    TIMESTAMP 'epoch' + INTERVAL '1 second' * trunc(extract('epoch' from lgps_fecha) / 300) * 300 as fecha_redondeo
+    , min(lgps_fecha)
+    , max(lgps_fecha)
     , lgps_vhcl_pk
     , count(lgps_vhcl_pk)
+    , min(lgps_pk)
     , max(lgps_pk)
     , max(lgps_spd)
     , min(lgps_spd)
@@ -13,7 +16,8 @@ SELECT
 FROM tbl_lectura_gps_lgps
 WHERE
 	lgps_fecha >= '2018-01-17 00:00:00'
-	AND lgps_fecha < '2018-01-17 01:30:00'
+	AND lgps_fecha < '2018-01-17 04:00:00'
 	AND lgps_vhcl_pk = 1700
-GROUP BY lgps_vhcl_pk, round(extract('epoch' from lgps_fecha) / 300)
+GROUP BY lgps_vhcl_pk, trunc(extract('epoch' from lgps_fecha) / 300)
+ORDER BY fecha_redondeo
 ;

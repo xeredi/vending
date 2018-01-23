@@ -3,12 +3,29 @@
 
 <log4j:configuration xmlns:log4j="http://jakarta.apache.org/log4j/">
     <appender name="log" class="org.apache.log4j.RollingFileAppender">
-        <param name="File" value="/home/xeredi/proyectos/deploy/log/transport.log" />
+        <param name="File" value="/home/xeredi/proyectos/deploy/log/transport/transport.log" />
         <param name="MaxFileSize" value="8192KB" />
         <param name="MaxBackupIndex" value="5" />
         <layout class="org.apache.log4j.PatternLayout">
             <param name="ConversionPattern" value="%-5p %d [%l]%n\t%m%n" />
         </layout>
+        <filter class="org.apache.log4j.varia.LevelRangeFilter">
+            <param name="LevelMin" value="debug" />
+            <param name="AcceptOnMatch" value="true" />
+        </filter>
+    </appender>
+
+    <appender name="error" class="org.apache.log4j.RollingFileAppender">
+        <param name="File" value="/home/xeredi/proyectos/deploy/log/transport/error.log" />
+        <param name="MaxFileSize" value="8192KB" />
+        <param name="MaxBackupIndex" value="5" />
+        <layout class="org.apache.log4j.PatternLayout">
+            <param name="ConversionPattern" value="%-5p %d [%l]%n\t%m%n" />
+        </layout>
+        <filter class="org.apache.log4j.varia.LevelRangeFilter">
+            <param name="LevelMin" value="warn" />
+            <param name="AcceptOnMatch" value="true" />
+        </filter>
     </appender>
 
     <logger name='xeredi'>
@@ -18,5 +35,6 @@
         <level value="ERROR" />
 
         <appender-ref ref="log" />
+        <appender-ref ref="error" />
     </root>
 </log4j:configuration>
