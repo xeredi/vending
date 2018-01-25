@@ -109,6 +109,16 @@ BEGIN
 					AND plca_codigo = placa_serial
 					AND plca_fecha_fin > fecha
 			)
+			AND (
+				lgps_fecha IS NULL
+				OR (
+					lgps_fecha < fecha
+					AND (
+						lgps_lat <> lat
+						OR lgps_lon <> lon
+					)
+				)
+			)
 	)
 	INSERT INTO tbl_lectura_gps_lgps (
 		lgps_pk, lgps_plca_pk, lgps_vhcl_pk, lgps_fecha, lgps_lat, lgps_lon, lgps_spd, lgps_dst, lgps_elt
