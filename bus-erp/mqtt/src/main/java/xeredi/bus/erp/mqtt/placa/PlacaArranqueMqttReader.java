@@ -11,30 +11,34 @@ import com.google.inject.Guice;
 import com.google.inject.Injector;
 
 import lombok.NonNull;
-import xeredi.bus.erp.model.service.PlacaPingService;
+import xeredi.bus.erp.model.service.PlacaArranqueService;
 import xeredi.bus.erp.model.util.mybatis.TransportGuiceModule;
 import xeredi.bus.erp.mqtt.MqttReader;
 
-public final class PlacaPingMqttReader extends MqttReader {
+// TODO: Auto-generated Javadoc
+/**
+ * The Class PlacaArranqueMqttReader.
+ */
+public final class PlacaArranqueMqttReader extends MqttReader {
 
 	/** The Constant LOG. */
-	private static final Log LOG = LogFactory.getLog(PlacaPingMqttReader.class);
+	private static final Log LOG = LogFactory.getLog(PlacaArranqueMqttReader.class);
 
 	/** The lgps service. */
-	private final PlacaPingService plpgService;
+	private final PlacaArranqueService plaqService;
 
 	/**
-	 * Instantiates a new gps mqtt reader.
+	 * Instantiates a new placa arranque mqtt reader.
 	 *
-	 * @param algpsService
-	 *            the algps service
+	 * @param aplaqService
+	 *            the aplaq service
 	 * @throws MqttException
 	 *             the mqtt exception
 	 */
-	public PlacaPingMqttReader(final @NonNull PlacaPingService aplpgService) throws MqttException {
-		super("tcp://localhost:1883", "placa_ping_data", MqttClient.generateClientId());
+	public PlacaArranqueMqttReader(final @NonNull PlacaArranqueService aplaqService) throws MqttException {
+		super("tcp://localhost:1883", "placa_arranque_data", MqttClient.generateClientId());
 
-		this.plpgService = aplpgService;
+		this.plaqService = aplaqService;
 	}
 
 	/**
@@ -42,7 +46,7 @@ public final class PlacaPingMqttReader extends MqttReader {
 	 */
 	@Override
 	protected void doMessageArrived(final @NonNull String senderId, final @NonNull List<String> messageList) {
-		plpgService.insert(senderId, messageList);
+		plaqService.insert(senderId, messageList);
 	}
 
 	/**
@@ -53,14 +57,14 @@ public final class PlacaPingMqttReader extends MqttReader {
 	 */
 	public static void main(final String[] args) {
 		final Injector injector = Guice.createInjector(new TransportGuiceModule());
-		final PlacaPingService plpgService = injector.getInstance(PlacaPingService.class);
+		final PlacaArranqueService plpgService = injector.getInstance(PlacaArranqueService.class);
 
 		try {
-			final PlacaPingMqttReader reader = new PlacaPingMqttReader(plpgService);
+			final PlacaArranqueMqttReader reader = new PlacaArranqueMqttReader(plpgService);
 
 			reader.start();
 		} catch (final MqttException ex) {
-			LOG.fatal("ERROR Starting PlacaPingMqttReader", ex);
+			LOG.fatal("ERROR Starting PlacaArranqueMqttReader", ex);
 		}
 	}
 

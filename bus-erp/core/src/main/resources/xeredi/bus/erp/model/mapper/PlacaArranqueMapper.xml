@@ -2,11 +2,11 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
-<mapper namespace="xeredi.bus.erp.model.mapper.PlacaPingMapper">
-    <insert id="insert" parameterType="PlacaPing" statementType="CALLABLE">
+<mapper namespace="xeredi.bus.erp.model.mapper.PlacaArranqueMapper">
+    <insert id="insert" parameterType="PlacaArranque" statementType="CALLABLE">
     <![CDATA[
         {
-            CALL guardar_placa_ping(
+            CALL guardar_placa_arranque(
                 #{plca.codigo, mode=IN, jdbcType=VARCHAR}
                 , #{fecha, mode=IN, jdbcType=TIMESTAMP}
             )
