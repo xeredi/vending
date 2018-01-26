@@ -1,7 +1,4 @@
-/*
- *
- */
-package xeredi.bus.erp.mqtt.gps;
+package xeredi.bus.erp.mqtt.placa;
 
 import java.util.List;
 
@@ -14,21 +11,18 @@ import com.google.inject.Guice;
 import com.google.inject.Injector;
 
 import lombok.NonNull;
-import xeredi.bus.erp.model.service.LecturaGpsService;
+import xeredi.bus.erp.model.service.PlacaPingService;
 import xeredi.bus.erp.model.util.mybatis.TransportGuiceModule;
 import xeredi.bus.erp.mqtt.MqttReader;
+import xeredi.bus.erp.mqtt.gps.GpsMqttReader;
 
-// TODO: Auto-generated Javadoc
-/**
- * The Class GpsMqttReader.
- */
-public final class GpsMqttReader extends MqttReader {
+public final class PlacaPingMqttReader extends MqttReader {
 
 	/** The Constant LOG. */
 	private static final Log LOG = LogFactory.getLog(GpsMqttReader.class);
 
 	/** The lgps service. */
-	private final LecturaGpsService lgpsService;
+	private final PlacaPingService plpgService;
 
 	/**
 	 * Instantiates a new gps mqtt reader.
@@ -38,10 +32,10 @@ public final class GpsMqttReader extends MqttReader {
 	 * @throws MqttException
 	 *             the mqtt exception
 	 */
-	public GpsMqttReader(final @NonNull LecturaGpsService algpsService) throws MqttException {
-		super("tcp://localhost:1883", "gps_data", MqttClient.generateClientId());
+	public PlacaPingMqttReader(final @NonNull PlacaPingService aplpgService) throws MqttException {
+		super("tcp://localhost:1883", "placa_ping_data", MqttClient.generateClientId());
 
-		this.lgpsService = algpsService;
+		this.plpgService = aplpgService;
 	}
 
 	/**
@@ -49,7 +43,7 @@ public final class GpsMqttReader extends MqttReader {
 	 */
 	@Override
 	protected void doMessageArrived(final @NonNull String senderId, final @NonNull List<String> messageList) {
-		lgpsService.insert(senderId, messageList);
+		plpgService.insert(senderId, messageList);
 	}
 
 	/**
@@ -60,14 +54,15 @@ public final class GpsMqttReader extends MqttReader {
 	 */
 	public static void main(final String[] args) {
 		final Injector injector = Guice.createInjector(new TransportGuiceModule());
-		final LecturaGpsService lgpsService = injector.getInstance(LecturaGpsService.class);
+		final PlacaPingService plpgService = injector.getInstance(PlacaPingService.class);
 
 		try {
-			final GpsMqttReader reader = new GpsMqttReader(lgpsService);
+			final PlacaPingMqttReader reader = new PlacaPingMqttReader(plpgService);
 
 			reader.start();
 		} catch (final MqttException ex) {
-			LOG.fatal("ERROR Starting GpsMqttReader", ex);
+			LOG.fatal("ERROR Starting PlacaPingMqttReader", ex);
 		}
 	}
+
 }

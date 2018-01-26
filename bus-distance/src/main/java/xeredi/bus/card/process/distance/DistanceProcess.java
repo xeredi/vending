@@ -167,9 +167,17 @@ public final class DistanceProcess {
 									.substring(servicio.getDest().indexOf(",") + 1, servicio.getDest().indexOf("]"))));
 						}
 					} catch (final NumberFormatException ex) {
-						LOG.error("Error leyendo coordenadas de parte", ex);
+						LOG.error(
+								"Error leyendo coordenadas de parte: " + servicio.getCodigoParte() + ", vehiculo: "
+										+ servicio.getVehiculo().getCodigo() + ", fechaDesde: "
+										+ servicio.getFechaDesde() + ", horaDesde: " + servicio.getHoraDesdeString(),
+								ex);
 					} catch (final StringIndexOutOfBoundsException ex) {
-						LOG.error("Error leyendo coordenadas de parte", ex);
+						LOG.error(
+								"Error leyendo coordenadas de parte: " + servicio.getCodigoParte() + ", vehiculo: "
+										+ servicio.getVehiculo().getCodigo() + ", fechaDesde: "
+										+ servicio.getFechaDesde() + ", horaDesde: " + servicio.getHoraDesdeString(),
+								ex);
 					}
 
 					if (servicioMapper.exists(servicio)) {
