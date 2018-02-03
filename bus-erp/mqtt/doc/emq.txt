@@ -27,6 +27,12 @@ Start/Stop the broker:
 Panel de control (Dashboard)
 	http://localhost:18083
 
+ACTUALIZACION (creo que no funciona quizas mejor un "yum remove emqttd")
+	$ systemctl stop emqttd.service
+	$ rpm --upgrade [install-options] PACKAGE_FILE ...
+	$ systemctl start emqttd.service
+
+
 ***********************************************************************************************
 TUNING
 	http://emqttd-docs.readthedocs.io/en/latest/tune.html

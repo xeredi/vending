@@ -1,0 +1,8 @@
+LINX
+=======================================================================
+Añadir repositorio YUM:
+	$ wget http://repos.fedorapeople.org/repos/dchen/apache-maven/epel-apache-maven.repo -O /etc/yum.repos.d/epel-apache-maven.repo
+
+Instalar
+	$ yum info apache-maven
+	$ yum install apache-maven
