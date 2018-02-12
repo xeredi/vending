@@ -1,7 +1,11 @@
 package xeredi.bus.erp.model.tachograph.util;
 
 import java.util.Arrays;
+import java.util.Calendar;
 import java.util.Date;
+import java.util.TimeZone;
+
+import org.apache.commons.lang.StringUtils;
 
 // TODO: Auto-generated Javadoc
 /**
@@ -112,6 +116,23 @@ public final class CardBlockUtil {
 			numberValue = (numberValue * 256) + byteValue;
 		}
 
+		final Calendar calendar = Calendar.getInstance();
+
+		calendar.setTimeZone(TimeZone.getTimeZone("GMT"));
+		calendar.setTimeInMillis(numberValue * 1000);
+
 		return new Date(numberValue * 1000);
+	}
+
+	public static String getBinaryString(final byte[] data, final int offset, final int size) {
+		final byte[] array = Arrays.copyOfRange(data, offset, offset + size);
+
+		String value = "";
+
+		for (byte byteValue : array) {
+			value += String.format("%8s", Integer.toBinaryString(byteValue & 0xFF)).replace(' ', '0');
+		}
+
+		return value;
 	}
 }

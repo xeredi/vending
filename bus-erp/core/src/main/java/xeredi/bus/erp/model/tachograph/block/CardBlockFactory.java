@@ -37,6 +37,8 @@ public final class CardBlockFactory {
 			return new CardEventData(fid, data);
 		case EF_FAULTS_DATA:
 			return new CardFaultData(fid, data);
+		case EF_DRIVER_ACTIVITY_DATA:
+			return new CardDriverActivity(fid, data);
 		default:
 			throw new Error("Unimplemented value: " + fid);
 		}

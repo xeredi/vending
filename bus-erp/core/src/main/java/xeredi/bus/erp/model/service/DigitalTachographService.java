@@ -41,7 +41,7 @@ public class DigitalTachographService {
 				if (fid_type == 0) {
 					final CardBlock cardBlock = CardBlockFactory.getInstance(fid, fid_data);
 
-					System.out.println(ToStringBuilder.reflectionToString(cardBlock));
+					LOG.info(ToStringBuilder.reflectionToString(cardBlock));
 				}
 			}
 
