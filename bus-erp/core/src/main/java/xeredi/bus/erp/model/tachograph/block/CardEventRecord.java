@@ -31,7 +31,7 @@ public class CardEventRecord extends CardRecord {
 	 *            the adata
 	 */
 	public CardEventRecord(final @NonNull byte[] adata) {
-		super(adata);
+		super();
 
 		eventType = CardBlockUtil.getShort(adata, 0, 1);
 		eventBeginTime = CardBlockUtil.getDate(adata, 1, 4);

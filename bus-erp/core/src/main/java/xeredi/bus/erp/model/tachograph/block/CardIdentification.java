@@ -38,7 +38,7 @@ public class CardIdentification extends CardBlock {
 	private final String cardHolderPreferredLanguage;
 
 	public CardIdentification(final @NonNull Fid afid, final @NonNull byte[] adata) {
-		super(afid, adata);
+		super(afid);
 
 		cardIssuingMemberState = CardBlockUtil.getInteger(adata, 0, 1);
 		cardNumber = CardBlockUtil.getString(adata, 1, 16);

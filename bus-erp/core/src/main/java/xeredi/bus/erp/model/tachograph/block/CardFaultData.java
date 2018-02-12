@@ -13,7 +13,7 @@ public class CardFaultData extends CardBlock {
 	private final List<CardFaultRecord> records;
 
 	public CardFaultData(final @NonNull Fid afid, final @NonNull byte[] adata) {
-		super(afid, adata);
+		super(afid);
 
 		records = new ArrayList<>();
 

@@ -15,6 +15,12 @@ import xeredi.bus.erp.model.tachograph.util.CardBlockUtil;
 /**
  * The Class CardActivityDailyRecord.
  */
+
+/*
+ * (non-Javadoc)
+ *
+ * @see xeredi.bus.erp.model.tachograph.block.CardRecord#hashCode()
+ */
 @Data
 public class CardActivityDailyRecord extends CardRecord {
 
@@ -33,6 +39,7 @@ public class CardActivityDailyRecord extends CardRecord {
 	/** The activity day distance. */
 	private final Short activityDayDistance;
 
+	/** The activity change info records. */
 	private final List<ActivityChangeInfoRecord> activityChangeInfoRecords;
 
 	/**
@@ -42,13 +49,13 @@ public class CardActivityDailyRecord extends CardRecord {
 	 *            the data
 	 */
 	public CardActivityDailyRecord(final @NonNull byte[] data) {
-		super(data);
+		super();
 
 		this.activityPreviousRecordLength = CardBlockUtil.getInteger(data, 0, 2);
 		this.activityRecordLength = CardBlockUtil.getInteger(data, 2, 2);
 		this.activityRecordDate = CardBlockUtil.getDate(data, 4, 4);
-		this.activityDailyPresenceCounter = CardBlockUtil.getInteger(data, 8, 2);
-		this.activityDayDistance = CardBlockUtil.getShort(data, 10, 2);
+		this.activityDailyPresenceCounter = CardBlockUtil.getIntegerBCD(data, 8, 2);
+		this.activityDayDistance = CardBlockUtil.getShort16(data, 10, 2);
 
 		this.activityChangeInfoRecords = new ArrayList<>();
 
@@ -57,12 +64,17 @@ public class CardActivityDailyRecord extends CardRecord {
 
 		do {
 			this.activityChangeInfoRecords
-					.add(new ActivityChangeInfoRecord(Arrays.copyOfRange(data, offset, offset + recordSize)));
+					.add(new ActivityChangeInfoRecord(CardBlockUtil.getByteArray(data, offset, recordSize)));
 
 			offset += recordSize;
 		} while (offset < data.length);
 	}
 
+	/*
+	 * (non-Javadoc)
+	 *
+	 * @see xeredi.bus.erp.model.tachograph.block.CardRecord#toString()
+	 */
 	public String toString() {
 		return ToStringBuilder.reflectionToString(this);
 	}

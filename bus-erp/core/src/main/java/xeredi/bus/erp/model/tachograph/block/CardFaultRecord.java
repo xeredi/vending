@@ -45,7 +45,7 @@ public class CardFaultRecord extends CardRecord {
 	 *            the adata
 	 */
 	public CardFaultRecord(final @NonNull byte[] adata) {
-		super(adata);
+		super();
 
 		faultType = CardBlockUtil.getShort(adata, 0, 1);
 		faultBeginTime = CardBlockUtil.getDate(adata, 1, 4);

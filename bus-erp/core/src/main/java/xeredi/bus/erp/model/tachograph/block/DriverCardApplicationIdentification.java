@@ -41,7 +41,7 @@ public class DriverCardApplicationIdentification extends CardBlock {
 	 *            the adata
 	 */
 	public DriverCardApplicationIdentification(final @NonNull Fid afid, final @NonNull byte[] adata) {
-		super(afid, adata);
+		super(afid);
 
 		typeOfTachographCardId = CardBlockUtil.getShort(adata, 0, 1);
 		cardStructureVersion = CardBlockUtil.getShort(adata, 1, 2);

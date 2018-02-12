@@ -6,6 +6,8 @@ import java.util.Date;
 import java.util.List;
 
 import org.apache.commons.lang.builder.ToStringBuilder;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 
 import lombok.Data;
 import lombok.NonNull;
@@ -17,6 +19,7 @@ import xeredi.bus.erp.model.tachograph.util.CardBlockUtil;
  */
 @Data
 public class CardDriverActivity extends CardBlock {
+	private static final Log LOG = LogFactory.getLog(CardDriverActivity.class);
 
 	/** The activity pointer oldest day record. */
 	private final Integer activityPointerOldestDayRecord;
@@ -36,13 +39,13 @@ public class CardDriverActivity extends CardBlock {
 	 *            the adata
 	 */
 	public CardDriverActivity(final @NonNull Fid afid, final @NonNull byte[] adata) {
-		super(afid, adata);
+		super(afid);
 
 		activityPointerOldestDayRecord = CardBlockUtil.getInteger(adata, 0, 2);
 		activityPointerNewestRecord = CardBlockUtil.getInteger(adata, 2, 2);
 
-		System.out.println("activityPointerOldestDayRecord: " + activityPointerOldestDayRecord
-				+ ", activityPointerNewestRecord: " + activityPointerNewestRecord);
+		LOG.info("activityPointerOldestDayRecord: " + activityPointerOldestDayRecord + ", activityPointerNewestRecord: "
+				+ activityPointerNewestRecord);
 
 		activityDailyRecords = new ArrayList<>();
 
@@ -61,24 +64,19 @@ public class CardDriverActivity extends CardBlock {
 			System.arraycopy(arrayNewest, 0, cyclicData, arrayOldest.length, arrayNewest.length - 1);
 		}
 
-		System.out.println("cyclicData.length: " + cyclicData.length);
+		LOG.info("cyclicData.length: " + cyclicData.length);
 
 		int offset = 4;
 
 		do {
-			// final Integer activityPreviousRecordLength =
-			// CardBlockUtil.getInteger(cyclicData, offset, 2);
 			final Integer activityRecordLength = CardBlockUtil.getInteger(cyclicData, offset + 2, 2);
-			// final Date activityRecordDate = CardBlockUtil.getDate(cyclicData, offset + 4,
-			// 4);
-			// final Integer activityDailyPresenceCounter =
-			// CardBlockUtil.getInteger(cyclicData, offset + 8, 2);
-			// final Integer activityDayDistance = CardBlockUtil.getInteger(cyclicData,
-			// offset + 10, 2);
 
-			final byte[] activityChangeInfo = Arrays.copyOfRange(cyclicData, offset, offset + activityRecordLength);
+			if (LOG.isDebugEnabled()) {
+				LOG.debug("activityRecordLength: " + activityRecordLength);
+			}
 
-			activityDailyRecords.add(new CardActivityDailyRecord(activityChangeInfo));
+			activityDailyRecords.add(
+					new CardActivityDailyRecord(CardBlockUtil.getByteArray(cyclicData, offset, activityRecordLength)));
 
 			offset += activityRecordLength;
 		} while (offset < cyclicData.length);

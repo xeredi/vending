@@ -26,7 +26,7 @@ public final class CardChipIdentification extends CardBlock {
 	 *            the adata
 	 */
 	public CardChipIdentification(final @NonNull Fid afid, final @NonNull byte[] adata) {
-		super(afid, adata);
+		super(afid);
 
 		icSerialNumber = CardBlockUtil.getString(adata, 0, 4);
 		icManufacturingReferneces = CardBlockUtil.getString(adata, 4, 4);

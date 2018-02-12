@@ -44,7 +44,7 @@ public class ActivityChangeInfoRecord extends CardRecord {
 	 *            the data
 	 */
 	public ActivityChangeInfoRecord(final @NonNull byte[] data) {
-		super(data);
+		super();
 
 		final String binaryString = CardBlockUtil.getBinaryString(data, 0, 2);
 

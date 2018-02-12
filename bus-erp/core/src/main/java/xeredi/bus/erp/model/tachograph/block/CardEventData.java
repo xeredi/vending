@@ -24,7 +24,7 @@ public class CardEventData extends CardBlock {
 	 *            the adata
 	 */
 	public CardEventData(final @NonNull Fid afid, final @NonNull byte[] adata) {
-		super(afid, adata);
+		super(afid);
 
 		records = new ArrayList<>();
 

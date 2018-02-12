@@ -43,13 +43,13 @@
         <maven-resources-plugin.version>3.0.2</maven-resources-plugin.version>
         <maven-project-info-reports-plugin.version>2.9</maven-project-info-reports-plugin.version>
         <maven-surefire-plugin.version>2.20.1</maven-surefire-plugin.version>
-        <maven-surefire-plugin.skipTests>true</maven-surefire-plugin.skipTests>
+        <maven-surefire-plugin.skipTests>false</maven-surefire-plugin.skipTests>
         <maven-project-info-reports-plugin.version>2.9</maven-project-info-reports-plugin.version>
         <maven-project-info-reports-plugin.dependencyLocationsEnabled>false</maven-project-info-reports-plugin.dependencyLocationsEnabled>
 
         <mqttv3.version>1.2.0</mqttv3.version>
         <jackson.version>2.9.3</jackson.version>
-        <lombok.version>1.16.20</lombok.version>
+        <lombok.version>1.16.18</lombok.version>
         <commons-io.version>2.6</commons-io.version>
         <postgresql.version>42.1.4</postgresql.version>
         <mybatis.version>3.4.5</mybatis.version>

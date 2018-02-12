@@ -38,7 +38,7 @@ public final class CardIccIdentification extends CardBlock {
 	 *            the adata
 	 */
 	public CardIccIdentification(final @NonNull Fid afid, final @NonNull byte[] adata) {
-		super(afid, adata);
+		super(afid);
 
 		clockStop = CardBlockUtil.getString(adata, 0, 1);
 		cardExtendedSerialNumber = CardBlockUtil.getString(adata, 1, 8);

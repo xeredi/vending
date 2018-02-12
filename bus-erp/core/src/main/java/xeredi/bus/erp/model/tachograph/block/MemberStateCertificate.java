@@ -12,7 +12,7 @@ import xeredi.bus.erp.model.tachograph.util.CardBlockUtil;
 public class MemberStateCertificate extends CardBlock {
 
 	/** The certificate. */
-	private final String certificate;
+	private final byte[] certificate;
 
 	/**
 	 * Instantiates a new member state certificate.
@@ -23,9 +23,9 @@ public class MemberStateCertificate extends CardBlock {
 	 *            the adata
 	 */
 	public MemberStateCertificate(final @NonNull Fid afid, final @NonNull byte[] adata) {
-		super(afid, adata);
+		super(afid);
 
-		certificate = CardBlockUtil.getString(adata, 0, 194);
+		certificate = CardBlockUtil.getByteArray(adata, 0, 194);
 	}
 
 }

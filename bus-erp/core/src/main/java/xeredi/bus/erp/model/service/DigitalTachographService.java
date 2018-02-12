@@ -17,10 +17,24 @@ import xeredi.bus.erp.model.tachograph.block.CardBlock;
 import xeredi.bus.erp.model.tachograph.block.CardBlockFactory;
 import xeredi.bus.erp.model.tachograph.block.Fid;
 
+// TODO: Auto-generated Javadoc
+/**
+ * The Class DigitalTachographService.
+ */
 @Transactional(executorType = ExecutorType.REUSE)
 public class DigitalTachographService {
+
+	/** The Constant LOG. */
 	private static final Log LOG = LogFactory.getLog(DigitalTachographService.class);
 
+	/**
+	 * Load.
+	 *
+	 * @param data
+	 *            the data
+	 * @throws IOException
+	 *             Signals that an I/O exception has occurred.
+	 */
 	public void load(final byte[] data) throws IOException {
 		LOG.info("Data length: " + data.length);
 
@@ -41,7 +55,9 @@ public class DigitalTachographService {
 				if (fid_type == 0) {
 					final CardBlock cardBlock = CardBlockFactory.getInstance(fid, fid_data);
 
-					LOG.info(ToStringBuilder.reflectionToString(cardBlock));
+					if (LOG.isDebugEnabled()) {
+						LOG.debug(ToStringBuilder.reflectionToString(cardBlock));
+					}
 				}
 			}
 
@@ -49,6 +65,12 @@ public class DigitalTachographService {
 
 	}
 
+	/**
+	 * The main method.
+	 *
+	 * @param args
+	 *            the arguments
+	 */
 	public static void main(final String[] args) {
 		LOG.info("Start");
 

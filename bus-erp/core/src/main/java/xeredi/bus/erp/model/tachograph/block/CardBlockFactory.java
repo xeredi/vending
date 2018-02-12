@@ -39,6 +39,16 @@ public final class CardBlockFactory {
 			return new CardFaultData(fid, data);
 		case EF_DRIVER_ACTIVITY_DATA:
 			return new CardDriverActivity(fid, data);
+		case EF_VEHICLES_USED:
+			return new CardVehiclesUsed(fid, data);
+		case EF_PLACES:
+			return new CardPlaceDailyWorkPeriod(fid, data);
+		case EF_CURRENT_USAGE:
+			return new CardCurrentUse(fid, data);
+		case EF_CONTROL_ACTIVITY_DATA:
+			return new CardControlActivityDataRecord(fid, data);
+		case EF_SPECIFIC_CONDITIONS:
+			return new SpecificCondition(fid, data);
 		default:
 			throw new Error("Unimplemented value: " + fid);
 		}

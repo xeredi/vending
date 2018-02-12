@@ -29,7 +29,7 @@ public class CardDrivingLicenceInformation extends CardBlock {
 	 *            the adata
 	 */
 	public CardDrivingLicenceInformation(final @NonNull Fid afid, final @NonNull byte[] adata) {
-		super(afid, adata);
+		super(afid);
 
 		drivingLicenceIssuingAuthority = CardBlockUtil.getText(adata, 0, 36);
 		drivingLicenceIssuingNation = CardBlockUtil.getShort(adata, 36, 1);
