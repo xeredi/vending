@@ -1,14 +1,11 @@
 package xeredi.bus.erp.model.tachograph.block;
 
-import java.sql.Time;
 import java.util.Calendar;
-import java.util.Date;
 import java.util.TimeZone;
-
-import org.apache.commons.lang.builder.ToStringBuilder;
 
 import lombok.Data;
 import lombok.NonNull;
+import lombok.ToString;
 import xeredi.bus.erp.model.tachograph.util.CardBlockUtil;
 
 // TODO: Auto-generated Javadoc
@@ -20,6 +17,7 @@ import xeredi.bus.erp.model.tachograph.util.CardBlockUtil;
  * @see xeredi.bus.erp.model.tachograph.block.CardRecord#toString()
  */
 @Data
+@ToString(callSuper = true)
 public class ActivityChangeInfoRecord extends CardRecord {
 
 	/** The s. */
@@ -62,9 +60,4 @@ public class ActivityChangeInfoRecord extends CardRecord {
 		// System.out.println(calendar);
 		// System.out.println(calendar.getTime());
 	}
-
-	public String toString() {
-		return ToStringBuilder.reflectionToString(this);
-	}
-
 }

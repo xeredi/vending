@@ -1,13 +1,10 @@
 package xeredi.bus.erp.model.tachograph.block;
 
-import java.util.ArrayList;
 import java.util.Date;
-import java.util.List;
-
-import org.apache.commons.lang.builder.ToStringBuilder;
 
 import lombok.Data;
 import lombok.NonNull;
+import lombok.ToString;
 import xeredi.bus.erp.model.tachograph.util.CardBlockUtil;
 
 // TODO: Auto-generated Javadoc
@@ -15,6 +12,7 @@ import xeredi.bus.erp.model.tachograph.util.CardBlockUtil;
  * The Class PlaceRecord.
  */
 @Data
+@ToString(callSuper = true)
 public class PlaceRecord extends CardRecord {
 
 	/** The entry time. */
@@ -47,14 +45,4 @@ public class PlaceRecord extends CardRecord {
 		this.dailyWorkPeriodRegion = CardBlockUtil.getInteger(data, 6, 1);
 		this.vehicleOdometerValue = CardBlockUtil.getInteger24(data, 7, 3);
 	}
-
-	/*
-	 * (non-Javadoc)
-	 *
-	 * @see xeredi.bus.erp.model.tachograph.block.CardRecord#toString()
-	 */
-	public String toString() {
-		return ToStringBuilder.reflectionToString(this);
-	}
-
 }

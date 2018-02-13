@@ -2,14 +2,17 @@ package xeredi.bus.erp.model.tachograph.block;
 
 import java.util.Date;
 
-import org.apache.commons.lang.builder.ToStringBuilder;
-
 import lombok.Data;
 import lombok.NonNull;
 import lombok.ToString;
 import xeredi.bus.erp.model.tachograph.util.CardBlockUtil;
 
+// TODO: Auto-generated Javadoc
+/* (non-Javadoc)
+ * @see xeredi.bus.erp.model.tachograph.block.CardRecord#hashCode()
+ */
 @Data
+@ToString(callSuper = true)
 public class CardEventRecord extends CardRecord {
 
 	/** The event type. */
@@ -22,7 +25,10 @@ public class CardEventRecord extends CardRecord {
 	private final Date eventEndTime;
 
 	/** The event vehicle registration. */
-	private final String eventVehicleRegistration;
+	private final Integer vehicleNation;
+
+	/** The vehicle number. */
+	private final String vehicleNumber;
 
 	/**
 	 * Instantiates a new card event record.
@@ -36,10 +42,7 @@ public class CardEventRecord extends CardRecord {
 		eventType = CardBlockUtil.getShort(adata, 0, 1);
 		eventBeginTime = CardBlockUtil.getDate(adata, 1, 4);
 		eventEndTime = CardBlockUtil.getDate(adata, 5, 4);
-		eventVehicleRegistration = CardBlockUtil.getString(adata, 9, 15);
-	}
-
-	public String toString() {
-		return ToStringBuilder.reflectionToString(this);
+		vehicleNation = CardBlockUtil.getInteger(adata, 9, 1);
+		vehicleNumber = CardBlockUtil.getString(adata, 10, 14);
 	}
 }

@@ -2,6 +2,7 @@ package xeredi.bus.erp.model.tachograph.block;
 
 import lombok.Data;
 import lombok.NonNull;
+import lombok.ToString;
 import xeredi.bus.erp.model.tachograph.util.CardBlockUtil;
 
 // TODO: Auto-generated Javadoc
@@ -9,6 +10,7 @@ import xeredi.bus.erp.model.tachograph.util.CardBlockUtil;
  * The Class DriverCardApplicationIdentification.
  */
 @Data
+@ToString(callSuper = true)
 public class DriverCardApplicationIdentification extends CardBlock {
 
 	/** The type of tachograph card id. */

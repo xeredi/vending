@@ -6,8 +6,10 @@ import java.util.List;
 
 import lombok.Data;
 import lombok.NonNull;
+import lombok.ToString;
 
 @Data
+@ToString(callSuper = true)
 public class CardFaultData extends CardBlock {
 
 	private final List<CardFaultRecord> records;

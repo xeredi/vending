@@ -2,15 +2,14 @@ package xeredi.bus.erp.model.tachograph.block;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Date;
 import java.util.List;
 
-import org.apache.commons.lang.builder.ToStringBuilder;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
 import lombok.Data;
 import lombok.NonNull;
+import lombok.ToString;
 import xeredi.bus.erp.model.tachograph.util.CardBlockUtil;
 
 // TODO: Auto-generated Javadoc
@@ -18,14 +17,15 @@ import xeredi.bus.erp.model.tachograph.util.CardBlockUtil;
  * The Class CardDriverActivity.
  */
 @Data
+@ToString(callSuper = true)
 public class CardDriverActivity extends CardBlock {
 	private static final Log LOG = LogFactory.getLog(CardDriverActivity.class);
 
 	/** The activity pointer oldest day record. */
-	private final Integer activityPointerOldestDayRecord;
+	private final Short activityPointerOldestDayRecord;
 
 	/** The activity pointer newest record. */
-	private final Integer activityPointerNewestRecord;
+	private final Short activityPointerNewestRecord;
 
 	/** The activity daily records. */
 	private final List<CardActivityDailyRecord> activityDailyRecords;
@@ -41,11 +41,11 @@ public class CardDriverActivity extends CardBlock {
 	public CardDriverActivity(final @NonNull Fid afid, final @NonNull byte[] adata) {
 		super(afid);
 
-		activityPointerOldestDayRecord = CardBlockUtil.getInteger(adata, 0, 2);
-		activityPointerNewestRecord = CardBlockUtil.getInteger(adata, 2, 2);
+		activityPointerOldestDayRecord = CardBlockUtil.getShort(adata, 0, 2);
+		activityPointerNewestRecord = CardBlockUtil.getShort(adata, 2, 2);
 
 		LOG.info("activityPointerOldestDayRecord: " + activityPointerOldestDayRecord + ", activityPointerNewestRecord: "
-				+ activityPointerNewestRecord);
+				+ activityPointerNewestRecord + ", blockLength: " + adata.length);
 
 		activityDailyRecords = new ArrayList<>();
 
@@ -81,9 +81,4 @@ public class CardDriverActivity extends CardBlock {
 			offset += activityRecordLength;
 		} while (offset < cyclicData.length);
 	}
-
-	public String toString() {
-		return ToStringBuilder.reflectionToString(this);
-	}
-
 }

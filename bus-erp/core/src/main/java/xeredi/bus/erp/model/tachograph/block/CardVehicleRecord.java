@@ -2,16 +2,16 @@ package xeredi.bus.erp.model.tachograph.block;
 
 import java.util.Date;
 
-import org.apache.commons.lang.builder.ToStringBuilder;
-
 import lombok.Data;
 import lombok.NonNull;
+import lombok.ToString;
 import xeredi.bus.erp.model.tachograph.util.CardBlockUtil;
 
 /**
  * The Class CardVehicleRecord.
  */
 @Data
+@ToString(callSuper = true)
 public class CardVehicleRecord extends CardRecord {
 
 	/** The vehicle odometer begin. */
@@ -51,12 +51,5 @@ public class CardVehicleRecord extends CardRecord {
 		vehicleRegistrationNation = CardBlockUtil.getInteger(data, 14, 1);
 		vehicleRegistrationNumber = CardBlockUtil.getString(data, 15, 14);
 		vuDatablockCounter = CardBlockUtil.getIntegerBCD(data, 29, 2);
-	}
-
-	/**
-	 * {@inheritDoc}
-	 */
-	public String toString() {
-		return ToStringBuilder.reflectionToString(this);
 	}
 }

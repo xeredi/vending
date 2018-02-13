@@ -4,39 +4,53 @@ import java.util.Date;
 
 import lombok.Data;
 import lombok.NonNull;
+import lombok.ToString;
 import xeredi.bus.erp.model.tachograph.util.CardBlockUtil;
 
+// TODO: Auto-generated Javadoc
+/**
+ * The Class CardIdentification.
+ */
 @Data
+@ToString(callSuper = true)
 public class CardIdentification extends CardBlock {
 
+	/** The card issuing member state. */
 	private final Integer cardIssuingMemberState;
 
+	/** The card number. */
 	private final String cardNumber;
 
-	// private String driverIdentification;
-	// private String drivercardReplacementIndex;
-	// private String drivercardRenewalIndex;
-	// private IA5String ownerIdentification;
-	// private String cardConsecutiveIndex;
-	// private String cardReplacementIndex;
-	// private String cardRenewalIndex;
-
+	/** The card issuing authority name. */
 	private final String cardIssuingAuthorityName;
-	// @JsonFormat(shape=JsonFormat.Shape.STRING, pattern="yyyy-MM-dd'T'HH:mm:ss",
-	// timezone="GMT")
+
+	/** The card issue date. */
 	private final Date cardIssueDate;
-	// @JsonFormat(shape=JsonFormat.Shape.STRING, pattern="yyyy-MM-dd'T'HH:mm:ss",
-	// timezone="GMT")
+
+	/** The card validity begin. */
 	private final Date cardValidityBegin;
-	// @JsonFormat(shape=JsonFormat.Shape.STRING, pattern="yyyy-MM-dd'T'HH:mm:ss",
-	// timezone="GMT")
+
+	/** The card expiry date. */
 	private final Date cardExpiryDate;
 
+	/** The card holder surname. */
 	private final String cardHolderSurname;
+
+	/** The card holder first name. */
 	private final String cardHolderFirstName;
+
+	/** The card holder birth date. */
 	private final Integer cardHolderBirthDate;
+
+	/** The card holder preferred language. */
 	private final String cardHolderPreferredLanguage;
 
+	/**
+	 * Instantiates a new card identification.
+	 *
+	 * @param afid the afid
+	 * @param adata the adata
+	 */
 	public CardIdentification(final @NonNull Fid afid, final @NonNull byte[] adata) {
 		super(afid);
 

@@ -3,16 +3,16 @@ package xeredi.bus.erp.model.tachograph.block;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.apache.commons.lang.builder.ToStringBuilder;
-
 import lombok.Data;
 import lombok.NonNull;
+import lombok.ToString;
 import xeredi.bus.erp.model.tachograph.util.CardBlockUtil;
 
 /**
  * The Class SpecificConditionRecord.
  */
 @Data
+@ToString(callSuper = true)
 public class SpecificCondition extends CardBlock {
 
 	/** The records. */
@@ -39,12 +39,5 @@ public class SpecificCondition extends CardBlock {
 
 			offset += recordSize;
 		} while (offset < adata.length);
-	}
-
-	/**
-	 * {@inheritDoc}
-	 */
-	public String toString() {
-		return ToStringBuilder.reflectionToString(this);
 	}
 }

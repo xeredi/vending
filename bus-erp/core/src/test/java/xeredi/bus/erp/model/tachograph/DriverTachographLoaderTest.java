@@ -1,10 +1,10 @@
 package xeredi.bus.erp.model.tachograph;
 
+import java.io.DataInputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 
-import org.apache.commons.io.IOUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.junit.Test;
@@ -32,32 +32,32 @@ public final class DriverTachographLoaderTest {
 				LOG.info(filename);
 
 				final File file = new File(filename);
-				final byte[] data = new byte[(int) file.length()];
 
-				IOUtils.readFully(new FileInputStream(file), data);
+				try (final DataInputStream dis = new DataInputStream(new FileInputStream(file));) {
+					final DriverTachographLoader loader = new DriverTachographLoader();
+					final DriverTachograph tachograph = loader.load(dis);
 
-				final DriverTachographLoader loader = new DriverTachographLoader();
-				final DriverTachograph tachograph = loader.load(data);
-
-				LOG.info(tachograph);
-			}
-			{
-				final String filename = "/home/xeredi/git/raspberry/canbus/examples/tacograph/V_1927FFN_E_20171201_1025.TGD";
-
-				LOG.info(filename);
-
-				final File file = new File(filename);
-				final byte[] data = new byte[(int) file.length()];
-
-				IOUtils.readFully(new FileInputStream(file), data);
-
-				final DriverTachographLoader loader = new DriverTachographLoader();
-				// final DriverTachograph tachograph = loader.load(data);
-
-				// LOG.info(tachograph);
+					LOG.info(tachograph.getCardIccIdentification());
+					LOG.info(tachograph.getCardChipIdentification());
+					LOG.info(tachograph.getCardCertificate());
+					LOG.info(tachograph.getMemberStateCertificate());
+					LOG.info(tachograph.getDriverCardApplicationIdentification());
+					LOG.info(tachograph.getCardIdentification());
+					LOG.info(tachograph.getCardDrivingLicenceInformation());
+					LOG.info(tachograph.getCardEventData());
+					LOG.info(tachograph.getCardFaultData());
+					LOG.info(tachograph.getCardDriverActivity());
+					LOG.info(tachograph.getCardVehiclesUsed());
+					LOG.info(tachograph.getCardPlaceDailyWorkPeriod());
+					LOG.info(tachograph.getCardCurrentUse());
+					LOG.info(tachograph.getCardControlActivityDataRecord());
+					LOG.info(tachograph.getSpecificCondition());
+				}
 			}
 		} catch (final IOException ex) {
 			LOG.error(ex, ex);
+		} catch (final Throwable ex) {
+			LOG.fatal(ex, ex);
 		}
 
 		LOG.info("End");

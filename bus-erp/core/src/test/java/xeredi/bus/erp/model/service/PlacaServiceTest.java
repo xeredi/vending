@@ -4,8 +4,12 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.junit.Test;
 
+import com.google.inject.Guice;
+import com.google.inject.Injector;
+
 import xeredi.bus.erp.model.Placa;
 import xeredi.bus.erp.model.PlacaCriteria;
+import xeredi.bus.erp.model.util.mybatis.TransportGuiceModule;
 
 // TODO: Auto-generated Javadoc
 /**
@@ -21,12 +25,14 @@ public final class PlacaServiceTest {
 	 */
 	@Test
 	public void test() {
-		final PlacaService placaService = new PlacaService();
-
 		LOG.info("Busqueda de placas");
 
-		for (final Placa value : placaService.selectList(new PlacaCriteria(), 0, 20).getList()) {
-			LOG.info(value);
+		final Injector injector = Guice.createInjector(new TransportGuiceModule());
+
+		final PlacaService plcaService = injector.getInstance(PlacaService.class);
+
+		for (final Placa plca : plcaService.selectList(new PlacaCriteria(), 0, 20).getList()) {
+			LOG.info(plca);
 		}
 	}
 

@@ -1,7 +1,6 @@
 package xeredi.bus.erp.model.tachograph.block;
 
 import lombok.Data;
-import lombok.NonNull;
 
 // TODO: Auto-generated Javadoc
 /**

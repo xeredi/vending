@@ -42,7 +42,7 @@ public final class LecturaGpsTest {
 
 		// calendar.add(Calendar.DAY_OF_MONTH, -2);
 
-		for (int i = 0; i < 1000; i++) {
+		for (int i = 0; i < 50; i++) {
 			if ((i % 100) == 0) {
 				LOG.info(i * placas.size());
 			}

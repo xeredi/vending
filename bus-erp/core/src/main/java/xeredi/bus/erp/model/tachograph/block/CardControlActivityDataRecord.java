@@ -2,16 +2,16 @@ package xeredi.bus.erp.model.tachograph.block;
 
 import java.util.Date;
 
-import org.apache.commons.lang.builder.ToStringBuilder;
-
 import lombok.Data;
 import lombok.NonNull;
+import lombok.ToString;
 import xeredi.bus.erp.model.tachograph.util.CardBlockUtil;
 
 /**
  * The Class CardControlActivityDataRecord.
  */
 @Data
+@ToString(callSuper = true)
 public class CardControlActivityDataRecord extends CardBlock {
 
 	/** The control type. */
@@ -76,12 +76,5 @@ public class CardControlActivityDataRecord extends CardBlock {
 		vehicleNumber = CardBlockUtil.getString(adata, 24, 14);
 		controlDownloadPeriodBegin = CardBlockUtil.getDate(adata, 38, 4);
 		controlDownloadPeriodEnd = CardBlockUtil.getDate(adata, 42, 4);
-	}
-
-	/**
-	 * {@inheritDoc}
-	 */
-	public String toString() {
-		return ToStringBuilder.reflectionToString(this);
 	}
 }

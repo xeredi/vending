@@ -1,26 +1,27 @@
 package xeredi.bus.erp.model.tachograph.block;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
-
-import org.apache.commons.lang.builder.ToStringBuilder;
 
 import lombok.Data;
 import lombok.NonNull;
+import lombok.ToString;
 import xeredi.bus.erp.model.tachograph.util.CardBlockUtil;
 
-// TODO: Auto-generated Javadoc
 /**
  * The Class CardVehiclesUsed.
  */
 @Data
+@ToString(callSuper = true)
 public class CardVehiclesUsed extends CardBlock {
 
+	/** The vehicle pointer newest record. */
 	private final Short vehiclePointerNewestRecord;
 
+	/** The card vehicle records. */
 	private final List<CardVehicleRecord> cardVehicleRecords;
 
+	/** The no of card vehicle records. */
 	private int noOfCardVehicleRecords;
 
 	/**
@@ -47,23 +48,4 @@ public class CardVehiclesUsed extends CardBlock {
 			offset += recordLength;
 		} while (offset < adata.length);
 	}
-
-	// EF_VEHICLES_USED(2606,6202,0),
-	// CARDVEHICLEUSED(2606,6202,0),
-	// VEHICLEPOINTERNEWESTRECORD(2,2,0),
-	// CARDVEHICLERECORDS(2604,6200,0),
-	// CARDVEHICLERECORD(31,31,0),
-	// VEHICLEODOMETERBEGIN(3,3,0),
-	// VEHICLEODOMETEREND(3,3,0),
-	// VEHICLEFIRSTUSE(4,4,0),
-	// VEHICLELASTUSE(4,4,0),
-	// VEHICLEREGISTRATION(15,15,0),
-	// VEHICLEREGISTRATIONNATION(1,1,0),
-	// VEHICLEREGISTRATIONNUMBER(14,14,0),
-	// VUDATABLOCKCOUNTER(2,2,0),
-
-	public String toString() {
-		return ToStringBuilder.reflectionToString(this);
-	}
-
 }

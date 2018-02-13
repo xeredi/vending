@@ -3,20 +3,25 @@ package xeredi.bus.erp.model.tachograph.block;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.apache.commons.lang.builder.ToStringBuilder;
-
 import lombok.Data;
 import lombok.NonNull;
+import lombok.ToString;
 import xeredi.bus.erp.model.tachograph.util.CardBlockUtil;
 
-// TODO: Auto-generated Javadoc
 /**
  * The Class CardPlaceDailyWorkPeriod.
  */
 @Data
+@ToString(callSuper = true)
 public class CardPlaceDailyWorkPeriod extends CardBlock {
+
+	/** The place pointer newest record. */
 	private Short placePointerNewestRecord;
+
+	/** The no of card place records. */
 	private Integer noOfCardPlaceRecords;
+
+	/** The place records. */
 	private final List<PlaceRecord> placeRecords;
 
 	/**
@@ -57,9 +62,5 @@ public class CardPlaceDailyWorkPeriod extends CardBlock {
 			} while (offset < (1 + (placePointerNewestRecord + 1) * recordSize));
 		}
 
-	}
-
-	public String toString() {
-		return ToStringBuilder.reflectionToString(this);
 	}
 }

@@ -6,13 +6,17 @@ import java.util.List;
 
 import lombok.Data;
 import lombok.NonNull;
+import lombok.ToString;
 
+// TODO: Auto-generated Javadoc
 /**
  * The Class CardEventData.
  */
 @Data
+@ToString(callSuper = true)
 public class CardEventData extends CardBlock {
 
+	/** The records. */
 	private final List<CardEventRecord> records;
 
 	/**

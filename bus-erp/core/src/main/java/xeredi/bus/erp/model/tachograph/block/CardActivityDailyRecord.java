@@ -1,14 +1,12 @@
 package xeredi.bus.erp.model.tachograph.block;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 
-import org.apache.commons.lang.builder.ToStringBuilder;
-
 import lombok.Data;
 import lombok.NonNull;
+import lombok.ToString;
 import xeredi.bus.erp.model.tachograph.util.CardBlockUtil;
 
 // TODO: Auto-generated Javadoc
@@ -22,6 +20,7 @@ import xeredi.bus.erp.model.tachograph.util.CardBlockUtil;
  * @see xeredi.bus.erp.model.tachograph.block.CardRecord#hashCode()
  */
 @Data
+@ToString(callSuper = true)
 public class CardActivityDailyRecord extends CardRecord {
 
 	/** The activity previous record length. */
@@ -69,14 +68,4 @@ public class CardActivityDailyRecord extends CardRecord {
 			offset += recordSize;
 		} while (offset < data.length);
 	}
-
-	/*
-	 * (non-Javadoc)
-	 *
-	 * @see xeredi.bus.erp.model.tachograph.block.CardRecord#toString()
-	 */
-	public String toString() {
-		return ToStringBuilder.reflectionToString(this);
-	}
-
 }

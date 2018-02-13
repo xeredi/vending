@@ -6,12 +6,14 @@ import org.apache.commons.lang.builder.ToStringBuilder;
 
 import lombok.Data;
 import lombok.NonNull;
+import lombok.ToString;
 import xeredi.bus.erp.model.tachograph.util.CardBlockUtil;
 
 /**
  * The Class SpecificConditionRecord.
  */
 @Data
+@ToString(callSuper = true)
 public class SpecificConditionRecord extends CardRecord {
 
 	/** The entry time. */

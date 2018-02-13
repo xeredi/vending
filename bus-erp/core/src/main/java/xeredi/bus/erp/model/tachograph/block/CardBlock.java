@@ -9,7 +9,7 @@ import lombok.ToString;
  * @see java.lang.Object#toString()
  */
 @Data
-@ToString
+@ToString(callSuper = true)
 public abstract class CardBlock {
 
 	/** The fid. */

@@ -2,16 +2,16 @@ package xeredi.bus.erp.model.tachograph.block;
 
 import java.util.Date;
 
-import org.apache.commons.lang.builder.ToStringBuilder;
-
 import lombok.Data;
 import lombok.NonNull;
+import lombok.ToString;
 import xeredi.bus.erp.model.tachograph.util.CardBlockUtil;
 
 /**
  * The Class CardCurrentUse.
  */
 @Data
+@ToString(callSuper = true)
 public class CardCurrentUse extends CardBlock {
 
 	/** The session open time. */
@@ -38,12 +38,4 @@ public class CardCurrentUse extends CardBlock {
 		this.vehicleNation = CardBlockUtil.getInteger(adata, 4, 1);
 		this.vehicleNumber = CardBlockUtil.getString(adata, 5, 14);
 	}
-
-	/**
-	 * {@inheritDoc}
-	 */
-	public String toString() {
-		return ToStringBuilder.reflectionToString(this);
-	}
-
 }
