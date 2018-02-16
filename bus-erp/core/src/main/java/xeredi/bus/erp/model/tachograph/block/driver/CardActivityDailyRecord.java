@@ -1,4 +1,4 @@
-package xeredi.bus.erp.model.tachograph.block;
+package xeredi.bus.erp.model.tachograph.block.driver;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -7,6 +7,7 @@ import java.util.List;
 import lombok.Data;
 import lombok.NonNull;
 import lombok.ToString;
+import xeredi.bus.erp.model.tachograph.block.CardRecord;
 import xeredi.bus.erp.model.tachograph.util.CardBlockUtil;
 
 // TODO: Auto-generated Javadoc

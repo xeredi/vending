@@ -1,4 +1,4 @@
-package xeredi.bus.erp.model.tachograph.block;
+package xeredi.bus.erp.model.tachograph.block.driver;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -10,6 +10,7 @@ import org.apache.commons.logging.LogFactory;
 import lombok.Data;
 import lombok.NonNull;
 import lombok.ToString;
+import xeredi.bus.erp.model.tachograph.block.DriverCardBlock;
 import xeredi.bus.erp.model.tachograph.util.CardBlockUtil;
 
 // TODO: Auto-generated Javadoc
@@ -18,7 +19,7 @@ import xeredi.bus.erp.model.tachograph.util.CardBlockUtil;
  */
 @Data
 @ToString(callSuper = true)
-public class CardDriverActivity extends CardBlock {
+public class CardDriverActivity extends DriverCardBlock {
 	private static final Log LOG = LogFactory.getLog(CardDriverActivity.class);
 
 	/** The activity pointer oldest day record. */
@@ -38,7 +39,7 @@ public class CardDriverActivity extends CardBlock {
 	 * @param adata
 	 *            the adata
 	 */
-	public CardDriverActivity(final @NonNull Fid afid, final @NonNull byte[] adata) {
+	public CardDriverActivity(final @NonNull DriverFid afid, final @NonNull byte[] adata) {
 		super(afid);
 
 		activityPointerOldestDayRecord = CardBlockUtil.getShort(adata, 0, 2);

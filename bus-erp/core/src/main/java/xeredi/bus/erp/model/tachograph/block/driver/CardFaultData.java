@@ -1,4 +1,4 @@
-package xeredi.bus.erp.model.tachograph.block;
+package xeredi.bus.erp.model.tachograph.block.driver;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -7,14 +7,25 @@ import java.util.List;
 import lombok.Data;
 import lombok.NonNull;
 import lombok.ToString;
+import xeredi.bus.erp.model.tachograph.block.DriverCardBlock;
 
-@Data
+/**
+ * The Class CardFaultData.
+ */
+@Data()
 @ToString(callSuper = true)
-public class CardFaultData extends CardBlock {
+public class CardFaultData extends DriverCardBlock {
 
+	/** The records. */
 	private final List<CardFaultRecord> records;
 
-	public CardFaultData(final @NonNull Fid afid, final @NonNull byte[] adata) {
+	/**
+	 * Instantiates a new card fault data.
+	 *
+	 * @param afid the afid
+	 * @param adata the adata
+	 */
+	public CardFaultData(final @NonNull DriverFid afid, final @NonNull byte[] adata) {
 		super(afid);
 
 		records = new ArrayList<>();

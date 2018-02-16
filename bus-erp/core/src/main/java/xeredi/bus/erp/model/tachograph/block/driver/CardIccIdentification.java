@@ -1,8 +1,9 @@
-package xeredi.bus.erp.model.tachograph.block;
+package xeredi.bus.erp.model.tachograph.block.driver;
 
 import lombok.Data;
 import lombok.NonNull;
 import lombok.ToString;
+import xeredi.bus.erp.model.tachograph.block.DriverCardBlock;
 import xeredi.bus.erp.model.tachograph.util.CardBlockUtil;
 
 /**
@@ -10,7 +11,7 @@ import xeredi.bus.erp.model.tachograph.util.CardBlockUtil;
  */
 @Data
 @ToString(callSuper = true)
-public final class CardIccIdentification extends CardBlock {
+public final class CardIccIdentification extends DriverCardBlock {
 
 	/** The clock stop. */
 	private final Integer clockStop;
@@ -47,7 +48,7 @@ public final class CardIccIdentification extends CardBlock {
 	 * @param adata
 	 *            the adata
 	 */
-	public CardIccIdentification(final @NonNull Fid afid, final @NonNull byte[] adata) {
+	public CardIccIdentification(final @NonNull DriverFid afid, final @NonNull byte[] adata) {
 		super(afid);
 
 		clockStop = CardBlockUtil.getInteger(adata, 0, 1);

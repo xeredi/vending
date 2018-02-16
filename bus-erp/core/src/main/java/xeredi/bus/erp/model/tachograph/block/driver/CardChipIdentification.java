@@ -1,8 +1,9 @@
-package xeredi.bus.erp.model.tachograph.block;
+package xeredi.bus.erp.model.tachograph.block.driver;
 
 import lombok.Data;
 import lombok.NonNull;
 import lombok.ToString;
+import xeredi.bus.erp.model.tachograph.block.DriverCardBlock;
 import xeredi.bus.erp.model.tachograph.util.CardBlockUtil;
 
 // TODO: Auto-generated Javadoc
@@ -11,7 +12,7 @@ import xeredi.bus.erp.model.tachograph.util.CardBlockUtil;
  */
 @Data
 @ToString(callSuper = true)
-public final class CardChipIdentification extends CardBlock {
+public final class CardChipIdentification extends DriverCardBlock {
 
 	/** The ic serial number. */
 	private final String icSerialNumber;
@@ -27,7 +28,7 @@ public final class CardChipIdentification extends CardBlock {
 	 * @param adata
 	 *            the adata
 	 */
-	public CardChipIdentification(final @NonNull Fid afid, final @NonNull byte[] adata) {
+	public CardChipIdentification(final @NonNull DriverFid afid, final @NonNull byte[] adata) {
 		super(afid);
 
 		icSerialNumber = CardBlockUtil.getString(adata, 0, 4);

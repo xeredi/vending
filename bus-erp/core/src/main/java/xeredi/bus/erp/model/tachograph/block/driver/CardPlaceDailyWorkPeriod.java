@@ -1,4 +1,4 @@
-package xeredi.bus.erp.model.tachograph.block;
+package xeredi.bus.erp.model.tachograph.block.driver;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -6,6 +6,7 @@ import java.util.List;
 import lombok.Data;
 import lombok.NonNull;
 import lombok.ToString;
+import xeredi.bus.erp.model.tachograph.block.DriverCardBlock;
 import xeredi.bus.erp.model.tachograph.util.CardBlockUtil;
 
 /**
@@ -13,7 +14,7 @@ import xeredi.bus.erp.model.tachograph.util.CardBlockUtil;
  */
 @Data
 @ToString(callSuper = true)
-public class CardPlaceDailyWorkPeriod extends CardBlock {
+public class CardPlaceDailyWorkPeriod extends DriverCardBlock {
 
 	/** The place pointer newest record. */
 	private Short placePointerNewestRecord;
@@ -32,7 +33,7 @@ public class CardPlaceDailyWorkPeriod extends CardBlock {
 	 * @param adata
 	 *            the adata
 	 */
-	public CardPlaceDailyWorkPeriod(final @NonNull Fid afid, final @NonNull byte[] adata) {
+	public CardPlaceDailyWorkPeriod(final @NonNull DriverFid afid, final @NonNull byte[] adata) {
 		super(afid);
 
 		this.placePointerNewestRecord = CardBlockUtil.getShort(adata, 0, 1);
@@ -61,6 +62,5 @@ public class CardPlaceDailyWorkPeriod extends CardBlock {
 				offset += recordSize;
 			} while (offset < (1 + (placePointerNewestRecord + 1) * recordSize));
 		}
-
 	}
 }

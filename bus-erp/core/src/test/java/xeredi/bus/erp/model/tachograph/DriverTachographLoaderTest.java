@@ -27,7 +27,7 @@ public final class DriverTachographLoaderTest {
 
 		try {
 			{
-				final String filename = "/home/xeredi/git/raspberry/canbus/examples/tacograph/C_E34885608J000002_E_20171205_1549.TGD";
+				final String filename = "/home/xeredi/git/rb/canbus/examples/tacograph/C_E34885608J000002_E_20171205_1549.TGD";
 
 				LOG.info(filename);
 
@@ -37,21 +37,23 @@ public final class DriverTachographLoaderTest {
 					final DriverTachographLoader loader = new DriverTachographLoader();
 					final DriverTachograph tachograph = loader.load(dis);
 
-					LOG.info(tachograph.getCardIccIdentification());
-					LOG.info(tachograph.getCardChipIdentification());
-					LOG.info(tachograph.getCardCertificate());
-					LOG.info(tachograph.getMemberStateCertificate());
-					LOG.info(tachograph.getDriverCardApplicationIdentification());
-					LOG.info(tachograph.getCardIdentification());
-					LOG.info(tachograph.getCardDrivingLicenceInformation());
-					LOG.info(tachograph.getCardEventData());
-					LOG.info(tachograph.getCardFaultData());
-					LOG.info(tachograph.getCardDriverActivity());
-					LOG.info(tachograph.getCardVehiclesUsed());
-					LOG.info(tachograph.getCardPlaceDailyWorkPeriod());
-					LOG.info(tachograph.getCardCurrentUse());
-					LOG.info(tachograph.getCardControlActivityDataRecord());
-					LOG.info(tachograph.getSpecificCondition());
+					if (LOG.isDebugEnabled()) {
+						LOG.debug(tachograph.getCardIccIdentification());
+						LOG.debug(tachograph.getCardChipIdentification());
+						LOG.debug(tachograph.getCardCertificate());
+						LOG.debug(tachograph.getMemberStateCertificate());
+						LOG.debug(tachograph.getDriverCardApplicationIdentification());
+						LOG.debug(tachograph.getCardIdentification());
+						LOG.debug(tachograph.getCardDrivingLicenceInformation());
+						LOG.debug(tachograph.getCardEventData());
+						LOG.debug(tachograph.getCardFaultData());
+						LOG.debug(tachograph.getCardDriverActivity());
+						LOG.debug(tachograph.getCardVehiclesUsed());
+						LOG.debug(tachograph.getCardPlaceDailyWorkPeriod());
+						LOG.debug(tachograph.getCardCurrentUse());
+						LOG.debug(tachograph.getCardControlActivityDataRecord());
+						LOG.debug(tachograph.getSpecificCondition());
+					}
 				}
 			}
 		} catch (final IOException ex) {

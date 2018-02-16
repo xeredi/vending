@@ -1,10 +1,11 @@
-package xeredi.bus.erp.model.tachograph.block;
+package xeredi.bus.erp.model.tachograph.block.driver;
 
 import java.util.Date;
 
 import lombok.Data;
 import lombok.NonNull;
 import lombok.ToString;
+import xeredi.bus.erp.model.tachograph.block.DriverCardBlock;
 import xeredi.bus.erp.model.tachograph.util.CardBlockUtil;
 
 /**
@@ -12,7 +13,7 @@ import xeredi.bus.erp.model.tachograph.util.CardBlockUtil;
  */
 @Data
 @ToString(callSuper = true)
-public class CardCurrentUse extends CardBlock {
+public class CardCurrentUse extends DriverCardBlock {
 
 	/** The session open time. */
 	private final Date sessionOpenTime;
@@ -31,7 +32,7 @@ public class CardCurrentUse extends CardBlock {
 	 * @param adata
 	 *            the adata
 	 */
-	public CardCurrentUse(final @NonNull Fid afid, final @NonNull byte[] adata) {
+	public CardCurrentUse(final @NonNull DriverFid afid, final @NonNull byte[] adata) {
 		super(afid);
 
 		this.sessionOpenTime = CardBlockUtil.getDate(adata, 0, 4);

@@ -1,10 +1,11 @@
-package xeredi.bus.erp.model.tachograph.block;
+package xeredi.bus.erp.model.tachograph.block.driver;
 
 import java.util.Date;
 
 import lombok.Data;
 import lombok.NonNull;
 import lombok.ToString;
+import xeredi.bus.erp.model.tachograph.block.CardRecord;
 import xeredi.bus.erp.model.tachograph.util.CardBlockUtil;
 
 // TODO: Auto-generated Javadoc
@@ -24,8 +25,11 @@ public class CardFaultRecord extends CardRecord {
 	/** The fault end time. */
 	private final Date faultEndTime;
 
-	/** The fault vehicle registration. */
-	private final String faultVehicleRegistration;
+	/** The vehicle nation. */
+	private final Integer vehicleNation;
+
+	/** The vehicle number. */
+	private final String vehicleNumber;
 
 	/**
 	 * Instantiates a new card fault record.
@@ -39,6 +43,7 @@ public class CardFaultRecord extends CardRecord {
 		faultType = CardBlockUtil.getShort(adata, 0, 1);
 		faultBeginTime = CardBlockUtil.getDate(adata, 1, 4);
 		faultEndTime = CardBlockUtil.getDate(adata, 5, 4);
-		faultVehicleRegistration = CardBlockUtil.getString(adata, 9, 15);
+		vehicleNation = CardBlockUtil.getInteger(adata, 9, 1);
+		vehicleNumber = CardBlockUtil.getString(adata, 10, 14);
 	}
 }

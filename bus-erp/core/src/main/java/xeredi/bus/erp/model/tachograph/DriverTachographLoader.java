@@ -6,22 +6,22 @@ import java.io.IOException;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
-import xeredi.bus.erp.model.tachograph.block.CardCertificate;
-import xeredi.bus.erp.model.tachograph.block.CardChipIdentification;
-import xeredi.bus.erp.model.tachograph.block.CardControlActivityDataRecord;
-import xeredi.bus.erp.model.tachograph.block.CardCurrentUse;
-import xeredi.bus.erp.model.tachograph.block.CardDriverActivity;
-import xeredi.bus.erp.model.tachograph.block.CardDrivingLicenceInformation;
-import xeredi.bus.erp.model.tachograph.block.CardEventData;
-import xeredi.bus.erp.model.tachograph.block.CardFaultData;
-import xeredi.bus.erp.model.tachograph.block.CardIccIdentification;
-import xeredi.bus.erp.model.tachograph.block.CardIdentification;
-import xeredi.bus.erp.model.tachograph.block.CardPlaceDailyWorkPeriod;
-import xeredi.bus.erp.model.tachograph.block.CardVehiclesUsed;
-import xeredi.bus.erp.model.tachograph.block.DriverCardApplicationIdentification;
-import xeredi.bus.erp.model.tachograph.block.Fid;
-import xeredi.bus.erp.model.tachograph.block.MemberStateCertificate;
-import xeredi.bus.erp.model.tachograph.block.SpecificCondition;
+import xeredi.bus.erp.model.tachograph.block.driver.CardCertificate;
+import xeredi.bus.erp.model.tachograph.block.driver.CardChipIdentification;
+import xeredi.bus.erp.model.tachograph.block.driver.CardControlActivityDataRecord;
+import xeredi.bus.erp.model.tachograph.block.driver.CardCurrentUse;
+import xeredi.bus.erp.model.tachograph.block.driver.CardDriverActivity;
+import xeredi.bus.erp.model.tachograph.block.driver.CardDrivingLicenceInformation;
+import xeredi.bus.erp.model.tachograph.block.driver.CardEventData;
+import xeredi.bus.erp.model.tachograph.block.driver.CardFaultData;
+import xeredi.bus.erp.model.tachograph.block.driver.CardIccIdentification;
+import xeredi.bus.erp.model.tachograph.block.driver.CardIdentification;
+import xeredi.bus.erp.model.tachograph.block.driver.CardPlaceDailyWorkPeriod;
+import xeredi.bus.erp.model.tachograph.block.driver.CardVehiclesUsed;
+import xeredi.bus.erp.model.tachograph.block.driver.DriverCardApplicationIdentification;
+import xeredi.bus.erp.model.tachograph.block.driver.DriverFid;
+import xeredi.bus.erp.model.tachograph.block.driver.MemberStateCertificate;
+import xeredi.bus.erp.model.tachograph.block.driver.SpecificCondition;
 
 // TODO: Auto-generated Javadoc
 /**
@@ -52,7 +52,7 @@ public final class DriverTachographLoader {
 
 			dis.read(fid_data, 0, fid_length);
 
-			final Fid fid = Fid.valueOf(fid_value);
+			final DriverFid fid = DriverFid.valueOf(fid_value);
 
 			LOG.info("fid_value: " + String.format("%04X", fid_value & 0xFFFF) + ", fid_type: " + fid_type
 					+ ", fid_length: " + fid_length + ", fid: " + fid);

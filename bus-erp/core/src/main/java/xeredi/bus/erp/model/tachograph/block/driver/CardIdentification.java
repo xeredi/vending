@@ -1,10 +1,11 @@
-package xeredi.bus.erp.model.tachograph.block;
+package xeredi.bus.erp.model.tachograph.block.driver;
 
 import java.util.Date;
 
 import lombok.Data;
 import lombok.NonNull;
 import lombok.ToString;
+import xeredi.bus.erp.model.tachograph.block.DriverCardBlock;
 import xeredi.bus.erp.model.tachograph.util.CardBlockUtil;
 
 // TODO: Auto-generated Javadoc
@@ -13,7 +14,7 @@ import xeredi.bus.erp.model.tachograph.util.CardBlockUtil;
  */
 @Data
 @ToString(callSuper = true)
-public class CardIdentification extends CardBlock {
+public class CardIdentification extends DriverCardBlock {
 
 	/** The card issuing member state. */
 	private final Integer cardIssuingMemberState;
@@ -51,7 +52,7 @@ public class CardIdentification extends CardBlock {
 	 * @param afid the afid
 	 * @param adata the adata
 	 */
-	public CardIdentification(final @NonNull Fid afid, final @NonNull byte[] adata) {
+	public CardIdentification(final @NonNull DriverFid afid, final @NonNull byte[] adata) {
 		super(afid);
 
 		cardIssuingMemberState = CardBlockUtil.getInteger(adata, 0, 1);

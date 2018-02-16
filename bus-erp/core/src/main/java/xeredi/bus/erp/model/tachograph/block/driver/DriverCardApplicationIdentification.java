@@ -1,8 +1,9 @@
-package xeredi.bus.erp.model.tachograph.block;
+package xeredi.bus.erp.model.tachograph.block.driver;
 
 import lombok.Data;
 import lombok.NonNull;
 import lombok.ToString;
+import xeredi.bus.erp.model.tachograph.block.DriverCardBlock;
 import xeredi.bus.erp.model.tachograph.util.CardBlockUtil;
 
 // TODO: Auto-generated Javadoc
@@ -11,7 +12,7 @@ import xeredi.bus.erp.model.tachograph.util.CardBlockUtil;
  */
 @Data
 @ToString(callSuper = true)
-public class DriverCardApplicationIdentification extends CardBlock {
+public class DriverCardApplicationIdentification extends DriverCardBlock {
 
 	/** The type of tachograph card id. */
 	private final Short typeOfTachographCardId;
@@ -42,7 +43,7 @@ public class DriverCardApplicationIdentification extends CardBlock {
 	 * @param adata
 	 *            the adata
 	 */
-	public DriverCardApplicationIdentification(final @NonNull Fid afid, final @NonNull byte[] adata) {
+	public DriverCardApplicationIdentification(final @NonNull DriverFid afid, final @NonNull byte[] adata) {
 		super(afid);
 
 		typeOfTachographCardId = CardBlockUtil.getShort(adata, 0, 1);

@@ -1,5 +1,7 @@
 package xeredi.bus.erp.model.tachograph.util;
 
+import java.io.DataInputStream;
+import java.io.IOException;
 import java.nio.ByteBuffer;
 import java.util.Arrays;
 import java.util.Date;
@@ -62,7 +64,7 @@ public final class CardBlockUtil {
 		String value = "";
 
 		for (byte byteValue : Arrays.copyOfRange(data, offset, offset + size)) {
-			value += (char) (byteValue & 0xFF) ;
+			value += (char) (byteValue & 0xFF);
 		}
 
 		return value.trim();
@@ -152,7 +154,8 @@ public final class CardBlockUtil {
 	 * @return the integer 24
 	 */
 	public static Integer getInteger24(final byte[] data, final int offset, final int size) {
-		return (data[offset] << 16) & 0xff0000 | (data[offset + 1] << 8) & 0x00ff00 | (data[offset + 2] << 0) & 0x0000ff;
+		return (data[offset] << 16) & 0xff0000 | (data[offset + 1] << 8) & 0x00ff00
+				| (data[offset + 2] << 0) & 0x0000ff;
 	}
 
 	/**
@@ -227,4 +230,107 @@ public final class CardBlockUtil {
 
 		return value;
 	}
+
+	/**
+	 * Gets the date.
+	 *
+	 * @param dis
+	 *            the dis
+	 * @return the date
+	 * @throws IOException
+	 *             Signals that an I/O exception has occurred.
+	 */
+	public static Date getDate(final DataInputStream dis) throws IOException {
+		final byte[] array = new byte[4];
+
+		dis.readFully(array);
+
+		return new Date((long) ByteBuffer.wrap(array).getInt() * 1000);
+	}
+
+	/**
+	 * Gets the integer 24.
+	 *
+	 * @param dis
+	 *            the dis
+	 * @return the integer 24
+	 * @throws IOException
+	 *             Signals that an I/O exception has occurred.
+	 */
+	public static Integer getInteger24(final DataInputStream dis) throws IOException {
+		final byte[] array = new byte[3];
+
+		dis.readFully(array);
+
+		return (array[0] << 16) & 0xff0000 | (array[1] << 8) & 0x00ff00 | (array[2] << 0) & 0x0000ff;
+	}
+
+	/**
+	 * Gets the integer 8.
+	 *
+	 * @param dis
+	 *            the dis
+	 * @return the integer 8
+	 * @throws IOException
+	 *             Signals that an I/O exception has occurred.
+	 */
+	public static Integer getInteger8(final DataInputStream dis) throws IOException {
+		return dis.readUnsignedByte();
+	}
+
+	/**
+	 * Gets the integer 16.
+	 *
+	 * @param dis
+	 *            the dis
+	 * @return the integer 16
+	 * @throws IOException
+	 *             Signals that an I/O exception has occurred.
+	 */
+	public static Integer getInteger16(final DataInputStream dis) throws IOException {
+		return dis.readUnsignedShort();
+	}
+
+	/**
+	 * Gets the boolean 8.
+	 *
+	 * @param dis
+	 *            the dis
+	 * @return the boolean 8
+	 * @throws IOException
+	 *             Signals that an I/O exception has occurred.
+	 */
+	public static Boolean getBoolean8(final DataInputStream dis) throws IOException {
+		return dis.readUnsignedByte() > 0;
+	}
+
+	/**
+	 * Gets the string.
+	 *
+	 * @param dis
+	 *            the dis
+	 * @param size
+	 *            the size
+	 * @return the string
+	 * @throws IOException
+	 *             Signals that an I/O exception has occurred.
+	 */
+	public static String getString(final DataInputStream dis, final int size) throws IOException {
+		final byte[] array = new byte[size];
+
+		dis.readFully(array);
+
+		return new String(array).trim();
+	}
+
+	public static String getBinaryString(final DataInputStream dis, final int size) throws IOException {
+		String value = "";
+
+		for (int i = 0; i < size; i++) {
+			value += String.format("%8s", Integer.toBinaryString(dis.readByte() & 0xFF)).replace(' ', '0');
+		}
+
+		return value;
+	}
+
 }

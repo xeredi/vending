@@ -1,8 +1,9 @@
-package xeredi.bus.erp.model.tachograph.block;
+package xeredi.bus.erp.model.tachograph.block.driver;
 
 import lombok.Data;
 import lombok.NonNull;
 import lombok.ToString;
+import xeredi.bus.erp.model.tachograph.block.DriverCardBlock;
 import xeredi.bus.erp.model.tachograph.util.CardBlockUtil;
 
 // TODO: Auto-generated Javadoc
@@ -11,7 +12,7 @@ import xeredi.bus.erp.model.tachograph.util.CardBlockUtil;
  */
 @Data
 @ToString(callSuper = true)
-public class CardDrivingLicenceInformation extends CardBlock {
+public class CardDrivingLicenceInformation extends DriverCardBlock {
 
 	/** The driving licence issuing authority. */
 	private final String drivingLicenceIssuingAuthority;
@@ -30,7 +31,7 @@ public class CardDrivingLicenceInformation extends CardBlock {
 	 * @param adata
 	 *            the adata
 	 */
-	public CardDrivingLicenceInformation(final @NonNull Fid afid, final @NonNull byte[] adata) {
+	public CardDrivingLicenceInformation(final @NonNull DriverFid afid, final @NonNull byte[] adata) {
 		super(afid);
 
 		drivingLicenceIssuingAuthority = CardBlockUtil.getText(adata, 0, 36);

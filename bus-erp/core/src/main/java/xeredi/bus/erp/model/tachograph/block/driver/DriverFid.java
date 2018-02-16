@@ -1,10 +1,10 @@
-package xeredi.bus.erp.model.tachograph.block;
+package xeredi.bus.erp.model.tachograph.block.driver;
 
 // TODO: Auto-generated Javadoc
 /**
  * The Enum Fid.
  */
-public enum Fid {
+public enum DriverFid {
 
 	/** The mf. */
 	MF(0x3F00),
@@ -55,7 +55,7 @@ public enum Fid {
 	 * @param id
 	 *            the id
 	 */
-	Fid(int id) {
+	DriverFid(int id) {
 		this.id = id;
 	}
 
@@ -75,13 +75,13 @@ public enum Fid {
 	 *            the value
 	 * @return the fid
 	 */
-	public static Fid valueOf(final int value) {
-		for (final Fid fid : Fid.values()) {
+	public static DriverFid valueOf(final int value) {
+		for (final DriverFid fid : DriverFid.values()) {
 			if (fid.getId() == value) {
 				return fid;
 			}
 		}
 
-		throw new Error("Unexpected value: " + value);
+		throw new Error("Unexpected value: " + String.format("%04X", value & 0xFFFF));
 	}
 }

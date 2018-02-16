@@ -1,10 +1,11 @@
-package xeredi.bus.erp.model.tachograph.block;
+package xeredi.bus.erp.model.tachograph.block.driver;
 
 import java.util.Date;
 
 import lombok.Data;
 import lombok.NonNull;
 import lombok.ToString;
+import xeredi.bus.erp.model.tachograph.block.DriverCardBlock;
 import xeredi.bus.erp.model.tachograph.util.CardBlockUtil;
 
 /**
@@ -12,7 +13,7 @@ import xeredi.bus.erp.model.tachograph.util.CardBlockUtil;
  */
 @Data
 @ToString(callSuper = true)
-public class CardControlActivityDataRecord extends CardBlock {
+public class CardControlActivityDataRecord extends DriverCardBlock {
 
 	/** The control type. */
 	private final Integer controlTypeC;
@@ -58,7 +59,7 @@ public class CardControlActivityDataRecord extends CardBlock {
 	 * @param adata
 	 *            the adata
 	 */
-	public CardControlActivityDataRecord(final @NonNull Fid afid, final @NonNull byte[] adata) {
+	public CardControlActivityDataRecord(final @NonNull DriverFid afid, final @NonNull byte[] adata) {
 		super(afid);
 
 		final String controlType = CardBlockUtil.getBinaryString(adata, 0, 1);

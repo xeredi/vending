@@ -1,4 +1,4 @@
-package xeredi.bus.erp.model.tachograph.block;
+package xeredi.bus.erp.model.tachograph.block.driver;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -7,6 +7,7 @@ import java.util.List;
 import lombok.Data;
 import lombok.NonNull;
 import lombok.ToString;
+import xeredi.bus.erp.model.tachograph.block.DriverCardBlock;
 
 // TODO: Auto-generated Javadoc
 /**
@@ -14,7 +15,7 @@ import lombok.ToString;
  */
 @Data
 @ToString(callSuper = true)
-public class CardEventData extends CardBlock {
+public class CardEventData extends DriverCardBlock {
 
 	/** The records. */
 	private final List<CardEventRecord> records;
@@ -27,7 +28,7 @@ public class CardEventData extends CardBlock {
 	 * @param adata
 	 *            the adata
 	 */
-	public CardEventData(final @NonNull Fid afid, final @NonNull byte[] adata) {
+	public CardEventData(final @NonNull DriverFid afid, final @NonNull byte[] adata) {
 		super(afid);
 
 		records = new ArrayList<>();
