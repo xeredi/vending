@@ -5,7 +5,7 @@ import org.apache.commons.logging.LogFactory;
 import org.apache.ibatis.session.ExecutorType;
 import org.mybatis.guice.transactional.Transactional;
 
-import xeredi.bus.erp.model.tachograph.DriverTachograph;
+import xeredi.bus.erp.process.tachograph.DriverTachograph;
 
 // TODO: Auto-generated Javadoc
 /**
