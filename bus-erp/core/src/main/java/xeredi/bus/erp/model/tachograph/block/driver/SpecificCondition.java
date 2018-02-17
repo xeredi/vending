@@ -17,7 +17,7 @@ import xeredi.bus.erp.model.tachograph.util.CardBlockUtil;
 public class SpecificCondition extends DriverCardBlock {
 
 	/** The records. */
-	private final List<SpecificConditionRecord> records;
+	private final List<SpecificConditionRecord2> records;
 
 	/**
 	 * Instantiates a new specific condition record.
@@ -36,7 +36,7 @@ public class SpecificCondition extends DriverCardBlock {
 		final int recordSize = 5;
 
 		do {
-			records.add(new SpecificConditionRecord(CardBlockUtil.getByteArray(adata, offset, recordSize)));
+			records.add(new SpecificConditionRecord2(CardBlockUtil.getByteArray(adata, offset, recordSize)));
 
 			offset += recordSize;
 		} while (offset < adata.length);

@@ -1,60 +1,83 @@
 package xeredi.bus.erp.model.tachograph.block.vehicle;
 
+import java.io.DataInputStream;
+import java.io.IOException;
 import java.util.Date;
 
 import lombok.Data;
-import lombok.ToString;
+import lombok.NonNull;
+import xeredi.bus.erp.model.tachograph.util.CardBlockUtil;
 
 // TODO: Auto-generated Javadoc
 /**
  * Instantiates a new vu card IW record.
  */
 @Data
-@ToString(callSuper = true)
 public class VuCardIWRecord {
 
 	/** The car holder last name. */
-	private String carHolderLastName;
+	private final String carHolderLastName;
 
 	/** The car holder first name. */
-	private String carHolderFirstName;
+	private final String carHolderFirstName;
 
-	/** The card type. */
-	private Integer cardType;
-
-	/** The card state. */
-	private Integer cardState;
-
-	/** The driver identification. */
-	private String driverIdentification;
+	/** The card number. */
+	private final FullCardNumber cardNumber;
 
 	/** The card expiry date. */
-	private Date cardExpiryDate;
+	private final Date cardExpiryDate;
 
 	/** The card insertion time. */
-	private Date cardInsertionTime;
+	private final Date cardInsertionTime;
 
 	/** The vehicle odometer value at insertion. */
-	private Integer vehicleOdometerValueAtInsertion;
+	private final Integer vehicleOdometerValueAtInsertion;
 
 	/** The card slot number. */
-	private Integer cardSlotNumber;
+	private final Integer cardSlotNumber;
 
 	/** The card withdrawal time. */
-	private Date cardWithdrawalTime;
+	private final Date cardWithdrawalTime;
 
 	/** The vehicle odometer value at withdrawal. */
-	private Integer vehicleOdometerValueAtWithdrawal;
+	private final Integer vehicleOdometerValueAtWithdrawal;
 
 	/** The previous vehicle registration nation. */
-	private Integer previousVehicleRegistrationNation;
+	private final Integer previousVehicleRegistrationNation;
 
 	/** The previous vehicle registration number. */
-	private String previousVehicleRegistrationNumber;
+	private final String previousVehicleRegistrationNumber;
 
 	/** The previous card withdrawal time. */
-	private Date previousCardWithdrawalTime;
+	private final Date previousCardWithdrawalTime;
 
 	/** The manual input flag. */
-	private Boolean manualInputFlag;
+	private final Boolean manualInputFlag;
+
+	/**
+	 * Instantiates a new vu card IW record.
+	 *
+	 * @param dis
+	 *            the dis
+	 * @throws IOException
+	 *             Signals that an I/O exception has occurred.
+	 */
+	public VuCardIWRecord(final @NonNull DataInputStream dis) throws IOException {
+		super();
+
+		carHolderLastName = CardBlockUtil.getString(dis, 35);
+		carHolderFirstName = CardBlockUtil.getString(dis, 35);
+		cardNumber = new FullCardNumber(dis);
+		cardExpiryDate = CardBlockUtil.getDate(dis);
+		cardInsertionTime = CardBlockUtil.getDate(dis);
+		vehicleOdometerValueAtInsertion = CardBlockUtil.getInteger24(dis);
+		cardSlotNumber = CardBlockUtil.getInteger8(dis);
+		cardWithdrawalTime = CardBlockUtil.getDate(dis);
+		vehicleOdometerValueAtWithdrawal = CardBlockUtil.getInteger24(dis);
+		previousVehicleRegistrationNation = CardBlockUtil.getInteger8(dis);
+		previousVehicleRegistrationNumber = CardBlockUtil.getString(dis, 14);
+		previousCardWithdrawalTime = CardBlockUtil.getDate(dis);
+		manualInputFlag = CardBlockUtil.getBoolean8(dis);
+	}
+
 }

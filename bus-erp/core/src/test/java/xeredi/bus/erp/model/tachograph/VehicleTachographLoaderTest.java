@@ -19,16 +19,14 @@ public final class VehicleTachographLoaderTest {
 	private static final Log LOG = LogFactory.getLog(VehicleTachographLoaderTest.class);
 
 	/**
-	 * Test.
+	 * Test load.
+	 *
+	 * @param filename
+	 *            the filename
 	 */
-	@Test
-	public void test() {
-		LOG.info("Start");
-
+	private void testLoad(final String filename) {
 		try {
 			{
-				final String filename = "/home/xeredi/git/rb/canbus/examples/tacograph/V_1927FFN_E_20171201_1025.TGD";
-
 				LOG.info(filename);
 
 				final File file = new File(filename);
@@ -45,6 +43,19 @@ public final class VehicleTachographLoaderTest {
 		} catch (final Throwable ex) {
 			LOG.fatal(ex, ex);
 		}
+	}
+
+	/**
+	 * Test.
+	 */
+	@Test
+	public void test() {
+		LOG.info("Start");
+
+		testLoad("/home/xeredi/git/rb/canbus/examples/tacograph/V_3047HBH_E_20171201_1800.TGD");
+		testLoad("/home/xeredi/git/rb/canbus/examples/tacograph/V_7193GWY_E_20171204_1148.TGD");
+
+		testLoad("/home/xeredi/git/rb/canbus/examples/tacograph/V_1927FFN_E_20171201_1025.TGD");
 
 		LOG.info("End");
 	}

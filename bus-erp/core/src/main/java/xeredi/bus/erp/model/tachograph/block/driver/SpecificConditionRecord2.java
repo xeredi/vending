@@ -15,7 +15,7 @@ import xeredi.bus.erp.model.tachograph.util.CardBlockUtil;
  */
 @Data
 @ToString(callSuper = true)
-public class SpecificConditionRecord extends CardRecord {
+public class SpecificConditionRecord2 extends CardRecord {
 
 	/** The entry time. */
 	private final Date entryTime;
@@ -29,7 +29,7 @@ public class SpecificConditionRecord extends CardRecord {
 	 *
 	 * @param data the data
 	 */
-	public SpecificConditionRecord(final @NonNull byte[] data) {
+	public SpecificConditionRecord2(final @NonNull byte[] data) {
 		super();
 
 		this.entryTime = CardBlockUtil.getDate(data, 0, 4);

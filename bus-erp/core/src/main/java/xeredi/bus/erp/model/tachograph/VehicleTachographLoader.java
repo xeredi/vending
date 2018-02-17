@@ -2,15 +2,14 @@ package xeredi.bus.erp.model.tachograph;
 
 import java.io.DataInputStream;
 import java.io.IOException;
-import java.util.Date;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
 import xeredi.bus.erp.model.tachograph.block.vehicle.TransferDataActivity;
-import xeredi.bus.erp.model.tachograph.block.vehicle.TransferDataOverview;
+import xeredi.bus.erp.model.tachograph.block.vehicle.TransferDataTechnicalData;
+import xeredi.bus.erp.model.tachograph.block.vehicle.TransferDetailedSpeed;
 import xeredi.bus.erp.model.tachograph.block.vehicle.VehicleFid;
-import xeredi.bus.erp.model.tachograph.util.CardBlockUtil;
 
 // TODO: Auto-generated Javadoc
 /**
@@ -33,30 +32,52 @@ public final class VehicleTachographLoader {
 	public VehicleTachograph load(final DataInputStream dis) throws IOException {
 		final VehicleTachograph tachograph = new VehicleTachograph();
 
-		int i = 0;
-
 		while (dis.available() > 0) {
 			final int fid_value = dis.readUnsignedShort();
 
 			for (final VehicleFid fid : VehicleFid.values()) {
 				if (fid_value == fid.getId()) {
-					System.out.println(fid.name() + ", " + i);
+					if (LOG.isDebugEnabled()) {
+						LOG.debug(fid.name());
+					}
 
 					switch (fid) {
-					case TransferDataActivities:
+					case TransferDataOverview:
+						LOG.warn("Pendiente implementar!: " + fid.name());
+
+						break;
+					case TransferDataActivities: {
 						final TransferDataActivity record = new TransferDataActivity(dis);
 
-						System.out.println(record);
+						if (LOG.isDebugEnabled()) {
+							LOG.debug(record);
+						}
+					}
 
 						break;
+					case TransferDetailedSpeed: {
+						final TransferDetailedSpeed record = new TransferDetailedSpeed(dis);
 
+						if (LOG.isDebugEnabled()) {
+							LOG.debug(record);
+						}
+					}
+
+						break;
+					case TransferDataTechnicalData: {
+						final TransferDataTechnicalData record = new TransferDataTechnicalData(dis);
+
+						if (LOG.isDebugEnabled()) {
+							LOG.debug(record);
+						}
+					}
+						break;
 					default:
-						break;
+						throw new Error("No implementado!: " + fid.name());
+						// break;
 					}
 				}
 			}
-
-			i += 2;
 		}
 
 		return tachograph;

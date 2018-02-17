@@ -265,6 +265,10 @@ public final class CardBlockUtil {
 		return (array[0] << 16) & 0xff0000 | (array[1] << 8) & 0x00ff00 | (array[2] << 0) & 0x0000ff;
 	}
 
+	public static Integer getInteger(final DataInputStream dis) throws IOException {
+		return dis.readInt();
+	}
+
 	/**
 	 * Gets the integer 8.
 	 *
@@ -328,6 +332,19 @@ public final class CardBlockUtil {
 
 		for (int i = 0; i < size; i++) {
 			value += String.format("%8s", Integer.toBinaryString(dis.readByte() & 0xFF)).replace(' ', '0');
+		}
+
+		return value;
+	}
+
+	public static Integer getIntegerBCD(final DataInputStream dis, final int size) throws IOException {
+		// Cada byte son 2 digitos (4 bits + 4 bits)
+		Integer value = 0;
+
+		for (int i = 0; i < size; i++) {
+			final byte byteValue = dis.readByte();
+
+			value = value * 100 + (((byteValue & 0xf0) >>> 4) & 0x0f) * 10 + (byteValue & 0x0f);
 		}
 
 		return value;
