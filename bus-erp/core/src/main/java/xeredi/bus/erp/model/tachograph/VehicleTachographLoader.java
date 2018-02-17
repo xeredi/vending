@@ -7,6 +7,7 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
 import xeredi.bus.erp.model.tachograph.block.vehicle.TransferDataActivity;
+import xeredi.bus.erp.model.tachograph.block.vehicle.TransferDataEventsAndFaults;
 import xeredi.bus.erp.model.tachograph.block.vehicle.TransferDataTechnicalData;
 import xeredi.bus.erp.model.tachograph.block.vehicle.TransferDetailedSpeed;
 import xeredi.bus.erp.model.tachograph.block.vehicle.VehicleFid;
@@ -32,7 +33,7 @@ public final class VehicleTachographLoader {
 	public VehicleTachograph load(final DataInputStream dis) throws IOException {
 		final VehicleTachograph tachograph = new VehicleTachograph();
 
-		while (dis.available() > 0) {
+		while (dis.available() > 1) {
 			final int fid_value = dis.readUnsignedShort();
 
 			for (final VehicleFid fid : VehicleFid.values()) {
@@ -48,6 +49,15 @@ public final class VehicleTachographLoader {
 						break;
 					case TransferDataActivities: {
 						final TransferDataActivity record = new TransferDataActivity(dis);
+
+						if (LOG.isDebugEnabled()) {
+							LOG.debug(record);
+						}
+					}
+
+						break;
+					case TransferDataEventsAndFaults: {
+						final TransferDataEventsAndFaults record = new TransferDataEventsAndFaults(dis);
 
 						if (LOG.isDebugEnabled()) {
 							LOG.debug(record);
