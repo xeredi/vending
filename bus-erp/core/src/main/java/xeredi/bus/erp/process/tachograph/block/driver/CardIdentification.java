@@ -4,7 +4,6 @@ import java.util.Date;
 
 import lombok.Data;
 import lombok.NonNull;
-import lombok.ToString;
 import xeredi.bus.erp.process.tachograph.block.DriverCardBlock;
 import xeredi.bus.erp.process.tachograph.util.CardBlockUtil;
 
@@ -13,7 +12,6 @@ import xeredi.bus.erp.process.tachograph.util.CardBlockUtil;
  * The Class CardIdentification.
  */
 @Data
-@ToString(callSuper = true)
 public class CardIdentification extends DriverCardBlock {
 
 	/** The card issuing member state. */

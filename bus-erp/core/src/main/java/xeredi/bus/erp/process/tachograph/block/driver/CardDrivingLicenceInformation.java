@@ -2,7 +2,6 @@ package xeredi.bus.erp.process.tachograph.block.driver;
 
 import lombok.Data;
 import lombok.NonNull;
-import lombok.ToString;
 import xeredi.bus.erp.process.tachograph.block.DriverCardBlock;
 import xeredi.bus.erp.process.tachograph.util.CardBlockUtil;
 
@@ -11,7 +10,6 @@ import xeredi.bus.erp.process.tachograph.util.CardBlockUtil;
  * @see xeredi.bus.erp.model.tachograph.block.CardBlock#toString()
  */
 @Data
-@ToString(callSuper = true)
 public class CardDrivingLicenceInformation extends DriverCardBlock {
 
 	/** The driving licence issuing authority. */
@@ -38,5 +36,4 @@ public class CardDrivingLicenceInformation extends DriverCardBlock {
 		drivingLicenceIssuingNation = CardBlockUtil.getShort(adata, 36, 1);
 		drivingLicenceNumber = CardBlockUtil.getText(adata, 37, 16);
 	}
-
 }

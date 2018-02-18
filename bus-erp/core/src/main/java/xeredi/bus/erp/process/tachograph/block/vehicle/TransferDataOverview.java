@@ -10,47 +10,65 @@ import lombok.Data;
 import lombok.NonNull;
 import xeredi.bus.erp.process.tachograph.util.CardBlockUtil;
 
+// TODO: Auto-generated Javadoc
+/**
+ * The Class TransferDataOverview.
+ */
 @Data
 public class TransferDataOverview {
-	/*
-    <IdentifiedObject Name="TransferDataOverview" Identifier="0x7601">
-        <Collection Name="VuCompanyLocksData">
-            <Object Name="VuCompanyLocksRecord">
-                <TimeReal Name="LockInTime" />
-                <TimeReal Name="LockOutTime" />
-                <Name Name="CompanyName" />
-                <Name Name="CompanyAddress" />
-                <FullCardNumber Name="CompanyCardNumber" />
-            </Object>
-        </Collection>
-        <Collection Name="VuControlActivityData">
-            <Object Name="VuControlActivityRecord">
-                <UInt8 Name="ControlType" />
-                <TimeReal Name="ControlTime" />
-                <FullCardNumber Name="ControlCardNumber" />
-                <TimeReal Name="DownloadPeriodBeginTime" />
-                <TimeReal Name="DownloadPeriodEndTime" />
-            </Object>
-        </Collection>
-        <Padding Name="Signature" Size="128" />
-    </IdentifiedObject>
-    */
 
+	/** The member state certificate. */
 	private final byte[] memberStateCertificate;
+
+	/** The vu certificate. */
 	private final byte[] vuCertificate;
+
+	/** The vehicle identification number. */
 	private final String vehicleIdentificationNumber;
+
+	/** The vehicle registration nation. */
 	private final Integer vehicleRegistrationNation;
+
+	/** The vehicle registration number. */
 	private final String vehicleRegistrationNumber;
+
+	/** The current date time. */
 	private final Date currentDateTime;
+
+	/** The min downloable time. */
 	private final Date minDownloableTime;
+
+	/** The max downloable time. */
 	private final Date maxDownloableTime;
+
+	/** The card slot status. */
 	private final Integer cardSlotStatus;
+
+	/** The downloading time. */
 	private final Date downloadingTime;
+
+	/** The card number. */
 	private final CardNumber cardNumber;
+
+	/** The company or workshop name. */
 	private final String companyOrWorkshopName;
+
+	/** The vu company locks data. */
 	private final List<VuCompanyLocksRecord> vuCompanyLocksData;
 
+	/** The vu control activity data. */
+	private final List<VuControlActivityRecord> vuControlActivityData;
 
+	/** The signature. */
+	private final byte[] signature;
+
+
+	/**
+	 * Instantiates a new transfer data overview.
+	 *
+	 * @param dis the dis
+	 * @throws IOException Signals that an I/O exception has occurred.
+	 */
 	public TransferDataOverview(final @NonNull DataInputStream dis) throws IOException {
 		super();
 
@@ -72,13 +90,17 @@ public class TransferDataOverview {
 
 		vuCompanyLocksData = new ArrayList<>();
 
-		final int tamanio = CardBlockUtil.getInteger8(dis);
-
-		System.out.println("tamanio: " + tamanio);
-
-		for (int i = 0, size = tamanio; i < tamanio; i++) {
+		for (int i = 0, size = CardBlockUtil.getInteger8(dis); i < size; i++) {
 			vuCompanyLocksData.add(new VuCompanyLocksRecord(dis));
 		}
+
+		vuControlActivityData = new ArrayList<>();
+
+		for (int i = 0, size = CardBlockUtil.getInteger8(dis); i < size; i++) {
+			vuControlActivityData.add(new VuControlActivityRecord(dis));
+		}
+
+		signature = CardBlockUtil.getByteArray(dis, 128);
 	}
 
 }

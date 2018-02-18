@@ -2,7 +2,6 @@ package xeredi.bus.erp.process.tachograph.block.driver;
 
 import lombok.Data;
 import lombok.NonNull;
-import lombok.ToString;
 import xeredi.bus.erp.process.tachograph.block.DriverCardBlock;
 import xeredi.bus.erp.process.tachograph.util.CardBlockUtil;
 
@@ -11,7 +10,6 @@ import xeredi.bus.erp.process.tachograph.util.CardBlockUtil;
  * @see xeredi.bus.erp.model.tachograph.block.CardBlock#toString()
  */
 @Data
-@ToString(callSuper = true)
 public class CardCertificate extends DriverCardBlock {
 
 	/** The certificate. */
@@ -30,5 +28,4 @@ public class CardCertificate extends DriverCardBlock {
 
 		certificate = CardBlockUtil.getByteArray(adata, 0, 194);
 	}
-
 }

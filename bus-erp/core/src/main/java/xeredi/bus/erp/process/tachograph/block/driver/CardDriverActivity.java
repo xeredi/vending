@@ -9,7 +9,6 @@ import org.apache.commons.logging.LogFactory;
 
 import lombok.Data;
 import lombok.NonNull;
-import lombok.ToString;
 import xeredi.bus.erp.process.tachograph.block.DriverCardBlock;
 import xeredi.bus.erp.process.tachograph.util.CardBlockUtil;
 
@@ -18,7 +17,6 @@ import xeredi.bus.erp.process.tachograph.util.CardBlockUtil;
  * The Class CardDriverActivity.
  */
 @Data
-@ToString(callSuper = true)
 public class CardDriverActivity extends DriverCardBlock {
 	private static final Log LOG = LogFactory.getLog(CardDriverActivity.class);
 

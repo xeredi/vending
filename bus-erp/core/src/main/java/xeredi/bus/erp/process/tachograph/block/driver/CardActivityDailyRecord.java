@@ -6,7 +6,6 @@ import java.util.List;
 
 import lombok.Data;
 import lombok.NonNull;
-import lombok.ToString;
 import xeredi.bus.erp.process.tachograph.block.CardRecord;
 import xeredi.bus.erp.process.tachograph.util.CardBlockUtil;
 
@@ -21,7 +20,6 @@ import xeredi.bus.erp.process.tachograph.util.CardBlockUtil;
  * @see xeredi.bus.erp.model.tachograph.block.CardRecord#hashCode()
  */
 @Data
-@ToString(callSuper = true)
 public class CardActivityDailyRecord extends CardRecord {
 
 	/** The activity previous record length. */

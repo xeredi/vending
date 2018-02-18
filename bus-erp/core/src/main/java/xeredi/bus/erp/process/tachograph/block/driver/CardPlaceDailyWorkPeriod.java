@@ -5,7 +5,6 @@ import java.util.List;
 
 import lombok.Data;
 import lombok.NonNull;
-import lombok.ToString;
 import xeredi.bus.erp.process.tachograph.block.DriverCardBlock;
 import xeredi.bus.erp.process.tachograph.util.CardBlockUtil;
 
@@ -13,7 +12,6 @@ import xeredi.bus.erp.process.tachograph.util.CardBlockUtil;
  * The Class CardPlaceDailyWorkPeriod.
  */
 @Data
-@ToString(callSuper = true)
 public class CardPlaceDailyWorkPeriod extends DriverCardBlock {
 
 	/** The place pointer newest record. */

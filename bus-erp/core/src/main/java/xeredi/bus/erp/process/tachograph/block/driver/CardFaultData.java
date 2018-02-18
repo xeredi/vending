@@ -6,14 +6,12 @@ import java.util.List;
 
 import lombok.Data;
 import lombok.NonNull;
-import lombok.ToString;
 import xeredi.bus.erp.process.tachograph.block.DriverCardBlock;
 
 /**
  * The Class CardFaultData.
  */
 @Data()
-@ToString(callSuper = true)
 public class CardFaultData extends DriverCardBlock {
 
 	/** The records. */
@@ -39,5 +37,4 @@ public class CardFaultData extends DriverCardBlock {
 			offset += recordLength;
 		} while (offset < adata.length);
 	}
-
 }

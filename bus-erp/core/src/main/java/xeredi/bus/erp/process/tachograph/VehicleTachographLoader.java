@@ -47,8 +47,8 @@ public final class VehicleTachographLoader {
 					case TransferDataOverview:
 						tachograph.setTransferDataOverview(new TransferDataOverview(dis));
 
-						if (LOG.isInfoEnabled()) {
-							LOG.info(tachograph.getTransferDataOverview());
+						if (LOG.isDebugEnabled()) {
+							LOG.debug(tachograph.getTransferDataOverview());
 						}
 
 						break;

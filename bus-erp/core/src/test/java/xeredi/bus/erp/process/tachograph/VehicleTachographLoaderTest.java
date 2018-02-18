@@ -38,7 +38,7 @@ public final class VehicleTachographLoaderTest {
 					final VehicleTachographLoader loader = new VehicleTachographLoader();
 					final VehicleTachograph tachograph = loader.load(dis);
 
-					LOG.info(tachograph.getTransferDataOverview());
+					LOG.info("Success");
 				}
 			}
 		} catch (final IOException ex) {
@@ -55,8 +55,8 @@ public final class VehicleTachographLoaderTest {
 	public void test() {
 		LOG.info("Start");
 
-		testLoad("/home/xeredi/git/rb/canbus/examples/tacograph/V_3047HBH_E_20171201_1800.TGD");
-		testLoad("/home/xeredi/git/rb/canbus/examples/tacograph/V_7193GWY_E_20171204_1148.TGD");
+		// testLoad("/home/xeredi/git/rb/canbus/examples/tacograph/V_3047HBH_E_20171201_1800.TGD");
+		// testLoad("/home/xeredi/git/rb/canbus/examples/tacograph/V_7193GWY_E_20171204_1148.TGD");
 
 		testLoad("/home/xeredi/git/rb/canbus/examples/tacograph/V_1927FFN_E_20171201_1025.TGD");
 

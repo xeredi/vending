@@ -4,7 +4,6 @@ import java.util.Date;
 
 import lombok.Data;
 import lombok.NonNull;
-import lombok.ToString;
 import xeredi.bus.erp.process.tachograph.block.CardRecord;
 import xeredi.bus.erp.process.tachograph.util.CardBlockUtil;
 
@@ -12,7 +11,6 @@ import xeredi.bus.erp.process.tachograph.util.CardBlockUtil;
  * The Class CardVehicleRecord.
  */
 @Data
-@ToString(callSuper = true)
 public class CardVehicleRecord extends CardRecord {
 
 	/** The vehicle odometer begin. */

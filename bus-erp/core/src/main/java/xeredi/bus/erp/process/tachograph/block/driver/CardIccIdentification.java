@@ -2,7 +2,6 @@ package xeredi.bus.erp.process.tachograph.block.driver;
 
 import lombok.Data;
 import lombok.NonNull;
-import lombok.ToString;
 import xeredi.bus.erp.process.tachograph.block.DriverCardBlock;
 import xeredi.bus.erp.process.tachograph.util.CardBlockUtil;
 
@@ -10,7 +9,6 @@ import xeredi.bus.erp.process.tachograph.util.CardBlockUtil;
  * The Class CardBlockICC.
  */
 @Data
-@ToString(callSuper = true)
 public final class CardIccIdentification extends DriverCardBlock {
 
 	/** The clock stop. */
